@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>State Bank - Online Banking Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f6f9;
+            min-height: 100vh;
+        }
+
+        .warning-banner {
+            background: #ff6b6b;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .banking-container {
+            max-width: 1200px;
+            margin: 60px auto 20px;
+            background: white;
+            min-height: calc(100vh - 80px);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bank-logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .secure-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-name {
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid white;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 600px;
+        }
+
+        .sidebar {
+            background: #f8f9fa;
+            border-right: 1px solid #e0e0e0;
+            padding: 20px 0;
+        }
+
+        .menu-item {
+            padding: 12px 30px;
+            color: #333;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .menu-item:hover {
+            background: #e9ecef;
+            border-left-color: #1e3c72;
+        }
+
+        .menu-item.active {
+            background: #e7f3ff;
+            border-left-color: #1e3c72;
+            color: #1e3c72;
+            font-weight: 600;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            color: #1e3c72;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .notification-panel {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .notification {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            transition: background 0.2s;
+        }
+
+        .notification:last-child {
+            border-bottom: none;
+        }
+
+        .notification:hover {
+            background: #f8f9fa;
+        }
+
+        .notification.urgent {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+
+        .notification.critical {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+
+        .notification.success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            font-size: 16px;
+            color: #212529;
+        }
+
+        .notification-time {
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        .notification-body {
+            color: #495057;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .notification-body a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .notification-body a:hover {
+            text-decoration: underline;
+        }
+
+        .account-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .account-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .account-type {
+            font-size: 12px;
+            color: #6c757d;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .account-balance {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e3c72;
+            margin-bottom: 8px;
+        }
+
+        .account-number {
+            font-size: 13px;
+            color: #6c757d;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .btn-primary {
+            background: #1e3c72;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="warning-banner">
+        ⚠ This is a controlled phishing simulation environment.
+    </div>
+
+    <div class="banking-container">
+        <div class="header">
+            <div class="bank-logo">
+                <span>🏦</span>
+                <span>State Bank Online</span>
+            </div>
+            <div class="secure-badge">
+                🔒 Secure Session
+            </div>
+            <div class="user-info">
+                <div class="user-name">Welcome, Rajesh Kumar</div>
+                <button class="logout-btn">Logout</button>
+            </div>
+        </div>
+
+        <div class="dashboard">
+            <div class="sidebar">
+                <div class="menu-item active">Dashboard</div>
+                <div class="menu-item">Accounts</div>
+                <div class="menu-item">Transfers</div>
+                <div class="menu-item">Payments</div>
+                <div class="menu-item">Cards</div>
+                <div class="menu-item">Loans</div>
+                <div class="menu-item">Investments</div>
+                <div class="menu-item">Settings</div>
+            </div>
+
+            <div class="main-content">
+                <div class="page-title">Dashboard</div>
+
+                <!-- Account Summary Cards -->
+                <div class="account-summary">
+                    <div class="account-card">
+                        <div class="account-type">Savings Account</div>
+                        <div class="account-balance">₹1,24,567.80</div>
+                        <div class="account-number">XXXX-XXXX-1234</div>
+                    </div>
+                    <div class="account-card">
+                        <div class="account-type">Current Account</div>
+                        <div class="account-balance">₹3,45,890.50</div>
+                        <div class="account-number">XXXX-XXXX-5678</div>
+                    </div>
+                    <div class="account-card">
+                        <div class="account-type">Fixed Deposit</div>
+                        <div class="account-balance">₹5,00,000.00</div>
+                        <div class="account-number">FD-XXXX-7890</div>
+                    </div>
+                </div>
+
+                <!-- Notifications Panel -->
+                <div class="section-title">Notifications & Alerts</div>
+                <div class="notification-panel">
+
+                    <!-- PHISHING NOTIFICATION 1: Critical security alert -->
+                    <div class="notification critical">
+                        <div class="notification-header">
+                            <div class="notification-title">🚨 CRITICAL SECURITY ALERT</div>
+                            <div class="notification-time">2 hours ago</div>
+                        </div>
+                        <div class="notification-body">
+                            Your account security has been compromised. Unauthorized access detected from an unknown device. You must verify your credentials immediately to prevent account suspension.
+                            <br><br>
+                            <a href="#">Click here to verify your account now</a> or your account will be locked within 24 hours.
+                            <button class="btn-danger">Verify Now</button>
+                        </div>
+                    </div>
+
+                    <!-- SAFE NOTIFICATION 1: Transaction confirmation -->
+                    <div class="notification success">
+                        <div class="notification-header">
+                            <div class="notification-title">✓ Transaction Successful</div>
+                            <div class="notification-time">3 hours ago</div>
+                        </div>
+                        <div class="notification-body">
+                            Your NEFT transfer of ₹15,000 to Account XXXX-5432 has been successfully processed. Transaction ID: NEFT26021312345.
+                        </div>
+                    </div>
+
+                    <!-- PHISHING NOTIFICATION 2: Hindi-English mix -->
+                    <div class="notification urgent">
+                        <div class="notification-header">
+                            <div class="notification-title">⚠ KYC Update Required</div>
+                            <div class="notification-time">5 hours ago</div>
+                        </div>
+                        <div class="notification-body">
+                            Aapka KYC verification pending hai. RBI guidelines ke according, aapko apna KYC immediately update karna hoga. 48 hours ke andar update nahi kiya to aapka account suspend ho jayega.
+                            <br><br>
+                            <a href="#">https://kyc-update-portal.tk/verify-now</a>
+                            <button class="btn-primary">Update KYC</button>
+                        </div>
+                    </div>
+
+                    <!-- SAFE NOTIFICATION 2: Statement available -->
+                    <div class="notification">
+                        <div class="notification-header">
+                            <div class="notification-title">📄 Account Statement Available</div>
+                            <div class="notification-time">Yesterday</div>
+                        </div>
+                        <div class="notification-body">
+                            Your account statement for January 2026 is now available. You can download it from the Statements section in your account menu.
+                        </div>
+                    </div>
+
+                    <!-- PHISHING NOTIFICATION 3: Adversarial spelling -->
+                    <div class="notification critical">
+                        <div class="notification-header">
+                            <div class="notification-title">🔴 URG3NT: Acc0unt Susp3ns10n N0t1ce</div>
+                            <div class="notification-time">Yesterday</div>
+                        </div>
+                        <div class="notification-body">
+                            Y0ur acc0unt will be p3rman3ntly susp3nd3d du3 to s3cur1ty v10lat10n. V3r1fy y0ur 1d3nt1ty 1mm3d1at3ly to pr3v3nt l0ss 0f acc3ss.
+                            <br><br>
+                            V3r1fy h3r3: <a href="#">https://bank-v3r1fy.tk/urgent-action</a>
+                            <button class="btn-danger">V3r1fy N0w</button>
+                        </div>
+                    </div>
+
+                    <!-- SAFE NOTIFICATION 3: Interest credit -->
+                    <div class="notification success">
+                        <div class="notification-header">
+                            <div class="notification-title">💰 Interest Credited</div>
+                            <div class="notification-time">2 days ago</div>
+                        </div>
+                        <div class="notification-body">
+                            Quarterly interest of ₹2,345.67 has been credited to your Savings Account XXXX-1234 on Feb 10, 2026.
+                        </div>
+                    </div>
+
+                    <!-- PHISHING NOTIFICATION 4: Tamil-English mix -->
+                    <div class="notification urgent">
+                        <div class="notification-header">
+                            <div class="notification-title">⚠ Suspicious Activity Detected</div>
+                            <div class="notification-time">2 days ago</div>
+                        </div>
+                        <div class="notification-body">
+                            Unga account-il suspicious transaction kandupidichirukku. Someone trying to transfer ₹50,000 from your account. Immediately secure pannunga.
+                            <br><br>
+                            Secure your account: <a href="#">https://secure-account-sbi.ml/block-transaction</a>
+                            <button class="btn-danger">Block Transaction</button>
+                        </div>
+                    </div>
+
+                    <!-- SUSPICIOUS: Link without clear urgency -->
+                    <div class="notification">
+                        <div class="notification-header">
+                            <div class="notification-title">📋 Privacy Policy Update</div>
+                            <div class="notification-time">3 days ago</div>
+                        </div>
+                        <div class="notification-body">
+                            We have updated our privacy policy and terms of service. Please review the changes to continue using our online banking services.
+                            <br><br>
+                            Review policy: <a href="#">https://bank-policy-update.com/review-terms</a>
+                        </div>
+                    </div>
+
+                    <!-- SAFE NOTIFICATION 4: Card delivery -->
+                    <div class="notification">
+                        <div class="notification-header">
+                            <div class="notification-title">💳 Debit Card Dispatched</div>
+                            <div class="notification-time">3 days ago</div>
+                        </div>
+                        <div class="notification-body">
+                            Your new Debit Card ending with XX5678 has been dispatched via courier. Expected delivery: 5-7 working days. Track courier: INPOST1234567890.
+                        </div>
+                    </div>
+
+                    <!-- PHISHING NOTIFICATION 5: Bengali-English mix -->
+                    <div class="notification critical">
+                        <div class="notification-header">
+                            <div class="notification-title">🚨 Account Hack Alert</div>
+                            <div class="notification-time">4 days ago</div>
+                        </div>
+                        <div class="notification-body">
+                            Apnar account hack hoyeche! Hacker apnar password change korar chesta korche. Ekhn verify korun noyto apnar sob taka hariye jabe.
+                            <br><br>
+                            Immediate action: <a href="#">https://sbi-emergency.tk/protect-account</a>
+                            <button class="btn-danger">Protect Account</button>
+                        </div>
+                    </div>
+
+                    <!-- SAFE NOTIFICATION 5: EMI deduction -->
+                    <div class="notification">
+                        <div class="notification-header">
+                            <div class="notification-title">💸 EMI Deducted Successfully</div>
+                            <div class="notification-time">5 days ago</div>
+                        </div>
+                        <div class="notification-body">
+                            Your home loan EMI of ₹18,500 has been successfully deducted from your account on Feb 8, 2026. Outstanding loan balance: ₹12,45,000.
+                        </div>
+                    </div>
+
+                    <!-- PHISHING NOTIFICATION 6: Malayalam-English mix -->
+                    <div class="notification urgent">
+                        <div class="notification-header">
+                            <div class="notification-title">⚠ Password Expired</div>
+                            <div class="notification-time">5 days ago</div>
+                        </div>
+                        <div class="notification-body">
+                            Ningalude online banking password expired aayirikkunnu. 24 hours il reset cheyyuka, allenkil account access blocked aavum.
+                            <br><br>
+                            Reset password: <a href="#">https://password-reset-sbi.tk/change</a>
+                            <button class="btn-primary">Reset Password</button>
+                        </div>
+                    </div>
+
+                    <!-- SUSPICIOUS: Urgency without link -->
+                    <div class="notification critical">
+                        <div class="notification-header">
+                            <div class="notification-title">🔴 URGENT: Fraud Detection Alert</div>
+                            <div class="notification-time">6 days ago</div>
+                        </div>
+                        <div class="notification-body">
+                            Multiple failed login attempts detected! Someone is trying to access your account from Russia. Contact our fraud team immediately at 1800-XXXX-9999 or your account will be locked for your protection!
+                        </div>
+                    </div>
+
+                    <!-- SAFE NOTIFICATION 6: Reward points -->
+                    <div class="notification success">
+                        <div class="notification-header">
+                            <div class="notification-title">🎁 Reward Points Credited</div>
+                            <div class="notification-time">1 week ago</div>
+                        </div>
+                        <div class="notification-body">
+                            You have earned 1,250 reward points on your credit card transactions last month. Total reward points: 8,450. Redeem your points from the Rewards section.
+                        </div>
+                    </div>
+
+                    <!-- PHISHING NOTIFICATION 7: Prize scam -->
+                    <div class="notification urgent">
+                        <div class="notification-header">
+                            <div class="notification-title">🎉 Congratulations! You've Won ₹5,00,000</div>
+                            <div class="notification-time">1 week ago</div>
+                        </div>
+                        <div class="notification-body">
+                            You have been selected as the winner of our Annual Customer Appreciation Lottery! Claim your prize of ₹5,00,000 by verifying your account details.
+                            <br><br>
+                            Claim prize: <a href="#">https://bank-lottery.ml/claim-prize</a>
+                            <button class="btn-primary">Claim Now</button>
+                        </div>
+                    </div>
+
+                    <!-- SAFE NOTIFICATION 7: FD maturity reminder -->
+                    <div class="notification">
+                        <div class="notification-header">
+                            <div class="notification-title">📅 FD Maturity Reminder</div>
+                            <div class="notification-time">1 week ago</div>
+                        </div>
+                        <div class="notification-body">
+                            Your Fixed Deposit FD-XXXX-7890 of ₹5,00,000 will mature on Feb 20, 2026. Maturity amount: ₹5,42,750. Please visit your nearest branch or use online banking to renew or withdraw.
+                        </div>
+                    </div>
+
+                    <!-- PHISHING NOTIFICATION 8: Fake compliance -->
+                    <div class="notification critical">
+                        <div class="notification-header">
+                            <div class="notification-title">⚠ RBI Compliance Required</div>
+                            <div class="notification-time">1 week ago</div>
+                        </div>
+                        <div class="notification-body">
+                            As per new RBI guidelines, all bank customers must re-verify their PAN card and Aadhaar details. Non-compliance will result in account freezing.
+                            <br><br>
+                            Comply now: <a href="#">https://rbi-compliance-portal.tk/verify-documents</a>
+                            <button class="btn-danger">Verify Documents</button>
+                        </div>
+                    </div>
+
+                    <!-- SAFE NOTIFICATION 8: Service announcement -->
+                    <div class="notification">
+                        <div class="notification-header">
+                            <div class="notification-title">🔧 Scheduled Maintenance Notice</div>
+                            <div class="notification-time">2 weeks ago</div>
+                        </div>
+                        <div class="notification-body">
+                            Our online banking services will undergo scheduled maintenance on Feb 15, 2026 from 2:00 AM to 4:00 AM. ATM and mobile banking services will remain available. We apologize for any inconvenience.
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

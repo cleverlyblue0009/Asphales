@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS - Phishing Test Environment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .warning-banner {
+            background: #ff6b6b;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .sms-container {
+            max-width: 400px;
+            margin: 0 auto;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            margin-top: 45px;
+        }
+
+        .header {
+            background: #1c1c1e;
+            color: white;
+            padding: 16px 20px;
+            text-align: center;
+        }
+
+        .contact-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .contact-number {
+            font-size: 12px;
+            color: #8e8e93;
+            margin-top: 2px;
+        }
+
+        .messages-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 16px;
+            background: #000;
+        }
+
+        .message {
+            margin-bottom: 12px;
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.incoming {
+            justify-content: flex-start;
+        }
+
+        .message.outgoing {
+            justify-content: flex-end;
+        }
+
+        .message-bubble {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+        }
+
+        .message.incoming .message-bubble {
+            background: #3a3a3c;
+            color: white;
+        }
+
+        .message.outgoing .message-bubble {
+            background: #0a84ff;
+            color: white;
+        }
+
+        .sms-text {
+            font-size: 16px;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .sms-text a {
+            color: #0a84ff;
+            text-decoration: underline;
+        }
+
+        .message.outgoing .sms-text a {
+            color: white;
+        }
+
+        .timestamp {
+            font-size: 11px;
+            color: #8e8e93;
+            margin-top: 4px;
+            text-align: center;
+        }
+
+        .date-separator {
+            text-align: center;
+            color: #8e8e93;
+            font-size: 12px;
+            margin: 20px 0 16px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="warning-banner">
+        ⚠ This is a controlled phishing simulation environment.
+    </div>
+
+    <div class="sms-container">
+        <div class="header">
+            <div class="contact-name">SBI-ALERT</div>
+            <div class="contact-number">+91-XXXXXX1234</div>
+        </div>
+
+        <div class="messages-area">
+            <div class="date-separator">Today</div>
+
+            <!-- PHISHING CASE 1: Clear phishing with urgency -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        URGENT: Your SBI account will be blocked in 2 hours. Verify immediately: <a href="#">https://sbi-verify.tk/urgent</a>
+                    </div>
+                    <div class="timestamp">9:15 AM</div>
+                </div>
+            </div>
+
+            <div class="message outgoing">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        Is this really from SBI?
+                    </div>
+                    <div class="timestamp">9:16 AM</div>
+                </div>
+            </div>
+
+            <!-- SAFE CASE 1: Legitimate transaction alert -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        Your SBI A/c XX1234 debited with Rs.5000 on 13-Feb-26. Avl Bal: Rs.45,230. If not you, call 1800-1234. -SBI
+                    </div>
+                    <div class="timestamp">10:23 AM</div>
+                </div>
+            </div>
+
+            <!-- PHISHING CASE 2: Hindi-English code mix -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        Aapka KYC update pending hai. 24 hours me complete karo: <a href="#">https://kyc-sbi.ml/update</a> Nahi to account block ho jayega.
+                    </div>
+                    <div class="timestamp">11:45 AM</div>
+                </div>
+            </div>
+
+            <!-- SAFE CASE 2: OTP message -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        Your OTP for SBI transaction is 873562. Valid for 5 minutes. Do not share with anyone. -State Bank of India
+                    </div>
+                    <div class="timestamp">12:30 PM</div>
+                </div>
+            </div>
+
+            <!-- PHISHING CASE 3: Adversarial spelling -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        URG3NT: Acc0unt susp3nd3d. V3r1fy n0w: <a href="#">https://bit.ly/sb1-v3r1fy</a> 0r l0se acc3ss p3rman3ntly.
+                    </div>
+                    <div class="timestamp">1:20 PM</div>
+                </div>
+            </div>
+
+            <!-- SAFE CASE 3: Balance inquiry response -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        Your SBI A/c XX1234 balance as on 13-Feb-26 is Rs.45,230.00. -SBI
+                    </div>
+                    <div class="timestamp">2:15 PM</div>
+                </div>
+            </div>
+
+            <div class="message outgoing">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        Thanks
+                    </div>
+                    <div class="timestamp">2:16 PM</div>
+                </div>
+            </div>
+
+            <!-- PHISHING CASE 4: Tamil-English code mix -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        Unga account-il suspicious activity iruku. Verify pannunga: <a href="#">https://sbi-check.tk/verify</a> Illana block aagum.
+                    </div>
+                    <div class="timestamp">3:40 PM</div>
+                </div>
+            </div>
+
+            <!-- SUSPICIOUS: Link without urgency -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        SBI has updated terms and conditions. Review here: <a href="#">https://sbi-terms.com/update</a>
+                    </div>
+                    <div class="timestamp">4:10 PM</div>
+                </div>
+            </div>
+
+            <!-- SAFE CASE 4: Card delivery notification -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        Your SBI Debit Card ending XX5678 has been dispatched. Expected delivery: 3-5 working days. Track: INXXXX1234 -SBI
+                    </div>
+                    <div class="timestamp">5:00 PM</div>
+                </div>
+            </div>
+
+            <!-- PHISHING CASE 5: Bengali-English code mix -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        Apnar account hack hoyeche. Taka hariye jete pare. Immediately secure korun: <a href="#">https://sbi-secure.ml/now</a>
+                    </div>
+                    <div class="timestamp">5:45 PM</div>
+                </div>
+            </div>
+
+            <div class="message outgoing">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        Looks fake
+                    </div>
+                    <div class="timestamp">5:46 PM</div>
+                </div>
+            </div>
+
+            <!-- SAFE CASE 5: EMI reminder -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        Reminder: Your home loan EMI of Rs.18,500 is due on 15-Feb-26. Please ensure sufficient balance. -SBI
+                    </div>
+                    <div class="timestamp">6:30 PM</div>
+                </div>
+            </div>
+
+            <!-- PHISHING CASE 6: Malayalam-English code mix -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        Ningalude account blocked aavum. Password reset cheyyuka: <a href="#">https://sbi-reset.tk/pwd</a> Vendenkil taka pokum.
+                    </div>
+                    <div class="timestamp">7:20 PM</div>
+                </div>
+            </div>
+
+            <!-- SUSPICIOUS: Urgency without link -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        CRITICAL ALERT! Unauthorized access detected on your account. Contact us immediately or account will be frozen!
+                    </div>
+                    <div class="timestamp">7:55 PM</div>
+                </div>
+            </div>
+
+            <!-- SAFE CASE 6: Credit card payment confirmation -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        Payment of Rs.12,000 received for SBI Card XX3456. Outstanding: Rs.0. Thank you. -SBI Card
+                    </div>
+                    <div class="timestamp">8:15 PM</div>
+                </div>
+            </div>
+
+            <div class="message outgoing">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        Great!
+                    </div>
+                    <div class="timestamp">8:16 PM</div>
+                </div>
+            </div>
+
+            <!-- PHISHING CASE 7: Prize scam -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        Congratulations! You won Rs.50,000 in SBI customer lottery. Claim now: <a href="#">https://sbi-prize.ml/claim</a> Valid 24hrs only.
+                    </div>
+                    <div class="timestamp">8:50 PM</div>
+                </div>
+            </div>
+
+            <!-- PHISHING CASE 8: Adversarial spelling variation -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        F1NAL W4RN1NG: P4ssw0rd exp1red. Upd4te: <a href="#">https://sbi-pwd.ga/fix</a> 2 h0urs 0nly!
+                    </div>
+                    <div class="timestamp">9:25 PM</div>
+                </div>
+            </div>
+
+            <!-- SAFE CASE 7: FD maturity alert -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        Your FD A/c XX7890 of Rs.1,00,000 matures on 20-Feb-26. Maturity amt: Rs.1,12,500. Visit branch to renew/withdraw. -SBI
+                    </div>
+                    <div class="timestamp">9:45 PM</div>
+                </div>
+            </div>
+
+            <!-- SUSPICIOUS: Authority claim -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        RBI Notice: Verify PAN for account compliance: <a href="#">https://rbi-verify.tk/pan</a> Mandatory by law.
+                    </div>
+                    <div class="timestamp">10:10 PM</div>
+                </div>
+            </div>
+
+            <!-- SAFE CASE 8: Branch timing update -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        SBI branches closed on 26-Feb for holiday. ATM & Internet banking available 24x7. -State Bank of India
+                    </div>
+                    <div class="timestamp">10:30 PM</div>
+                </div>
+            </div>
+
+            <!-- PHISHING CASE 9: Fake support number -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="sms-text">
+                        Your account compromised! Call our support immediately at 1800-XXXX-9999 or verify: <a href="#">https://sbi-help.tk/support</a>
+                    </div>
+                    <div class="timestamp">11:00 PM</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
