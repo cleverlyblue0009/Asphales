@@ -93,33 +93,44 @@ function highlightSuspiciousText(segments, harmfulLinks = []) {
   let node;
   while ((node = walker.nextNode())) {
     const nodeText = node.textContent || '';
+    const cleanNodeText = nodeText.replace(/\s+/g, ' ').trim().toLowerCase();
 
     for (const segment of segments) {
       const phrase = segment.phrase || '';
       if (!phrase || phrase.length < 20) continue;
 
-      // Check if this text node contains the suspicious phrase
-      const cleanNodeText = nodeText.replace(/\s+/g, ' ').trim();
-      const cleanPhrase = phrase.replace(/\s+/g, ' ').trim().slice(0, 200);
+      // 🔥 NEW: Use smaller anchor instead of full sentence
+      const anchor = phrase
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase()
+        .split(' ')
+        .slice(0, 8)        // Only first 8 words
+        .join(' ');
 
-      if (cleanNodeText.includes(cleanPhrase) || cleanPhrase.includes(cleanNodeText)) {
+      if (!anchor || anchor.length < 15) continue;
+
+      if (cleanNodeText.includes(anchor)) {
         const parent = node.parentElement;
-        if (parent && !parent.classList.contains('surakshaai-highlight')) {
-          parent.classList.add('surakshaai-highlight');
-          parent.title = `⚠️ Risk: ${(segment.risk_score * 100).toFixed(0)}% - ${segment.reason || 'Suspicious pattern detected'}`;
+        if (!parent) continue;
 
-          // If highlighted message has hyperlinks, highlight those links as well.
-          const linkedElements = [parent, ...parent.querySelectorAll('a')];
-          linkedElements.forEach((el) => {
-            if (el.tagName === 'A' || el.closest('a')) {
-              const anchor = el.tagName === 'A' ? el : el.closest('a');
-              if (anchor) {
-                anchor.classList.add('surakshaai-link-highlight');
-                anchor.setAttribute('data-surakshaai-risk', `${(segment.risk_score * 100).toFixed(0)}%`);
-              }
+        // Prevent nested / repeated highlighting
+        if (parent.closest('.surakshaai-highlight')) continue;
+
+        parent.classList.add('surakshaai-highlight');
+        parent.title = `⚠️ Risk: ${(segment.risk_score * 100).toFixed(0)}% - ${segment.reason || 'Suspicious pattern detected'}`;
+
+        // Highlight links inside that message
+        const linkedElements = [parent, ...parent.querySelectorAll('a')];
+        linkedElements.forEach((el) => {
+          if (el.tagName === 'A' || el.closest('a')) {
+            const anchorEl = el.tagName === 'A' ? el : el.closest('a');
+            if (anchorEl) {
+              anchorEl.classList.add('surakshaai-link-highlight');
+              anchorEl.setAttribute('data-surakshaai-risk', `${(segment.risk_score * 100).toFixed(0)}%`);
             }
-          });
-        }
+          }
+        });
       }
     }
   }
@@ -127,17 +138,20 @@ function highlightSuspiciousText(segments, harmfulLinks = []) {
   // Explicit harmful link highlighting from backend output.
   if (harmfulLinks.length) {
     const anchors = document.querySelectorAll('a[href]');
-    anchors.forEach((anchor) => {
-      const href = anchor.getAttribute('href') || '';
-      const absoluteHref = anchor.href || '';
-      const isHarmful = harmfulLinks.some((link) => href.includes(link) || absoluteHref.includes(link));
+    anchors.forEach((anchorEl) => {
+      const href = anchorEl.getAttribute('href') || '';
+      const absoluteHref = anchorEl.href || '';
+      const isHarmful = harmfulLinks.some(
+        (link) => href.includes(link) || absoluteHref.includes(link)
+      );
       if (isHarmful) {
-        anchor.classList.add('surakshaai-link-highlight');
-        anchor.setAttribute('data-surakshaai-risk', 'Harmful link');
+        anchorEl.classList.add('surakshaai-link-highlight');
+        anchorEl.setAttribute('data-surakshaai-risk', 'Harmful link');
       }
     });
   }
 }
+
 
 async function scanPage() {
   if (!isProtectionActive) return;
@@ -169,6 +183,9 @@ async function scanPage() {
   if (text.length > 4200) text = text.slice(0, 4200);
 
   try {
+    console.log("🟡 Extracted Blocks:", blocks);
+    console.log("🟡 Combined Text Sent To Backend:", text);
+
     const result = await analyzeText(text);
 
     // Highlight suspicious segments on the page
