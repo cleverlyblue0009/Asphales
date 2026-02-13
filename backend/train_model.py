@@ -247,9 +247,13 @@ def train(train_csv: Path, test_csv: Path, output_dir: Path, data_dir: Path) -> 
         X_train, y_train = read_csv(train_csv)
         X_test, y_test = read_csv(test_csv)
     else:
-        fallback = data_dir / "phishing_multilingual_7500.csv"
+        # Updated to use the real training data from markdown file
+        fallback = data_dir / "phishing_multilingual_from_md.csv"
         if not fallback.exists():
-            raise FileNotFoundError("Training CSVs not found and fallback dataset missing")
+            # Try old dataset as final fallback
+            fallback = data_dir / "phishing_multilingual_7500.csv"
+            if not fallback.exists():
+                raise FileNotFoundError("Training CSVs not found and fallback dataset missing")
         texts, labels = read_csv(fallback)
         X_train, y_train, X_test, y_test = _split_holdout(texts, labels)
 
