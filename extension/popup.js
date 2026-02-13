@@ -26,13 +26,13 @@ function renderResult(result) {
   scanSummaryDiv.style.display = 'block';
   scanSummaryDiv.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center;">
-      <strong>Suspicion Level</strong>
+      <strong>Jokhim Star / जोखिम स्तर</strong>
       <span style="padding:4px 8px;border-radius:999px;color:#fff;background:${levelColor(level)}">${level}</span>
     </div>
-    <div style="margin-top:8px;">Threat Score: <strong>${(riskScore * 100).toFixed(1)}%</strong></div>
-    <div>Context Impact: <strong>${contextBoost >= 0 ? '+' : ''}${(contextBoost * 100).toFixed(1)}%</strong></div>
-    <div>Scanned Blocks: <strong>${scannedBlocks}</strong></div>
-    ${languageInfo.primary_language ? `<div>Detected Language: <strong>${languageInfo.primary_language}</strong></div>` : ''}
+    <div style="margin-top:8px;">Threat Score / खतरा स्कोर: <strong>${(riskScore * 100).toFixed(1)}%</strong></div>
+    <div>Context Impact / प्रभाव: <strong>${contextBoost >= 0 ? '+' : ''}${(contextBoost * 100).toFixed(1)}%</strong></div>
+    <div>Scanned Blocks / स्कैन ब्लॉक्स: <strong>${scannedBlocks}</strong></div>
+    ${languageInfo.primary_language ? `<div>Detected Language / भाषा: <strong>${languageInfo.primary_language}</strong></div>` : ''}
   `;
 
   const tactics = explanation.psychological_tactics || [];
@@ -51,46 +51,51 @@ function renderResult(result) {
 
   // Format tactics display
   const tacticsDisplay = tactics.length
-    ? tactics.map((t, i) => formatBilingual(t, tacticsVernacular[i])).join(', ')
-    : 'No clear manipulation tactic detected.';
+    ? tacticsVernacular.length
+      ? tacticsVernacular.join(', ')
+      : tactics.map((t, i) => formatBilingual(t, tacticsVernacular[i])).join(', ')
+    : 'कोई स्पष्ट हेरफेर रणनीति नहीं मिली।';
 
   // Format indicators display
   const indicatorsDisplay = indicators.length
-    ? indicators.map((ind, i) => formatBilingual(ind, indicatorsVernacular[i])).join(', ')
-    : 'No technical indicator detected.';
+    ? indicatorsVernacular.length
+      ? indicatorsVernacular.join(', ')
+      : indicators.map((ind, i) => formatBilingual(ind, indicatorsVernacular[i])).join(', ')
+    : 'कोई तकनीकी संकेत नहीं मिला।';
 
   // Primary reason (bilingual)
   const primaryReason = explanation.primary_reason || 'No strong phishing indicator detected.';
   const primaryReasonVernacular = explanation.primary_reason_vernacular || '';
-  const primaryReasonDisplay = formatBilingual(primaryReason, primaryReasonVernacular);
+  const primaryReasonDisplay = primaryReasonVernacular || formatBilingual(primaryReason, primaryReasonVernacular);
+  const romanizedReason = explanation.risk_reason_romanized || result?.genai_validation?.explanation_romanized || '';
 
   const segmentHtml = segments.length
-    ? `<div class="threat-item"><div class="threat-head">Context-Aware Suspicious Snippets</div>
+    ? `<div class="threat-item"><div class="threat-head">Context-Aware Snippets / संदिग्ध अंश</div>
       ${segments.slice(0, 5).map((s) => `<div class="threat-phrase">• ${(s.phrase || '').slice(0, 140)}</div><div class="threat-explain">Risk ${(Number(s.risk_score || 0) * 100).toFixed(0)}% • ${s.reason || 'Potential phishing context'}</div>`).join('')}
     </div>`
-    : `<div class="threat-item safe"><div class="threat-head">Context-Aware Suspicious Snippets</div><div class="threat-phrase">No suspicious snippets were detected.</div></div>`;
+    : `<div class="threat-item safe"><div class="threat-head">Context-Aware Snippets / संदिग्ध अंश</div><div class="threat-phrase">कोई संदिग्ध अंश नहीं मिला।</div></div>`;
 
   const harmfulLinksHtml = harmfulLinks.length
-    ? `<div class="threat-item"><div class="threat-head">Harmful Links</div>${harmfulLinks.map((link) => `<div class="threat-phrase" style="word-break:break-all;">• ${link}</div>`).join('')}</div>`
-    : `<div class="threat-item safe"><div class="threat-head">Harmful Links</div><div class="threat-phrase">No harmful links detected.</div></div>`;
+    ? `<div class="threat-item"><div class="threat-head">Harmful Links / खतरनाक लिंक</div>${harmfulLinks.map((link) => `<div class="threat-phrase" style="word-break:break-all;">• ${link}</div>`).join('')}</div>`
+    : `<div class="threat-item safe"><div class="threat-head">Harmful Links / खतरनाक लिंक</div><div class="threat-phrase">कोई हानिकारक लिंक नहीं मिला।</div></div>`;
 
   threatListDiv.innerHTML = `
     <div class="threat-item">
-      <div class="threat-head">Manipulation Radar</div>
+      <div class="threat-head">Manipulation Radar / सामाजिक हेरफेर</div>
       <div class="threat-phrase">${tacticsDisplay}</div>
-      <div class="threat-explain"><strong>Primary Reason:</strong> ${primaryReasonDisplay}</div>
+      <div class="threat-explain"><strong>मुख्य कारण:</strong> ${primaryReasonDisplay}</div>${romanizedReason ? `<div class="threat-explain"><strong>Romanized:</strong> ${romanizedReason}</div>` : ''}
     </div>
     <div class="threat-item">
-      <div class="threat-head">Technical Indicators</div>
+      <div class="threat-head">Technical Indicators / तकनीकी संकेत</div>
       <div class="threat-phrase">${indicatorsDisplay}</div>
-      <div class="threat-explain"><strong>Detected Signals:</strong> ${signals.length ? signals.join(', ') : 'None'}</div>
+      <div class="threat-explain"><strong>Detected Signals:</strong> ${signals.length ? signals.join(', ') : 'कोई नहीं'}</div>
     </div>
     ${harmfulLinksHtml}
     ${segmentHtml}
     <div class="threat-item safe">
-      <div class="threat-head">Confidence</div>
+      <div class="threat-head">Confidence / भरोसा</div>
       <div class="threat-phrase">${explanation.confidence || 'Medium'}</div>
-      <div class="threat-explain">Scored using context-aware ML analysis and multilingual pattern detection.</div>
+      <div class="threat-explain">Context-aware ML और बहुभाषी pattern detection से score निकाला गया।</div>
     </div>
   `;
 }
@@ -106,14 +111,14 @@ toggleBtn.addEventListener('click', async () => {
   chrome.runtime.sendMessage({ action: 'SAVE_STATE', isActive });
 
   if (isActive) {
-    statusDiv.textContent = 'Protection: ON ✓';
+    statusDiv.textContent = 'Protection: ON ✓ / सुरक्षा चालू';
     statusDiv.className = 'status active';
-    toggleBtn.textContent = 'Deactivate Protection';
+    toggleBtn.textContent = 'Deactivate / सुरक्षा बंद करें';
     infoDiv.style.display = 'block';
   } else {
-    statusDiv.textContent = 'Protection: OFF';
+    statusDiv.textContent = 'Protection: OFF / सुरक्षा बंद';
     statusDiv.className = 'status inactive';
-    toggleBtn.textContent = 'Activate Protection';
+    toggleBtn.textContent = 'Activate / सुरक्षा चालू करें';
     infoDiv.style.display = 'none';
     scanSummaryDiv.style.display = 'none';
     threatListDiv.innerHTML = '';
@@ -129,9 +134,9 @@ chrome.runtime.onMessage.addListener((message) => {
 chrome.storage.local.get(['isActive', 'lastScanResult'], (result) => {
   if (result.isActive) {
     isActive = true;
-    statusDiv.textContent = 'Protection: ON ✓';
+    statusDiv.textContent = 'Protection: ON ✓ / सुरक्षा चालू';
     statusDiv.className = 'status active';
-    toggleBtn.textContent = 'Deactivate Protection';
+    toggleBtn.textContent = 'Deactivate / सुरक्षा बंद करें';
     infoDiv.style.display = 'block';
   }
 

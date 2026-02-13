@@ -63,13 +63,15 @@ async function analyzeText(text) {
 }
 
 function clearHighlights() {
-  const highlights = document.querySelectorAll('.surakshaai-highlight');
+  const highlights = document.querySelectorAll('.surakshaai-highlight, .surakshaai-link-highlight');
   highlights.forEach((el) => {
     el.classList.remove('surakshaai-highlight');
+    el.classList.remove('surakshaai-link-highlight');
+    el.removeAttribute('data-surakshaai-risk');
   });
 }
 
-function highlightSuspiciousText(segments) {
+function highlightSuspiciousText(segments, harmfulLinks = []) {
   clearHighlights();
 
   if (!segments || segments.length === 0) return;
@@ -105,9 +107,35 @@ function highlightSuspiciousText(segments) {
         if (parent && !parent.classList.contains('surakshaai-highlight')) {
           parent.classList.add('surakshaai-highlight');
           parent.title = `⚠️ Risk: ${(segment.risk_score * 100).toFixed(0)}% - ${segment.reason || 'Suspicious pattern detected'}`;
+
+          // If highlighted message has hyperlinks, highlight those links as well.
+          const linkedElements = [parent, ...parent.querySelectorAll('a')];
+          linkedElements.forEach((el) => {
+            if (el.tagName === 'A' || el.closest('a')) {
+              const anchor = el.tagName === 'A' ? el : el.closest('a');
+              if (anchor) {
+                anchor.classList.add('surakshaai-link-highlight');
+                anchor.setAttribute('data-surakshaai-risk', `${(segment.risk_score * 100).toFixed(0)}%`);
+              }
+            }
+          });
         }
       }
     }
+  }
+
+  // Explicit harmful link highlighting from backend output.
+  if (harmfulLinks.length) {
+    const anchors = document.querySelectorAll('a[href]');
+    anchors.forEach((anchor) => {
+      const href = anchor.getAttribute('href') || '';
+      const absoluteHref = anchor.href || '';
+      const isHarmful = harmfulLinks.some((link) => href.includes(link) || absoluteHref.includes(link));
+      if (isHarmful) {
+        anchor.classList.add('surakshaai-link-highlight');
+        anchor.setAttribute('data-surakshaai-risk', 'Harmful link');
+      }
+    });
   }
 }
 
@@ -145,7 +173,7 @@ async function scanPage() {
 
     // Highlight suspicious segments on the page
     if (result.suspicious_segments && result.suspicious_segments.length > 0) {
-      highlightSuspiciousText(result.suspicious_segments);
+      highlightSuspiciousText(result.suspicious_segments, result.harmful_links || []);
     } else {
       clearHighlights();
     }

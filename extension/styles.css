@@ -4,6 +4,19 @@
   border-radius: 3px !important;
 }
 
+.surakshaai-link-highlight {
+  background: rgba(255, 152, 0, 0.2) !important;
+  border-bottom: 2px dashed #ef6c00 !important;
+  text-decoration: underline !important;
+  text-decoration-color: #ef6c00 !important;
+}
+
+.surakshaai-link-highlight::after {
+  content: ' ⚠';
+  color: #c62828;
+  font-weight: bold;
+}
+
 .risk-badge-safe { background: #2e7d32; color: #fff; }
 .risk-badge-suspicious { background: #ef6c00; color: #fff; }
 .risk-badge-high { background: #e65100; color: #fff; }

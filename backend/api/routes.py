@@ -87,12 +87,28 @@ async def patterns():
     }
 
 
+
+
+def _fallback_romanized_reason(reason_type: str) -> str:
+    """Fallback romanized explanation when GenAI output is unavailable."""
+    mapping = {
+        "bank_impersonation": "Yeh message bank ya authority ban kar aapka private data maang raha hai.",
+        "urgency_tactic": "Message turant action ka pressure create karta hai, jo phishing ka common pattern hai.",
+        "credential_request": "Isme OTP/password/PIN jaisi sensitive details maangi ja rahi hain.",
+        "suspicious_link": "Message me suspicious link hai jo fake website par le ja sakta hai.",
+        "reward_scam": "Fake inaam ka lalach dekar personal data ya paisa lene ki koshish ho rahi hai.",
+        "account_threat": "Account block/suspend ka dar dikhakar aapse jaldi decision liya ja raha hai.",
+        "safe": "Koi strong phishing signal detect nahi hua, phir bhi link verify karke hi click karein.",
+    }
+    return mapping.get(reason_type, mapping["safe"])
+
 def _enhanced_explanation(
     risk_level: str,
     signals: list[str],
     ml_score: float,
     language_info: dict,
-    has_suspicious_links: bool
+    has_suspicious_links: bool,
+    genai_reason: str = ""
 ) -> dict:
     """
     Generate enhanced bilingual explanation with better signal detection.
@@ -124,6 +140,7 @@ def _enhanced_explanation(
 
     # Get bilingual explanation
     bilingual = get_bilingual_explanation(primary_language, reason_type, tactics, technical)
+    romanized_reason = genai_reason.strip() or _fallback_romanized_reason(reason_type)
 
     # Determine confidence
     confidence = "High" if ml_score >= 0.75 else "Medium" if ml_score >= 0.45 else "Low"
@@ -133,6 +150,7 @@ def _enhanced_explanation(
         "risk_level": risk_level,
         "primary_reason": bilingual["primary_reason"]["en"],
         "primary_reason_vernacular": bilingual["primary_reason"]["vernacular"],
+        "risk_reason_romanized": romanized_reason,
         "detected_language": primary_language,
         "psychological_tactics": [t["en"] for t in bilingual["psychological_tactics"]],
         "psychological_tactics_vernacular": [t["vernacular"] for t in bilingual["psychological_tactics"]],
@@ -232,13 +250,17 @@ async def analyze_text(request: AnalyzeRequest):
     # Filter harmful links (only include suspicious ones)
     harmful_links = ctx.get("suspicious_links", [])
 
+    genai_result = await classifier.genai.analyze(text) if classifier.genai.is_available() else None
+    genai_reason = genai_result.get("explanation_hinglish", "") if genai_result else ""
+
     # Generate enhanced bilingual explanation
     explanation = _enhanced_explanation(
         ctx["risk_level"],
         ctx["detected_signals"],
         ctx["risk_score"],
         language_info,
-        len(harmful_links) > 0
+        len(harmful_links) > 0,
+        genai_reason
     )
 
     return {
@@ -251,6 +273,10 @@ async def analyze_text(request: AnalyzeRequest):
         "links": links,
         "harmful_links": harmful_links,  # NEW: Added harmful_links field
         "language_info": language_info,  # NEW: Added language information
-        "genai_validation": {"enabled": False, "note": "GenAI validation disabled for precision/stability."},
+        "genai_validation": {
+            "enabled": bool(genai_result),
+            "note": "GenAI explanation generated." if genai_result else "GenAI unavailable, fallback vernacular explanation used.",
+            "explanation_romanized": genai_reason,
+        },
         "structured_explanation": explanation,
     }
