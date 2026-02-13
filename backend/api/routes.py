@@ -27,7 +27,7 @@ def set_classifier(c: HybridClassifier) -> None:
 # ---------- Request / Response models ----------
 
 class AnalyzeRequest(BaseModel):
-    text: str = Field(..., min_length=1, max_length=5000)
+    text: str
 
 
 class BatchAnalyzeRequest(BaseModel):
