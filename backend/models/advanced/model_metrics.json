@@ -1,0 +1,17 @@
+{
+  "best_threshold": {
+    "threshold": 0.2,
+    "f1": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "accuracy": 1.0
+  },
+  "confusion_matrix": {
+    "tn": 755,
+    "fp": 0,
+    "fn": 0,
+    "tp": 745
+  },
+  "json_samples_used": 114,
+  "target_accuracy_95": true
+}
