@@ -14,7 +14,7 @@ logger = setup_logger("classifier")
 
 
 class HybridClassifier:
-    """ML-first classifier with optional GenAI reasoning."""
+    """ML-first classifier with line-level risk aggregation and optional GenAI reasoning."""
 
     def __init__(self):
         self.risk_scorer = RiskScorer()
@@ -54,44 +54,49 @@ class HybridClassifier:
             self.total_time_ms += elapsed
             return cached
 
-        ml_result = self.ml.predict(text)
-        ml_score = ml_result["risk_score"]
+        ml_doc_result = self.ml.predict(text)
+        ml_doc_score = ml_doc_result["risk_score"]
+
+        line_threats, max_line_score = self._score_suspicious_lines(text)
+        ml_score = max(ml_doc_score, max_line_score)
 
         genai_score: Optional[int] = None
-        threats: list[ThreatDetail] = []
+        genai_explanation: Optional[str] = None
 
-        if self.genai.is_available() and (ml_score >= 35 or ml_score <= 20):
+        # Final GenAI check (when available) to reduce false negatives.
+        if self.genai.is_available():
             genai_result = await self.genai.analyze(text)
             if genai_result is not None:
-                genai_score = genai_result["risk_score"]
-                explanation = genai_result.get("explanation_hinglish", "GenAI suspicious analysis")
-                for tactic in genai_result.get("tactics", []):
-                    threats.append(
+                genai_score = int(genai_result["risk_score"])
+                genai_explanation = genai_result.get("explanation_hinglish")
+                if genai_result.get("is_phishing"):
+                    tactic_text = ", ".join(genai_result.get("tactics", [])[:4]) or "contextual phishing indicators"
+                    line_threats.append(
                         ThreatDetail(
-                            phrase=tactic,
+                            phrase=tactic_text,
                             risk=genai_score,
                             category="genai_detected",
-                            explanation=explanation,
+                            explanation=genai_explanation or "GenAI ne suspicious social-engineering pattern detect kiya.",
                         )
                     )
 
-        final_score = ml_score if genai_score is None else int((ml_score * 0.6) + (genai_score * 0.4))
+        final_score = ml_score if genai_score is None else max(ml_score, int((ml_score * 0.65) + (genai_score * 0.35)))
         severity = self.risk_scorer.get_severity(final_score)
 
-        if not threats and final_score >= 55:
-            threats.append(
+        if not line_threats and final_score >= 45:
+            line_threats.append(
                 ThreatDetail(
                     phrase=text[:220],
                     risk=final_score,
                     category="ml_detected",
-                    explanation="ML model ne is message ko phishing-like classify kiya hai based on multilingual scam patterns.",
+                    explanation="ML + contextual analysis ne message ko suspicious classify kiya. Link/OTP/KYC details verify kiye bina action mat lo.",
                 )
             )
 
         result = RiskResult(
             overall_risk=final_score,
             severity=severity,
-            threats=threats,
+            threats=line_threats[:8],
             method="ml+genai" if genai_score is not None else "ml",
             ml_score=ml_score,
             genai_score=genai_score,
@@ -101,6 +106,30 @@ class HybridClassifier:
         self.total_time_ms += result.processing_time_ms
         self.cache.set(key, result)
         return result
+
+    def _score_suspicious_lines(self, text: str) -> tuple[list[ThreatDetail], int]:
+        lines = [ln.strip() for ln in text.splitlines() if len(ln.strip()) >= 20]
+        threats: list[ThreatDetail] = []
+        max_line = 0
+
+        for line in lines:
+            line_risk = self.ml.predict(line)["risk_score"]
+            max_line = max(max_line, line_risk)
+            if line_risk >= 52:
+                threats.append(
+                    ThreatDetail(
+                        phrase=line[:220],
+                        risk=line_risk,
+                        category="ml_line_detected",
+                        explanation="Is specific line mein phishing-like pattern hai (OTP/KYC/account urgency/credential bait).",
+                    )
+                )
+
+        deduped: dict[str, ThreatDetail] = {}
+        for t in threats:
+            deduped[t.phrase] = t
+        sorted_threats = sorted(deduped.values(), key=lambda x: x.risk, reverse=True)
+        return sorted_threats, max_line
 
     async def batch_classify(self, texts: list[str]) -> list[RiskResult]:
         return [await self.classify(text) for text in texts]

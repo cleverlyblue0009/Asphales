@@ -6,6 +6,7 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from models.risk_scorer import RiskScorer
+from services.classifier import HybridClassifier
 from services.ml_classifier import MLPhishingClassifier
 from utils.text_processor import validate_length
 
@@ -53,3 +54,21 @@ class TestInputValidation:
     def test_validate_ok(self):
         ok, _ = validate_length("normal message")
         assert ok
+
+
+@pytest.mark.asyncio
+async def test_line_level_aggregator_catches_phishy_line_in_long_text():
+    clf = HybridClassifier()
+    text = """23BCB0058
+23BCB0155
+Dear Customer,
+Your SBI account will be blocked within 24 hours due to suspicious activity.
+Please verify your KYC immediately to avoid permanent suspension.
+Click here and enter your OTP and debit card details to continue
+SJT 308 Biochemistry
+Payment Guitar Sir No.
+"""
+
+    result = await clf.classify(text)
+    assert result.overall_risk >= 60
+    assert len(result.threats) > 0
