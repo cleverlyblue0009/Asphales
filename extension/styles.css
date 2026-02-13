@@ -1,86 +1,94 @@
-  .surakshaai-highlight {
+.surakshaai-highlight {
   background: rgba(255, 87, 51, 0.3) !important;
-  border-bottom: 2px solid #ff5733 !important;
+  border-bottom: 2px solid #ff0000 !important;
   cursor: pointer !important;
-  transition: all 0.2s ease !important;
-  padding: 2px 4px !important;
+  transition: all 0.25s ease !important;
+  animation: surakshaHighlightIn 0.25s ease !important;
   border-radius: 3px !important;
 }
 
 .surakshaai-highlight:hover {
-  background: rgba(255, 87, 51, 0.5) !important;
+  background: rgba(255, 87, 51, 0.45) !important;
 }
 
 .surakshaai-tooltip {
   position: fixed !important;
   background: #1a1a1a !important;
-  color: white !important;
-  padding: 15px 20px !important;
-  border-radius: 8px !important;
-  max-width: 350px !important;
+  color: #fff !important;
+  padding: 12px 14px !important;
+  border-radius: 10px !important;
+  max-width: 320px !important;
   z-index: 999999 !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35) !important;
   font-family: Arial, sans-serif !important;
-  font-size: 14px !important;
-  line-height: 1.6 !important;
+  font-size: 13px !important;
+  line-height: 1.45 !important;
 }
 
 .surakshaai-tooltip .risk-badge {
   display: inline-block !important;
-  padding: 5px 12px !important;
-  border-radius: 4px !important;
-  font-weight: bold !important;
-  margin-bottom: 10px !important;
-  font-size: 13px !important;
+  padding: 3px 10px !important;
+  border-radius: 999px !important;
+  font-weight: 700 !important;
+  margin-bottom: 8px !important;
+  font-size: 12px !important;
 }
 
 .risk-high {
   background: #f44336 !important;
-  color: white !important;
+  color: #fff !important;
 }
 
 .risk-medium {
   background: #ff9800 !important;
-  color: white !important;
+  color: #fff !important;
 }
 
 .risk-low {
   background: #4caf50 !important;
-  color: white !important;
+  color: #fff !important;
 }
 
-.surakshaai-shield {
+.surakshaai-loading {
   position: fixed !important;
-  bottom: 20px !important;
-  right: 20px !important;
-  width: 60px !important;
-  height: 60px !important;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  border-radius: 50% !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  cursor: pointer !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
-  z-index: 999998 !important;
-  font-size: 30px !important;
-  transition: all 0.3s ease !important;
+  top: 16px !important;
+  right: 16px !important;
+  background: #1a1a1a !important;
+  color: #fff !important;
+  padding: 10px 12px !important;
+  border-radius: 8px !important;
+  z-index: 999999 !important;
+  font: 600 12px Arial, sans-serif !important;
+  animation: surakshaPulse 1s infinite !important;
 }
 
-.surakshaai-shield:hover {
-  transform: scale(1.1) !important;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.4) !important;
+.surakshaai-toast {
+  position: fixed !important;
+  right: 16px !important;
+  bottom: 16px !important;
+  background: #202020 !important;
+  color: #fff !important;
+  padding: 10px 12px !important;
+  border-radius: 8px !important;
+  z-index: 999999 !important;
+  font: 600 12px Arial, sans-serif !important;
 }
 
-.surakshaai-shield.scanning {
-  animation: pulse 1.5s infinite !important;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
+@keyframes surakshaPulse {
+  0%,
+  100% {
+    opacity: 0.85;
   }
   50% {
-    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes surakshaHighlightIn {
+  from {
+    background: rgba(255, 87, 51, 0.05);
+  }
+  to {
+    background: rgba(255, 87, 51, 0.3);
   }
 }
