@@ -3,8 +3,13 @@
   "name": "SurakshaAI Shield",
   "version": "1.0",
   "description": "Phishing protection for code-mixed Indian languages",
-  "permissions": ["activeTab", "storage"],
-  "host_permissions": ["http://localhost:8000/*"],
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "http://localhost:8000/*"
+  ],
   "icons": {
     "16": "icon16.png",
     "32": "icon32.png",
@@ -18,11 +23,19 @@
       "128": "icon128.png"
     }
   },
-  "content_scripts": [{
-    "matches": ["<all_urls>"],
-    "js": ["content.js"],
-    "css": ["styles.css"]
-  }],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "styles.css"
+      ]
+    }
+  ],
   "background": {
     "service_worker": "background.js"
   }
