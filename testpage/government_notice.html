@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government of India - Official Notice Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background: #f0f0f0;
+            min-height: 100vh;
+        }
+
+        .warning-banner {
+            background: #ff6b6b;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .government-container {
+            max-width: 900px;
+            margin: 60px auto 20px;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            min-height: calc(100vh - 80px);
+        }
+
+        .header {
+            background: linear-gradient(to bottom, #ff9933 0%, #ff9933 33%, white 33%, white 66%, #138808 66%, #138808 100%);
+            height: 80px;
+            border-bottom: 3px solid #000080;
+        }
+
+        .emblem-section {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-bottom: 2px solid #000080;
+        }
+
+        .emblem {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .government-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #000080;
+            margin-bottom: 5px;
+        }
+
+        .department-name {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .motto {
+            font-style: italic;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .content-area {
+            padding: 30px 40px;
+        }
+
+        .notice {
+            margin-bottom: 40px;
+            border: 2px solid #e0e0e0;
+            padding: 25px;
+            background: #fafafa;
+        }
+
+        .notice.urgent {
+            border-color: #ff9800;
+            background: #fff3e0;
+        }
+
+        .notice.critical {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+
+        .notice.safe {
+            border-color: #4caf50;
+            background: #f1f8f4;
+        }
+
+        .notice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .notice-number {
+            font-weight: bold;
+            color: #000080;
+            font-size: 14px;
+        }
+
+        .notice-date {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .notice-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #000;
+            margin-bottom: 15px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .notice-subject {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+
+        .notice-body {
+            line-height: 1.8;
+            text-align: justify;
+            font-size: 15px;
+            color: #222;
+        }
+
+        .notice-body p {
+            margin-bottom: 15px;
+        }
+
+        .notice-body a {
+            color: #0066cc;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        .signature-section {
+            margin-top: 30px;
+            text-align: right;
+        }
+
+        .signature-line {
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .official-seal {
+            background: #000080;
+            color: white;
+            padding: 10px 20px;
+            display: inline-block;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 12px;
+        }
+
+        .action-button {
+            background: #000080;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+            margin-top: 15px;
+            text-transform: uppercase;
+        }
+
+        .action-button.urgent {
+            background: #f44336;
+        }
+
+        .footer {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            border-top: 2px solid #000080;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="warning-banner">
+        ⚠ This is a controlled phishing simulation environment.
+    </div>
+
+    <div class="government-container">
+        <div class="header"></div>
+
+        <div class="emblem-section">
+            <div class="emblem">⚜</div>
+            <div class="government-title">GOVERNMENT OF INDIA</div>
+            <div class="department-name">Ministry of Finance - Department of Revenue</div>
+            <div class="motto">सत्यमेव जयते (Truth Alone Triumphs)</div>
+        </div>
+
+        <div class="content-area">
+
+            <!-- PHISHING NOTICE 1: Fake tax refund -->
+            <div class="notice urgent">
+                <div class="notice-header">
+                    <div class="notice-number">Ref No: IT/2026/TAX/45892</div>
+                    <div class="notice-date">Date: February 13, 2026</div>
+                </div>
+                <div class="notice-title">Urgent: Income Tax Refund Pending</div>
+                <div class="notice-subject">Subject: Immediate Action Required for Tax Refund Claim</div>
+                <div class="notice-body">
+                    <p>Dear Taxpayer,</p>
+                    <p>This is to inform you that your Income Tax Refund of ₹45,680 for Assessment Year 2025-26 has been approved and is pending verification. You must verify your bank account details within 48 hours to receive the refund.</p>
+                    <p><strong>Failure to verify will result in forfeiture of the refund amount.</strong></p>
+                    <p>Verify your details immediately by clicking here: <a href="#">https://incometax-refund.tk/verify-claim</a></p>
+                    <p>This is an automated system-generated notice. Please do not reply to this message.</p>
+                </div>
+                <div class="signature-section">
+                    <div class="signature-line">Authorized Officer</div>
+                    <div class="signature-line">Income Tax Department</div>
+                </div>
+                <button class="action-button urgent">VERIFY NOW</button>
+            </div>
+
+            <!-- SAFE NOTICE 1: Legitimate tax filing reminder -->
+            <div class="notice safe">
+                <div class="notice-header">
+                    <div class="notice-number">Circular No: 1/2026</div>
+                    <div class="notice-date">Date: February 10, 2026</div>
+                </div>
+                <div class="notice-title">Income Tax Return Filing - Reminder</div>
+                <div class="notice-subject">Subject: Extended Due Date for ITR Filing FY 2025-26</div>
+                <div class="notice-body">
+                    <p>To All Taxpayers,</p>
+                    <p>This is to inform you that the due date for filing Income Tax Returns for the Financial Year 2025-26 (Assessment Year 2026-27) has been extended to July 31, 2026 for individual taxpayers.</p>
+                    <p>Taxpayers are advised to file their returns through the official Income Tax e-filing portal at www.incometax.gov.in</p>
+                    <p>For any assistance, please contact your nearest Income Tax Help Center or call the helpline at 1800-180-1961.</p>
+                </div>
+                <div class="signature-section">
+                    <div class="signature-line">Commissioner of Income Tax</div>
+                    <div class="signature-line">Central Board of Direct Taxes</div>
+                    <div class="official-seal">OFFICIAL SEAL</div>
+                </div>
+            </div>
+
+            <!-- PHISHING NOTICE 2: Hindi-English code mix -->
+            <div class="notice critical">
+                <div class="notice-header">
+                    <div class="notice-number">Notice No: PAN/2026/8754</div>
+                    <div class="notice-date">Date: February 12, 2026</div>
+                </div>
+                <div class="notice-title">PAN Card Verification Mandatory</div>
+                <div class="notice-subject">Subject: Aapka PAN Card Verification Pending Hai</div>
+                <div class="notice-body">
+                    <p>Dear Citizen,</p>
+                    <p>Aapka PAN card verification pending hai. New government rules ke according, sabhi PAN card holders ko apna PAN Aadhaar ke saath link karna mandatory hai.</p>
+                    <p><strong>Agar aap 72 hours mein verify nahi karenge to aapka PAN card permanently deactivate ho jayega aur tax penalties lagegi.</strong></p>
+                    <p>Immediate verification karein: <a href="#">https://pan-aadhaar-link.tk/verify-now</a></p>
+                    <p>Yeh bahut urgent hai. Please delay mat karein.</p>
+                </div>
+                <div class="signature-section">
+                    <div class="signature-line">Under Secretary</div>
+                    <div class="signature-line">PAN Services Unit</div>
+                </div>
+                <button class="action-button urgent">VERIFY PAN NOW</button>
+            </div>
+
+            <!-- SAFE NOTICE 2: Passport service update -->
+            <div class="notice safe">
+                <div class="notice-header">
+                    <div class="notice-number">Advisory No: MEA/2026/023</div>
+                    <div class="notice-date">Date: February 8, 2026</div>
+                </div>
+                <div class="notice-title">Passport Seva Kendra - New Services</div>
+                <div class="notice-subject">Subject: Introduction of Tatkaal Passport Service at All PSKs</div>
+                <div class="notice-body">
+                    <p>To All Citizens,</p>
+                    <p>The Ministry of External Affairs is pleased to announce that Tatkaal Passport services are now available at all Passport Seva Kendras across India.</p>
+                    <p>Citizens can apply for urgent passport services through the official portal at www.passportindia.gov.in</p>
+                    <p>For appointments and queries, please visit your nearest Passport Seva Kendra or call the helpline at 1800-258-1800.</p>
+                </div>
+                <div class="signature-section">
+                    <div class="signature-line">Joint Secretary</div>
+                    <div class="signature-line">Ministry of External Affairs</div>
+                    <div class="official-seal">OFFICIAL SEAL</div>
+                </div>
+            </div>
+
+            <!-- PHISHING NOTICE 3: Adversarial spelling -->
+            <div class="notice critical">
+                <div class="notice-header">
+                    <div class="notice-number">URG3NT N0T1C3: G0V/2026/9999</div>
+                    <div class="notice-date">Date: February 13, 2026</div>
+                </div>
+                <div class="notice-title">F1NAL W4RN1NG - T4X P3N4LTY N0T1C3</div>
+                <div class="notice-subject">Subject: 1mm3d1at3 P4ym3nt R3qu1r3d</div>
+                <div class="notice-body">
+                    <p>D3ar T4xp4y3r,</p>
+                    <p>Y0u hav3 unp41d t4x3s 0f ₹1,25,000. Y0u must p4y 1mm3d1at3ly 0r l3g4l act10n will b3 t4k3n ag41nst y0u.</p>
+                    <p><strong>P4y n0w: <a href="#">https://tax-p4yment.tk/pay-now</a></strong></p>
+                    <p>F41lur3 t0 c0mply will r3sult in arr3st warr4nt.</p>
+                </div>
+                <button class="action-button urgent">P4Y N0W</button>
+            </div>
+
+            <!-- PHISHING NOTICE 4: Tamil-English code mix -->
+            <div class="notice urgent">
+                <div class="notice-header">
+                    <div class="notice-number">Notice: UIDAI/2026/7845</div>
+                    <div class="notice-date">Date: February 11, 2026</div>
+                </div>
+                <div class="notice-title">Aadhaar Card Verification Required</div>
+                <div class="notice-subject">Subject: Unga Aadhaar Card Update Pannanum</div>
+                <div class="notice-body">
+                    <p>Dear Citizen,</p>
+                    <p>Unga Aadhaar card details outdated aayiruku. New government policy-ku according, ellorum apna Aadhaar card mobile number aur biometric details update pannanum.</p>
+                    <p><strong>Immediate action: <a href="#">https://aadhaar-update.tk/verify-details</a></strong></p>
+                    <p>48 hours kulla update pannala na unga Aadhaar services suspended aayidum.</p>
+                </div>
+                <div class="signature-section">
+                    <div class="signature-line">Regional Officer</div>
+                    <div class="signature-line">UIDAI - Aadhaar Authority</div>
+                </div>
+                <button class="action-button urgent">UPDATE AADHAAR</button>
+            </div>
+
+            <!-- SAFE NOTICE 3: Voter ID information -->
+            <div class="notice safe">
+                <div class="notice-header">
+                    <div class="notice-number">ECI Circular: 3/2026</div>
+                    <div class="notice-date">Date: February 5, 2026</div>
+                </div>
+                <div class="notice-title">Voter Registration Drive - 2026</div>
+                <div class="notice-subject">Subject: Special Drive for New Voter Registration</div>
+                <div class="notice-body">
+                    <p>To All Eligible Citizens,</p>
+                    <p>The Election Commission of India announces a special voter registration drive from February 15 to March 15, 2026.</p>
+                    <p>Eligible citizens who have attained the age of 18 years as on January 1, 2026, can register as voters through the official website www.nvsp.in or by visiting your nearest Electoral Registration Office.</p>
+                    <p>For assistance, call the helpline: 1950</p>
+                </div>
+                <div class="signature-section">
+                    <div class="signature-line">Chief Electoral Officer</div>
+                    <div class="signature-line">Election Commission of India</div>
+                    <div class="official-seal">OFFICIAL SEAL</div>
+                </div>
+            </div>
+
+            <!-- PHISHING NOTICE 5: Bengali-English code mix -->
+            <div class="notice critical">
+                <div class="notice-header">
+                    <div class="notice-number">Legal Notice: LAW/2026/4567</div>
+                    <div class="notice-date">Date: February 13, 2026</div>
+                </div>
+                <div class="notice-title">Court Summons - Immediate Response Required</div>
+                <div class="notice-subject">Subject: Apnar Biruddhe Criminal Case File Hoyeche</div>
+                <div class="notice-body">
+                    <p>Dear Citizen,</p>
+                    <p>Apnar biruddhe ek criminal case file kora hoyeche tax evasion ar fraud er jonno. Supreme Court apnake 24 hours er moddhe respond korte bolche.</p>
+                    <p><strong>Nahole arrest warrant issue hobe aur immediate arrest kora hobe.</strong></p>
+                    <p>Case details dekhun ebong respond korun: <a href="#">https://supreme-court.tk/case-details</a></p>
+                    <p>Aar deri korle bhishon somossha hobe.</p>
+                </div>
+                <div class="signature-section">
+                    <div class="signature-line">Court Registrar</div>
+                    <div class="signature-line">Supreme Court of India</div>
+                </div>
+                <button class="action-button urgent">RESPOND NOW</button>
+            </div>
+
+            <!-- SUSPICIOUS: Link without clear urgency -->
+            <div class="notice">
+                <div class="notice-header">
+                    <div class="notice-number">Info Circular: DIG/2026/112</div>
+                    <div class="notice-date">Date: February 9, 2026</div>
+                </div>
+                <div class="notice-title">Digital India Initiative - New Portal</div>
+                <div class="notice-subject">Subject: Updated Government Services Portal</div>
+                <div class="notice-body">
+                    <p>Dear Citizens,</p>
+                    <p>The Government of India has launched a new unified portal for all government services. Please register your profile to access various services.</p>
+                    <p>Register here: <a href="#">https://digital-india-portal.com/register</a></p>
+                    <p>This will streamline all your government interactions.</p>
+                </div>
+                <div class="signature-section">
+                    <div class="signature-line">Director</div>
+                    <div class="signature-line">Digital India Corporation</div>
+                </div>
+            </div>
+
+            <!-- SAFE NOTICE 4: COVID vaccination certificate -->
+            <div class="notice safe">
+                <div class="notice-header">
+                    <div class="notice-number">Health Advisory: MoHFW/2026/089</div>
+                    <div class="notice-date">Date: February 7, 2026</div>
+                </div>
+                <div class="notice-title">COVID-19 Vaccination Certificate Download</div>
+                <div class="notice-subject">Subject: Download Your Digital Vaccination Certificate</div>
+                <div class="notice-body">
+                    <p>Dear Citizens,</p>
+                    <p>All vaccinated citizens can download their digital COVID-19 vaccination certificates from the CoWIN portal at www.cowin.gov.in</p>
+                    <p>The certificate is available in both English and Hindi and is recognized internationally for travel purposes.</p>
+                    <p>For technical support, contact the helpline: 1075</p>
+                </div>
+                <div class="signature-section">
+                    <div class="signature-line">Secretary</div>
+                    <div class="signature-line">Ministry of Health & Family Welfare</div>
+                    <div class="official-seal">OFFICIAL SEAL</div>
+                </div>
+            </div>
+
+            <!-- PHISHING NOTICE 6: Malayalam-English code mix -->
+            <div class="notice urgent">
+                <div class="notice-header">
+                    <div class="notice-number">License Notice: RTO/2026/3421</div>
+                    <div class="notice-date">Date: February 12, 2026</div>
+                </div>
+                <div class="notice-title">Driving License Renewal Required</div>
+                <div class="notice-subject">Subject: Ningalude Driving License Expire Aayi</div>
+                <div class="notice-body">
+                    <p>Dear License Holder,</p>
+                    <p>Ningalude driving license expire aayi. Ippol renew cheyyuka otherwise heavy fine um jail time um undaavum.</p>
+                    <p><strong>Online renewal cheyyuka: <a href="#">https://driving-license-renew.tk/pay-renewal</a></strong></p>
+                    <p>48 hours delay cheythaal driving ban aavum.</p>
+                </div>
+                <div class="signature-section">
+                    <div class="signature-line">Transport Commissioner</div>
+                    <div class="signature-line">Regional Transport Office</div>
+                </div>
+                <button class="action-button urgent">RENEW LICENSE</button>
+            </div>
+
+            <!-- SUSPICIOUS: Urgency without link -->
+            <div class="notice critical">
+                <div class="notice-header">
+                    <div class="notice-number">URGENT: CBI/2026/CASE/9876</div>
+                    <div class="notice-date">Date: February 13, 2026</div>
+                </div>
+                <div class="notice-title">CBI Investigation Notice</div>
+                <div class="notice-subject">Subject: You Are Under Investigation</div>
+                <div class="notice-body">
+                    <p>URGENT NOTICE!</p>
+                    <p>The Central Bureau of Investigation has opened a case against you for financial fraud and money laundering. You must contact our office immediately at 1800-XXXX-7777 within 24 hours.</p>
+                    <p><strong>Failure to respond will result in immediate arrest and seizure of all assets!</strong></p>
+                    <p>This is your final warning. Act now!</p>
+                </div>
+            </div>
+
+            <!-- SAFE NOTICE 5: Railway announcement -->
+            <div class="notice safe">
+                <div class="notice-header">
+                    <div class="notice-number">Railway Board Circular: 12/2026</div>
+                    <div class="notice-date">Date: February 6, 2026</div>
+                </div>
+                <div class="notice-title">New Trains Introduction - February 2026</div>
+                <div class="notice-subject">Subject: Schedule of New Train Services</div>
+                <div class="notice-body">
+                    <p>Dear Passengers,</p>
+                    <p>Indian Railways is pleased to announce the introduction of 5 new express trains connecting major cities from March 1, 2026.</p>
+                    <p>Bookings are now open on the official IRCTC website www.irctc.co.in</p>
+                    <p>For enquiries, please call 139 or visit your nearest railway reservation center.</p>
+                </div>
+                <div class="signature-section">
+                    <div class="signature-line">General Manager</div>
+                    <div class="signature-line">Indian Railways</div>
+                    <div class="official-seal">OFFICIAL SEAL</div>
+                </div>
+            </div>
+
+            <!-- PHISHING NOTICE 7: Subsidy scam -->
+            <div class="notice urgent">
+                <div class="notice-header">
+                    <div class="notice-number">Subsidy Notice: AGR/2026/5544</div>
+                    <div class="notice-date">Date: February 11, 2026</div>
+                </div>
+                <div class="notice-title">Government Subsidy Payment Approved</div>
+                <div class="notice-subject">Subject: Claim Your ₹25,000 Government Subsidy</div>
+                <div class="notice-body">
+                    <p>Dear Beneficiary,</p>
+                    <p>You have been selected to receive a government subsidy of ₹25,000 under the PM Relief Scheme. This is a one-time benefit for eligible citizens.</p>
+                    <p><strong>Claim your subsidy by verifying your bank details: <a href="#">https://gov-subsidy.tk/claim-benefit</a></strong></p>
+                    <p>You must claim within 72 hours or the benefit will be transferred to another beneficiary.</p>
+                </div>
+                <div class="signature-section">
+                    <div class="signature-line">Welfare Officer</div>
+                    <div class="signature-line">Ministry of Rural Development</div>
+                </div>
+                <button class="action-button">CLAIM SUBSIDY</button>
+            </div>
+
+            <!-- SAFE NOTICE 6: Legitimate government scholarship -->
+            <div class="notice safe">
+                <div class="notice-header">
+                    <div class="notice-number">Scholarship Notice: EDU/2026/234</div>
+                    <div class="notice-date">Date: February 4, 2026</div>
+                </div>
+                <div class="notice-title">National Scholarship Portal - Applications Open</div>
+                <div class="notice-subject">Subject: Apply for Central Government Scholarships 2026-27</div>
+                <div class="notice-body">
+                    <p>Dear Students,</p>
+                    <p>Applications are invited for various Central Government Scholarships for the academic year 2026-27.</p>
+                    <p>Eligible students can apply through the National Scholarship Portal at www.scholarships.gov.in from February 15 to March 31, 2026.</p>
+                    <p>For queries, contact the helpline: 0120-6619540</p>
+                </div>
+                <div class="signature-section">
+                    <div class="signature-line">Director</div>
+                    <div class="signature-line">Ministry of Education</div>
+                    <div class="official-seal">OFFICIAL SEAL</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            © 2026 Government of India. All Rights Reserved.<br>
+            This is a controlled phishing simulation environment for testing purposes only.
+        </div>
+    </div>
+</body>
+</html>

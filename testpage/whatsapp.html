@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp - Phishing Test Environment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #e5ddd5;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QjVCN0E1RjI4MTIwMTFFNkI5MTBBOEI2NTdFNTgzNUIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QjVCN0E1RjM4MTIwMTFFNkI5MTBBOEI2NTdFNTgzNUIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpCNUI3QTVGMDgxMjAxMUU2QjkxMEE4QjY1N0U1ODM1QiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpCNUI3QTVGMTgxMjAxMUU2QjkxMEE4QjY1N0U1ODM1QiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRAA0wgfAaEJ4DwfxDeBKIHgDATAwQAAgwAFHQC+0q8UhAAAAAASUVORK5CYII=');
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .warning-banner {
+            background: #ff6b6b;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .whatsapp-container {
+            max-width: 500px;
+            margin: 0 auto;
+            height: 100vh;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            margin-top: 45px;
+        }
+
+        .header {
+            background: #075e54;
+            color: white;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #25d366;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .contact-status {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .chat-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #e5ddd5;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QjVCN0E1RjI4MTIwMTFFNkI5MTBBOEI2NTdFNTgzNUIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QjVCN0E1RjM4MTIwMTFFNkI5MTBBOEI2NTdFNTgzNUIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpCNUI3QTVGMDgxMjAxMUU2QjkxMEE4QjY1N0U1ODM1QiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpCNUI3QTVGMTgxMjAxMUU2QjkxMEE4QjY1N0U1ODM1QiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRAA0wgfAaEJ4DwfxDeBKIHgDATAwQAAgwAFHQC+0q8UhAAAAAASUVORK5CYII=');
+        }
+
+        .message {
+            margin-bottom: 10px;
+            display: flex;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.incoming {
+            justify-content: flex-start;
+        }
+
+        .message.outgoing {
+            justify-content: flex-end;
+        }
+
+        .message-bubble {
+            max-width: 75%;
+            padding: 8px 12px;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .message.incoming .message-bubble {
+            background: white;
+            border-top-left-radius: 0;
+        }
+
+        .message.outgoing .message-bubble {
+            background: #dcf8c6;
+            border-top-right-radius: 0;
+        }
+
+        .message-text {
+            font-size: 14px;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .message-text a {
+            color: #039be5;
+            text-decoration: none;
+        }
+
+        .timestamp {
+            font-size: 11px;
+            color: #667781;
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        .message.outgoing .timestamp {
+            color: #667781;
+        }
+
+        .input-area {
+            padding: 10px;
+            background: #f0f0f0;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 20px;
+            border: none;
+            background: white;
+            font-size: 14px;
+        }
+
+        .send-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #25d366;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="warning-banner">
+        ⚠ This is a controlled phishing simulation environment.
+    </div>
+
+    <div class="whatsapp-container">
+        <div class="header">
+            <div class="avatar">SB</div>
+            <div class="contact-info">
+                <div class="contact-name">State Bank Support</div>
+                <div class="contact-status">online</div>
+            </div>
+        </div>
+
+        <div class="chat-area">
+            <!-- PHISHING CASE 1: Clear phishing with urgency + link -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        URGENT: Your account has been temporarily suspended due to unusual activity. Please verify your identity immediately to avoid permanent closure.
+                        <br><br>
+                        Click here: <a href="#">https://statebank-verify.tk/login</a>
+                    </div>
+                    <div class="timestamp">10:23 AM</div>
+                </div>
+            </div>
+
+            <div class="message outgoing">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        What happened? I didn't do anything unusual.
+                    </div>
+                    <div class="timestamp">10:24 AM</div>
+                </div>
+            </div>
+
+            <!-- PHISHING CASE 2: Hindi-English code mix phishing -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        Aapka KYC pending hai. Agar 24 hours mein complete nahi kiya toh aapka account block ho jayega. Turant verify karein: <a href="#">https://kyc-verify-sbi.com/update</a>
+                    </div>
+                    <div class="timestamp">10:26 AM</div>
+                </div>
+            </div>
+
+            <div class="message outgoing">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        Ok, let me check
+                    </div>
+                    <div class="timestamp">10:27 AM</div>
+                </div>
+            </div>
+
+            <!-- SAFE CASE 1: Normal conversation -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        Thank you for visiting our branch yesterday. Your loan application has been received and is under review. We'll contact you within 3-5 business days.
+                    </div>
+                    <div class="timestamp">11:15 AM</div>
+                </div>
+            </div>
+
+            <div class="message outgoing">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        Great, thanks for the update!
+                    </div>
+                    <div class="timestamp">11:16 AM</div>
+                </div>
+            </div>
+
+            <!-- PHISHING CASE 3: Adversarial spelling with urgency -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        URG3NT N0TICE: Your acc0unt will be cl0sed in 2 hours. Ver1fy now to prevent loss of access: <a href="#">https://bit.ly/sb1-v3r1fy</a>
+                    </div>
+                    <div class="timestamp">2:45 PM</div>
+                </div>
+            </div>
+
+            <!-- SAFE CASE 2: Legitimate notification -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        Your Fixed Deposit of Rs. 1,00,000 has matured. Please visit your nearest branch to renew or withdraw. For queries, call our customer care.
+                    </div>
+                    <div class="timestamp">3:12 PM</div>
+                </div>
+            </div>
+
+            <div class="message outgoing">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        I'll visit tomorrow
+                    </div>
+                    <div class="timestamp">3:13 PM</div>
+                </div>
+            </div>
+
+            <!-- PHISHING CASE 4: Tamil-English code mix -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        Ungal account-il suspicious transaction kandupidichirukku. Unga details update pannunga immediately: <a href="#">https://sbi-security-check.net/verify</a>
+                    </div>
+                    <div class="timestamp">4:20 PM</div>
+                </div>
+            </div>
+
+            <!-- SUSPICIOUS BUT AMBIGUOUS: Link without clear urgency -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        We've updated our privacy policy. You can review the changes here: <a href="#">https://bank-policy-update.com/terms</a>
+                    </div>
+                    <div class="timestamp">4:45 PM</div>
+                </div>
+            </div>
+
+            <!-- SAFE CASE 3: Regular service message -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        Your monthly account statement for January 2026 is now available in your internet banking account.
+                    </div>
+                    <div class="timestamp">5:10 PM</div>
+                </div>
+            </div>
+
+            <!-- PHISHING CASE 5: Bengali-English code mix with urgency -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        Apnar account e security breach hoyeche. Ekhn verify korun noyto account permanently lock hoye jabe: <a href="#">https://sbi-secure-login.ml/auth</a>
+                    </div>
+                    <div class="timestamp">6:05 PM</div>
+                </div>
+            </div>
+
+            <div class="message outgoing">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        This looks suspicious
+                    </div>
+                    <div class="timestamp">6:06 PM</div>
+                </div>
+            </div>
+
+            <!-- SAFE CASE 4: Normal customer service -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        Dear customer, this is to inform you that our branch will be closed on February 26th for Republic Day. Normal operations will resume on February 27th.
+                    </div>
+                    <div class="timestamp">6:30 PM</div>
+                </div>
+            </div>
+
+            <!-- PHISHING CASE 6: Malayalam-English code mix -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        Ningalude account blocked aanu. Immediately verify cheyyuka: <a href="#">https://sbi-account-restore.tk/login</a>. Vendenkil account delete cheyyum.
+                    </div>
+                    <div class="timestamp">7:15 PM</div>
+                </div>
+            </div>
+
+            <!-- SUSPICIOUS: Urgency without link -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        CRITICAL: Unauthorized access detected on your account! Contact us immediately or your account will be frozen within 1 hour.
+                    </div>
+                    <div class="timestamp">7:45 PM</div>
+                </div>
+            </div>
+
+            <!-- SAFE CASE 5: Legitimate financial notification -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        Your credit card payment of Rs. 15,000 has been successfully processed. Your outstanding balance is now Rs. 0. Thank you for your timely payment.
+                    </div>
+                    <div class="timestamp">8:10 PM</div>
+                </div>
+            </div>
+
+            <div class="message outgoing">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        Perfect, thanks!
+                    </div>
+                    <div class="timestamp">8:11 PM</div>
+                </div>
+            </div>
+
+            <!-- PHISHING CASE 7: Adversarial spelling variation -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        Your p4ssw0rd has exp1red. Update your cr3d3nt1als now: <a href="#">https://account-update-sbi.ga/password</a>
+                    </div>
+                    <div class="timestamp">8:55 PM</div>
+                </div>
+            </div>
+
+            <!-- SUSPICIOUS: Authority claim with link -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        This is an official notification from the Reserve Bank of India. Verify your PAN card details for compliance: <a href="#">https://rbi-compliance.tk/verify-pan</a>
+                    </div>
+                    <div class="timestamp">9:20 PM</div>
+                </div>
+            </div>
+
+            <!-- SAFE CASE 6: Normal promotional message -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        Special offer for valued customers! Get 0.5% extra interest on new fixed deposits this month. Visit any branch or call customer care for details.
+                    </div>
+                    <div class="timestamp">9:45 PM</div>
+                </div>
+            </div>
+
+            <div class="message outgoing">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        Sounds good
+                    </div>
+                    <div class="timestamp">9:46 PM</div>
+                </div>
+            </div>
+
+            <!-- PHISHING CASE 8: Clear phishing with prize/reward -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        Congratulations! You've won Rs. 50,000 in our customer lottery. Claim your prize now by verifying your account: <a href="#">https://sbi-prize.ml/claim</a>
+                    </div>
+                    <div class="timestamp">10:15 PM</div>
+                </div>
+            </div>
+
+            <!-- SAFE CASE 7: Service update -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        Our mobile banking app will undergo maintenance from 2 AM to 4 AM tonight. Internet banking and ATM services will remain available.
+                    </div>
+                    <div class="timestamp">10:40 PM</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="input-area">
+            <input type="text" class="input-field" placeholder="Type a message">
+            <button class="send-button">➤</button>
+        </div>
+    </div>
+</body>
+</html>

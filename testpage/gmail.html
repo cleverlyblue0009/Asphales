@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gmail - Phishing Test Environment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', Roboto, Arial, sans-serif;
+            background: #f5f5f5;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .warning-banner {
+            background: #ff6b6b;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .gmail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            height: 100vh;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            margin-top: 45px;
+        }
+
+        .header {
+            background: white;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .logo {
+            font-size: 24px;
+            color: #ea4335;
+            font-weight: 500;
+        }
+
+        .search-bar {
+            flex: 1;
+            padding: 10px 16px;
+            background: #f1f3f4;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;
+        }
+
+        .inbox-area {
+            flex: 1;
+            overflow-y: auto;
+            background: #f5f5f5;
+        }
+
+        .email {
+            background: white;
+            margin: 8px 16px;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            border-left: 4px solid transparent;
+        }
+
+        .email.unread {
+            border-left-color: #1a73e8;
+        }
+
+        .email-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .sender-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #1a73e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .email-meta {
+            flex: 1;
+        }
+
+        .sender-name {
+            font-weight: 500;
+            font-size: 14px;
+            color: #202124;
+            margin-bottom: 2px;
+        }
+
+        .sender-email {
+            font-size: 12px;
+            color: #5f6368;
+        }
+
+        .email-time {
+            font-size: 12px;
+            color: #5f6368;
+        }
+
+        .email-subject {
+            font-size: 16px;
+            font-weight: 500;
+            color: #202124;
+            margin-bottom: 12px;
+        }
+
+        .email-body {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #3c4043;
+        }
+
+        .email-body a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+
+        .email-body a:hover {
+            text-decoration: underline;
+        }
+
+        .divider {
+            height: 1px;
+            background: #e0e0e0;
+            margin: 16px 0;
+        }
+
+        .label {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #fef7e0;
+            color: #ea8600;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .label.important {
+            background: #fce8e6;
+            color: #d93025;
+        }
+    </style>
+</head>
+<body>
+    <div class="warning-banner">
+        ⚠ This is a controlled phishing simulation environment.
+    </div>
+
+    <div class="gmail-container">
+        <div class="header">
+            <div class="logo">Gmail</div>
+            <input type="text" class="search-bar" placeholder="Search mail">
+        </div>
+
+        <div class="inbox-area">
+            <!-- PHISHING EMAIL 1: Bank account verification -->
+            <div class="email unread">
+                <div class="label important">URGENT</div>
+                <div class="email-header">
+                    <div class="sender-avatar">SB</div>
+                    <div class="email-meta">
+                        <div class="sender-name">State Bank of India</div>
+                        <div class="sender-email">security@statebank-alert.tk</div>
+                    </div>
+                    <div class="email-time">9:23 AM</div>
+                </div>
+                <div class="email-subject">Immediate Action Required: Verify Your Account</div>
+                <div class="email-body">
+                    <p>Dear Valued Customer,</p>
+                    <br>
+                    <p>We have detected unusual activity on your account. For your security, your account has been temporarily suspended.</p>
+                    <br>
+                    <p><strong>You must verify your identity within 24 hours to avoid permanent account closure.</strong></p>
+                    <br>
+                    <p>Click here to verify now: <a href="#">https://statebank-verify.tk/secure-login</a></p>
+                    <br>
+                    <p>Failure to verify will result in permanent account deactivation and loss of access to your funds.</p>
+                    <br>
+                    <p>Thank you,<br>State Bank Security Team</p>
+                </div>
+            </div>
+
+            <!-- SAFE EMAIL 1: Legitimate bank statement -->
+            <div class="email">
+                <div class="email-header">
+                    <div class="sender-avatar">SB</div>
+                    <div class="email-meta">
+                        <div class="sender-name">State Bank of India</div>
+                        <div class="sender-email">statements@sbi.co.in</div>
+                    </div>
+                    <div class="email-time">8:00 AM</div>
+                </div>
+                <div class="email-subject">Your Account Statement for January 2026</div>
+                <div class="email-body">
+                    <p>Dear Customer,</p>
+                    <br>
+                    <p>Your monthly account statement for January 2026 is now available. You can view and download it from your internet banking account.</p>
+                    <br>
+                    <p>Account Number: XXXX-XXXX-1234<br>
+                    Statement Period: January 1 - January 31, 2026</p>
+                    <br>
+                    <p>For any queries, please visit your nearest branch or call our customer care.</p>
+                    <br>
+                    <p>Regards,<br>State Bank of India</p>
+                </div>
+            </div>
+
+            <!-- PHISHING EMAIL 2: Hindi-English code mix -->
+            <div class="email unread">
+                <div class="label important">URGENT</div>
+                <div class="email-header">
+                    <div class="sender-avatar">KY</div>
+                    <div class="email-meta">
+                        <div class="sender-name">KYC Verification Center</div>
+                        <div class="sender-email">kyc-update@sbi-verify.ml</div>
+                    </div>
+                    <div class="email-time">10:15 AM</div>
+                </div>
+                <div class="email-subject">Aapka KYC Pending Hai - Turant Update Karein</div>
+                <div class="email-body">
+                    <p>Namaste Customer,</p>
+                    <br>
+                    <p>Aapka KYC verification pending hai. Agar aap 48 hours mein update nahi karenge to aapka account block ho jayega.</p>
+                    <br>
+                    <p><strong>Immediately verify karein:</strong> <a href="#">https://kyc-update-sbi.com/verify-now</a></p>
+                    <br>
+                    <p>Yeh bahut urgent hai. Please delay mat karein.</p>
+                    <br>
+                    <p>Dhanyavaad,<br>KYC Department</p>
+                </div>
+            </div>
+
+            <!-- SAFE EMAIL 2: Loan application update -->
+            <div class="email">
+                <div class="email-header">
+                    <div class="sender-avatar">SB</div>
+                    <div class="email-meta">
+                        <div class="sender-name">State Bank of India - Loans</div>
+                        <div class="sender-email">loans@sbi.co.in</div>
+                    </div>
+                    <div class="email-time">11:30 AM</div>
+                </div>
+                <div class="email-subject">Home Loan Application Status Update</div>
+                <div class="email-body">
+                    <p>Dear Mr. Sharma,</p>
+                    <br>
+                    <p>Thank you for applying for a home loan with State Bank of India.</p>
+                    <br>
+                    <p>Your application (Reference No: HL2026012345) has been received and is currently under review. Our team will contact you within 5-7 business days with an update.</p>
+                    <br>
+                    <p>If you have any questions, please feel free to contact your relationship manager.</p>
+                    <br>
+                    <p>Best regards,<br>SBI Home Loans Department</p>
+                </div>
+            </div>
+
+            <!-- PHISHING EMAIL 3: Adversarial spelling -->
+            <div class="email unread">
+                <div class="label important">ACT10N R3QU1R3D</div>
+                <div class="email-header">
+                    <div class="sender-avatar">AC</div>
+                    <div class="email-meta">
+                        <div class="sender-name">Acc0unt S3cur1ty</div>
+                        <div class="sender-email">n0-r3ply@bank-alert.ga</div>
+                    </div>
+                    <div class="email-time">1:45 PM</div>
+                </div>
+                <div class="email-subject">URG3NT: Y0ur Acc0unt W1ll Be Cl0s3d</div>
+                <div class="email-body">
+                    <p>D3ar Us3r,</p>
+                    <br>
+                    <p>Y0ur acc0unt will be p3rman3ntly cl0s3d in 2 h0urs du3 to s3cur1ty v10lat10n.</p>
+                    <br>
+                    <p><strong>V3r1fy 1mm3d1at3ly:</strong> <a href="#">https://acc0unt-v3r1fy.tk/l0g1n</a></p>
+                    <br>
+                    <p>Fa1lur3 to c0mply will r3sult in p3rman3nt l0ss 0f acc3ss.</p>
+                    <br>
+                    <p>S3cur1ty T3am</p>
+                </div>
+            </div>
+
+            <!-- PHISHING EMAIL 4: Tamil-English code mix -->
+            <div class="email unread">
+                <div class="email-header">
+                    <div class="sender-avatar">BS</div>
+                    <div class="email-meta">
+                        <div class="sender-name">Bank Security Alert</div>
+                        <div class="sender-email">alert@bank-security.ml</div>
+                    </div>
+                    <div class="email-time">2:30 PM</div>
+                </div>
+                <div class="email-subject">Unga Account-il Suspicious Activity Kandupidichirukku</div>
+                <div class="email-body">
+                    <p>Dear Customer,</p>
+                    <br>
+                    <p>Unga bank account-il suspicious transaction detect pannirukkom. Unga account protect panna immediately action edukkanum.</p>
+                    <br>
+                    <p><strong>Inga click panni verify pannunga:</strong> <a href="#">https://bank-secure-verify.tk/check</a></p>
+                    <br>
+                    <p>24 hours kulla verify pannala na account automatically lock aayidum.</p>
+                    <br>
+                    <p>Thanks,<br>Security Department</p>
+                </div>
+            </div>
+
+            <!-- SAFE EMAIL 3: Fixed deposit maturity -->
+            <div class="email">
+                <div class="email-header">
+                    <div class="sender-avatar">FD</div>
+                    <div class="email-meta">
+                        <div class="sender-name">SBI Fixed Deposits</div>
+                        <div class="sender-email">fd@sbi.co.in</div>
+                    </div>
+                    <div class="email-time">3:00 PM</div>
+                </div>
+                <div class="email-subject">Fixed Deposit Maturity Notification</div>
+                <div class="email-body">
+                    <p>Dear Customer,</p>
+                    <br>
+                    <p>This is to inform you that your Fixed Deposit account will mature on February 25, 2026.</p>
+                    <br>
+                    <p>FD Number: FD123456789<br>
+                    Principal Amount: Rs. 2,00,000<br>
+                    Maturity Amount: Rs. 2,18,500<br>
+                    Maturity Date: February 25, 2026</p>
+                    <br>
+                    <p>Please visit your nearest branch to renew or withdraw the amount. You can also renew online through internet banking.</p>
+                    <br>
+                    <p>Thank you for banking with us.</p>
+                    <br>
+                    <p>Regards,<br>State Bank of India</p>
+                </div>
+            </div>
+
+            <!-- PHISHING EMAIL 5: Bengali-English code mix -->
+            <div class="email unread">
+                <div class="label important">CRITICAL</div>
+                <div class="email-header">
+                    <div class="sender-avatar">SE</div>
+                    <div class="email-meta">
+                        <div class="sender-name">Security Emergency</div>
+                        <div class="sender-email">emergency@sbi-alert.ga</div>
+                    </div>
+                    <div class="email-time">4:15 PM</div>
+                </div>
+                <div class="email-subject">Apnar Account Hack Hoyeche - Ekhn Action Nin</div>
+                <div class="email-body">
+                    <p>Priyo Customer,</p>
+                    <br>
+                    <p>Apnar account e unauthorized access detect kora hoyeche. Keu apnar account theke taka transfer korar chesta korche.</p>
+                    <br>
+                    <p><strong>Immediately verify korun:</strong> <a href="#">https://sbi-protect-account.ml/secure</a></p>
+                    <br>
+                    <p>Aar wait korle apnar account permanently block hoye jabe aar apnar taka hariye jete pare.</p>
+                    <br>
+                    <p>Dhonnobad,<br>Emergency Response Team</p>
+                </div>
+            </div>
+
+            <!-- SUSPICIOUS: Privacy policy update with link -->
+            <div class="email">
+                <div class="email-header">
+                    <div class="sender-avatar">PL</div>
+                    <div class="email-meta">
+                        <div class="sender-name">Policy Update Team</div>
+                        <div class="sender-email">policy@bank-updates.com</div>
+                    </div>
+                    <div class="email-time">5:00 PM</div>
+                </div>
+                <div class="email-subject">Important: Privacy Policy Updates</div>
+                <div class="email-body">
+                    <p>Dear Customer,</p>
+                    <br>
+                    <p>We have updated our privacy policy and terms of service. Please review the changes to continue using our services.</p>
+                    <br>
+                    <p>Review updated policy: <a href="#">https://bank-policy-update.com/review</a></p>
+                    <br>
+                    <p>Thank you,<br>Policy Team</p>
+                </div>
+            </div>
+
+            <!-- PHISHING EMAIL 6: Malayalam-English code mix -->
+            <div class="email unread">
+                <div class="label important">URGENT</div>
+                <div class="email-header">
+                    <div class="sender-avatar">AB</div>
+                    <div class="email-meta">
+                        <div class="sender-name">Account Block Notice</div>
+                        <div class="sender-email">block-alert@sbi-notice.tk</div>
+                    </div>
+                    <div class="email-time">6:20 PM</div>
+                </div>
+                <div class="email-subject">Ningalude Account Block Cheyyum - Urgent Action Required</div>
+                <div class="email-body">
+                    <p>Dear Customer,</p>
+                    <br>
+                    <p>Ningalude bank account suspicious activity karanam block cheyyum 24 hours il. Athu avoid cheyyaan immediately verify cheyyuka.</p>
+                    <br>
+                    <p><strong>Verify cheyyuka ippol:</strong> <a href="#">https://sbi-account-verify.ml/login</a></p>
+                    <br>
+                    <p>Time waste cheyyalle, vendenkil account permanent delete aavum.</p>
+                    <br>
+                    <p>Thanks,<br>Account Security</p>
+                </div>
+            </div>
+
+            <!-- SAFE EMAIL 4: Credit card payment confirmation -->
+            <div class="email">
+                <div class="email-header">
+                    <div class="sender-avatar">CC</div>
+                    <div class="email-meta">
+                        <div class="sender-name">SBI Credit Cards</div>
+                        <div class="sender-email">creditcard@sbi.co.in</div>
+                    </div>
+                    <div class="email-time">7:00 PM</div>
+                </div>
+                <div class="email-subject">Payment Received - Credit Card XXXX-1234</div>
+                <div class="email-body">
+                    <p>Dear Customer,</p>
+                    <br>
+                    <p>We have successfully received your credit card payment.</p>
+                    <br>
+                    <p>Card Number: XXXX-XXXX-XXXX-1234<br>
+                    Payment Amount: Rs. 25,000<br>
+                    Payment Date: February 13, 2026<br>
+                    Outstanding Balance: Rs. 0</p>
+                    <br>
+                    <p>Thank you for your timely payment. Your next statement will be generated on March 1, 2026.</p>
+                    <br>
+                    <p>Best regards,<br>SBI Cards Customer Service</p>
+                </div>
+            </div>
+
+            <!-- PHISHING EMAIL 7: Prize/lottery scam -->
+            <div class="email unread">
+                <div class="label">WINNER NOTIFICATION</div>
+                <div class="email-header">
+                    <div class="sender-avatar">LT</div>
+                    <div class="email-meta">
+                        <div class="sender-name">Bank Customer Lottery</div>
+                        <div class="sender-email">lottery@sbi-winner.tk</div>
+                    </div>
+                    <div class="email-time">8:15 PM</div>
+                </div>
+                <div class="email-subject">Congratulations! You've Won Rs. 10,00,000</div>
+                <div class="email-body">
+                    <p>Dear Lucky Winner,</p>
+                    <br>
+                    <p>Congratulations! Your account has been randomly selected in our annual customer appreciation lottery.</p>
+                    <br>
+                    <p><strong>Prize Amount: Rs. 10,00,000 (Ten Lakh Rupees Only)</strong></p>
+                    <br>
+                    <p>To claim your prize, verify your account details: <a href="#">https://sbi-lottery-claim.ml/winner</a></p>
+                    <br>
+                    <p>You must claim within 48 hours or the prize will be forfeited.</p>
+                    <br>
+                    <p>Congratulations again!<br>Lottery Department</p>
+                </div>
+            </div>
+
+            <!-- SUSPICIOUS: Urgency without link -->
+            <div class="email unread">
+                <div class="label important">ALERT</div>
+                <div class="email-header">
+                    <div class="sender-avatar">FR</div>
+                    <div class="email-meta">
+                        <div class="sender-name">Fraud Detection</div>
+                        <div class="sender-email">fraud@bank-security.com</div>
+                    </div>
+                    <div class="email-time">8:45 PM</div>
+                </div>
+                <div class="email-subject">Unauthorized Transaction Detected!</div>
+                <div class="email-body">
+                    <p>URGENT ALERT!</p>
+                    <br>
+                    <p>We have detected an unauthorized transaction of Rs. 50,000 from your account. Someone is trying to withdraw money from an ATM in another state!</p>
+                    <br>
+                    <p><strong>Contact us immediately at the number in this email or your account will be emptied!</strong></p>
+                    <br>
+                    <p>Act now before it's too late!</p>
+                    <br>
+                    <p>Fraud Prevention Team</p>
+                </div>
+            </div>
+
+            <!-- SAFE EMAIL 5: Branch closure notice -->
+            <div class="email">
+                <div class="email-header">
+                    <div class="sender-avatar">BR</div>
+                    <div class="email-meta">
+                        <div class="sender-name">SBI Branch Operations</div>
+                        <div class="sender-email">branch@sbi.co.in</div>
+                    </div>
+                    <div class="email-time">Yesterday</div>
+                </div>
+                <div class="email-subject">Branch Holiday Notice - February 26, 2026</div>
+                <div class="email-body">
+                    <p>Dear Customers,</p>
+                    <br>
+                    <p>Please note that all our branches will remain closed on February 26, 2026, on account of Republic Day holiday.</p>
+                    <br>
+                    <p>Normal banking operations will resume on February 27, 2026.</p>
+                    <br>
+                    <p>ATM services and internet banking will remain available 24/7.</p>
+                    <br>
+                    <p>We apologize for any inconvenience.</p>
+                    <br>
+                    <p>Regards,<br>State Bank of India</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
