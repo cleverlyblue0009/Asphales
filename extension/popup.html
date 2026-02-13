@@ -1,90 +1,128 @@
 <!DOCTYPE html>
 <html>
 <head>
- <meta charset="UTF-8">
- <style>
- body {
- width: 320px;
- padding: 20px;
- font-family: 'Segoe UI', Arial, sans-serif;
- margin: 0;
- background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
- }
- .container {
- background: white;
- border-radius: 12px;
- padding: 20px;
- }
- h2 {
- margin: 0 0 15px 0;
- color: #333;
- font-size: 20px;
- }
-
- .shield-icon {
- font-size: 40px;
- text-align: center;
- margin-bottom: 15px;
- }
-
- .status {
- padding: 12px;
- border-radius: 8px;
- margin: 15px 0;
- font-weight: bold;
- text-align: center;
- transition: all 0.3s;
- }
- 
- .status.active {
- background: #4CAF50;
- color: white;
- }
-
- .status.inactive {
-    background: #f0f0f0;
- color: #666;
- }
-
- button {
- width: 100%;
- padding: 14px;
- font-size: 16px;
- font-weight: bold;
- cursor: pointer;
- border: none;
- border-radius: 8px;
- background: #2196F3;
- color: white;
- transition: all 0.3s;
- }
-  button:hover {
- background: #1976D2;
- transform: translateY(-2px);
- box-shadow: 0 4px 8px rgba(0,0,0,0.2);
- }
-
- .info {
- margin-top: 15px;
- padding: 10px;
- background: #e3f2fd;
- border-radius: 6px;
- font-size: 13px;
- color: #1976D2;
- }
- </style>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      width: 320px;
+      padding: 20px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .container {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+    }
+    h2 {
+      margin: 0 0 15px 0;
+      color: #333;
+      font-size: 20px;
+    }
+    .shield-icon {
+      font-size: 40px;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    .status {
+      padding: 12px;
+      border-radius: 8px;
+      margin: 15px 0;
+      font-weight: bold;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .status.active {
+      background: #4CAF50;
+      color: white;
+    }
+    .status.inactive {
+      background: #f0f0f0;
+      color: #666;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background: #2196F3;
+      color: white;
+      transition: all 0.3s;
+    }
+    button:hover {
+      background: #1976D2;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .info {
+      margin-top: 15px;
+      padding: 10px;
+      background: #e3f2fd;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #1976D2;
+      text-align: center;
+    }
+    .info.scanning {
+      background: #fff3e0;
+      color: #e65100;
+    }
+    .result {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .result.safe {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+    .result.danger {
+      background: #ffebee;
+      color: #c62828;
+    }
+    .result.warning {
+      background: #fff3e0;
+      color: #e65100;
+    }
+    .result.error {
+      background: #fce4ec;
+      color: #c62828;
+    }
+    .result-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .result-text strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+    .result-detail {
+      font-size: 11px;
+      opacity: 0.85;
+      margin-top: 2px;
+    }
+  </style>
 </head>
 <body>
- <div class="container">
- <div class="shield-icon">🛡️</div>
- <h2>SurakshaAI Shield</h2>
- <div class="status inactive" id="status">Protection: OFF</div>
- <button id="toggleBtn">Activate Protection</button>
- <div class="info" id="info" style="display: none;">
- Scanning webpage for phishing threats...
- </div>
- </div>
+  <div class="container">
+    <div class="shield-icon">&#x1f6e1;&#xfe0f;</div>
+    <h2>SurakshaAI Shield</h2>
+    <div class="status inactive" id="status">Protection: OFF</div>
+    <button id="toggleBtn">Activate Protection</button>
+    <div class="info" id="info" style="display: none;">
+      Scanning webpage for phishing threats...
+    </div>
+    <div class="result" id="result" style="display: none;"></div>
+  </div>
 
- <script src="popup.js"></script>
- </body>
+  <script src="popup.js"></script>
+</body>
 </html>
