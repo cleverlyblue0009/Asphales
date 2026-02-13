@@ -83,21 +83,44 @@ async function analyzeText(text) {
 // ============ FALLBACK DETECTION ============
 function useFallbackDetection(text) {
   console.log('⚠️ Using fallback detection');
-  
+
   const dangerousPatterns = {
+    // Hinglish patterns
     'password share karo': { risk: 90, explanation: 'असली banks कभी भी password नहीं मांगते। यह scam है।' },
     'otp batao': { risk: 95, explanation: 'OTP केवल आप के लिए है। किसी को भी share मत करो।' },
+    'otp bhejo': { risk: 95, explanation: 'OTP केवल आप के लिए है। किसी को भी share मत करो।' },
     'turant verify': { risk: 75, explanation: 'Urgency एक common phishing tactic है।' },
-    'account block': { risk: 80, explanation: 'डराने की कोशिश है। Bank ऐसे message नहीं भेजते।' },
+    'account block hoga': { risk: 80, explanation: 'डराने की कोशिश है। Bank ऐसे message नहीं भेजते।' },
     'cvv enter': { risk: 95, explanation: 'CVV कभी किसी को मत दो। यह fraud है।' },
     'bank details bhejo': { risk: 90, explanation: 'Bank details message में मत भेजो। Scam है।' },
     'lottery jeet': { risk: 85, explanation: 'Fake lottery scam है। कुछ भी share मत करो।' },
-    'police department': { risk: 70, explanation: 'Police message से payment नहीं मांगती। Fake है।' }
+    'police department': { risk: 70, explanation: 'Police message से payment नहीं मांगती। Fake है।' },
+    'kyc update karo': { risk: 75, explanation: 'Bank कभी WhatsApp पर KYC update नहीं मांगता।' },
+    // English patterns
+    'enter your otp': { risk: 92, explanation: 'No legitimate service asks for OTP via message. This is a scam.' },
+    'share your otp': { risk: 92, explanation: 'Never share your OTP with anyone. This is a scam.' },
+    'enter your password': { risk: 90, explanation: 'Legitimate services never ask for passwords via messages.' },
+    'debit card details': { risk: 88, explanation: 'Never share card details on messaging apps. This is a scam.' },
+    'credit card details': { risk: 88, explanation: 'Never share card details on messaging apps. This is a scam.' },
+    'account will be blocked': { risk: 82, explanation: 'Scare tactic. Banks do not send such messages on WhatsApp.' },
+    'account will be suspended': { risk: 82, explanation: 'Scare tactic. Banks do not threaten via WhatsApp.' },
+    'permanent suspension': { risk: 80, explanation: 'Fear tactic used by scammers. Real banks contact you officially.' },
+    'suspicious activity': { risk: 75, explanation: 'Banks do not report suspicious activity via WhatsApp messages.' },
+    'verify your kyc': { risk: 80, explanation: 'KYC verification is never done through WhatsApp. This is a scam.' },
+    'verify immediately': { risk: 78, explanation: 'Urgency is a classic phishing tactic. Do not act hastily.' },
+    'within 24 hours': { risk: 72, explanation: 'Artificial deadline to pressure you. Real banks give proper notice.' },
+    'click here and enter': { risk: 80, explanation: 'Never click suspicious links asking for personal information.' },
+    'click here to verify': { risk: 78, explanation: 'Phishing link detected. Do not click unknown verification links.' },
+    'you have won': { risk: 82, explanation: 'Lottery/prize scam. You cannot win contests you did not enter.' },
+    'claim your prize': { risk: 82, explanation: 'Prize claim scam. Legitimate prizes do not require messaging.' },
+    'dear customer': { risk: 55, explanation: 'Generic greeting often used in phishing messages.' },
+    'sbi account': { risk: 65, explanation: 'SBI does not contact customers via WhatsApp for account issues.' },
+    'unauthorized transaction': { risk: 78, explanation: 'Scare tactic. Contact your bank directly to verify.' }
   };
-  
+
   const threats = [];
   const lowerText = text.toLowerCase();
-  
+
   for (const [phrase, info] of Object.entries(dangerousPatterns)) {
     if (lowerText.includes(phrase)) {
       threats.push({
@@ -107,7 +130,7 @@ function useFallbackDetection(text) {
       });
     }
   }
-  
+
   return {
     overall_risk: threats.length > 0 ? Math.max(...threats.map(t => t.risk)) : 0,
     threats: threats
@@ -198,43 +221,31 @@ async function scanPage() {
 
   console.log(`📦 Total blocks found: ${blocks.length}`);
 
-  // 🔒 Limit number of blocks (avoid massive pages like Wikipedia)
-  const MAX_BLOCKS = 30;
+  // 🔒 Limit number of blocks (avoid massive pages)
+  const MAX_BLOCKS = 50;
   const limitedBlocks = blocks.slice(0, MAX_BLOCKS);
 
   console.log(`✂️ Using first ${limitedBlocks.length} blocks`);
 
-  // Combine selected blocks
-  let fullText = limitedBlocks.map(b => b.text).join('\n\n');
+  let totalThreats = 0;
 
-  console.log("🧮 Text length before trim:", fullText.length);
+  // Analyze each block individually for better accuracy
+  for (const block of limitedBlocks) {
+    const text = block.text;
 
-  // 🔒 Hard limit to stay below backend 5000 max_length
-  const MAX_LENGTH = 4000;
-  if (fullText.length > MAX_LENGTH) {
-    console.log(`✂️ Trimming text from ${fullText.length} to ${MAX_LENGTH}`);
-    fullText = fullText.slice(0, MAX_LENGTH);
-  }
+    // Skip very short blocks that are unlikely to be messages
+    if (text.length < 30) continue;
 
-  console.log("📤 Final text length sent:", fullText.length);
+    try {
+      const result = await analyzeText(text);
 
-  try {
-    console.log("📤 FULL TEXT SENT TO API:");
-    console.log(fullText);
+      if (!result) continue;
 
-    const result = await analyzeText(fullText);
+      if (result.threats && result.threats.length > 0) {
+        console.log(`⚠️ Found ${result.threats.length} threat(s) in block: "${text.substring(0, 60)}..."`);
+        totalThreats += result.threats.length;
 
-    if (!result) {
-      console.log('No result returned from analysis');
-      return;
-    }
-
-    // Highlight threats
-    if (result.threats && result.threats.length > 0) {
-      console.log(`⚠️ Found ${result.threats.length} threats`);
-
-      result.threats.forEach(threat => {
-        limitedBlocks.forEach(block => {
+        result.threats.forEach(threat => {
           if (block.text.toLowerCase().includes(threat.phrase.toLowerCase())) {
             highlightText(
               block.node,
@@ -244,17 +255,20 @@ async function scanPage() {
             );
           }
         });
-      });
-    } else {
-      console.log('✅ No threats detected');
-      chrome.runtime.sendMessage({
-        action: "SCAN_RESULT",
-        data: result
-      });
+      }
+    } catch (err) {
+      console.warn("⚠️ Error analyzing block:", err);
     }
+  }
 
-  } catch (err) {
-    console.error("🚨 Scan failed:", err);
+  if (totalThreats === 0) {
+    console.log('✅ No threats detected in any block');
+    chrome.runtime.sendMessage({
+      action: "SCAN_RESULT",
+      data: { overall_risk: 0, threats: [] }
+    });
+  } else {
+    console.log(`🚨 Total threats found across all blocks: ${totalThreats}`);
   }
 }
 
