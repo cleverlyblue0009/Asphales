@@ -1,0 +1,266 @@
+{
+  "phishing_examples": [
+    {
+      "id": 1,
+      "text": "URGENT! Aapke account mein suspicious activity hai. Turant password aur OTP share karo.",
+      "expected_risk": 90,
+      "expected_threats": ["password", "otp", "turant"],
+      "category": "credential_request",
+      "is_phishing": true
+    },
+    {
+      "id": 2,
+      "text": "Aapka bank account block ho jayega agar 24 ghante mein KYC update nahi karte. Link pe click karo: bit.ly/kyc-update",
+      "expected_risk": 85,
+      "expected_threats": ["account block", "kyc update", "bit.ly"],
+      "category": "fear_tactics",
+      "is_phishing": true
+    },
+    {
+      "id": 3,
+      "text": "Congratulations! Aapne 50 lakh rupaye ki lottery jeeta hai. Claim karne ke liye processing fee bhejo.",
+      "expected_risk": 88,
+      "expected_threats": ["lottery jeeta", "lakh rupaye", "processing fee"],
+      "category": "too_good_to_be_true",
+      "is_phishing": true
+    },
+    {
+      "id": 4,
+      "text": "Main SBI bank manager bol raha hoon. Aapke account mein fraud hua hai. Abhi apna CVV aur PIN batao.",
+      "expected_risk": 95,
+      "expected_threats": ["bank manager bol raha", "cvv", "pin"],
+      "category": "impersonation",
+      "is_phishing": true
+    },
+    {
+      "id": 5,
+      "text": "Police department se call hai. Aapke naam pe FIR darj hoga agar turant paise transfer nahi karte.",
+      "expected_risk": 82,
+      "expected_threats": ["police department", "fir darj", "paise transfer"],
+      "category": "fear_tactics",
+      "is_phishing": true
+    },
+    {
+      "id": 6,
+      "text": "Dear customer, aapka Aadhar number bhejo verification ke liye. Nahi toh account band ho jayega.",
+      "expected_risk": 85,
+      "expected_threats": ["aadhar number bhejo", "account band"],
+      "category": "personal_info",
+      "is_phishing": true
+    },
+    {
+      "id": 7,
+      "text": "Aapke credit card pe 5 lakh ka transaction hua hai. Cancel karne ke liye OTP bhejo turant.",
+      "expected_risk": 90,
+      "expected_threats": ["otp bhejo", "turant"],
+      "category": "credential_request",
+      "is_phishing": true
+    },
+    {
+      "id": 8,
+      "text": "Income tax department se notice. Aapka PAN card number aur bank details share karo immediately.",
+      "expected_risk": 85,
+      "expected_threats": ["income tax department", "pan card", "bank details share"],
+      "category": "impersonation",
+      "is_phishing": true
+    },
+    {
+      "id": 9,
+      "text": "Aapne iPhone 15 jeeta hai! Claim karne ke liye registration fee GPay pe bhejo: 9876543210",
+      "expected_risk": 82,
+      "expected_threats": ["registration fee", "gpay pe"],
+      "category": "too_good_to_be_true",
+      "is_phishing": true
+    },
+    {
+      "id": 10,
+      "text": "RBI se notice — aapka account freeze ho jayega. Turant verify karo is link pe: tinyurl.com/rbi-verify",
+      "expected_risk": 85,
+      "expected_threats": ["rbi se notice", "account freeze", "turant verify", "tinyurl"],
+      "category": "impersonation",
+      "is_phishing": true
+    },
+    {
+      "id": 11,
+      "text": "CBI officer bol raha hoon. Aapke khilaf warrant issue hua hai. Arrest se bachne ke liye paise transfer karo.",
+      "expected_risk": 85,
+      "expected_threats": ["cbi officer", "warrant issue", "arrest", "paise transfer"],
+      "category": "impersonation",
+      "is_phishing": true
+    },
+    {
+      "id": 12,
+      "text": "Cyber cell se bol rahe hain. Aapka account hack hua hai. Password share karo reset ke liye.",
+      "expected_risk": 88,
+      "expected_threats": ["cyber cell", "password share karo"],
+      "category": "impersonation",
+      "is_phishing": true
+    },
+    {
+      "id": 13,
+      "text": "Last chance! Sirf aaj ke liye bumper offer — free gift milega. Abhi click karo: bit.ly/free-prize",
+      "expected_risk": 78,
+      "expected_threats": ["last chance", "sirf aaj ke liye", "bumper offer", "free gift", "bit.ly"],
+      "category": "too_good_to_be_true",
+      "is_phishing": true
+    },
+    {
+      "id": 14,
+      "text": "Paytm pe 500 rupaye bhejo token amount. Government scheme ke under 5 lakh milega.",
+      "expected_risk": 82,
+      "expected_threats": ["paytm pe bhejo", "token amount", "government scheme"],
+      "category": "money_request",
+      "is_phishing": true
+    },
+    {
+      "id": 15,
+      "text": "Aapki debit card number aur expiry date bhejo. Bank se verification ho rahi hai.",
+      "expected_risk": 90,
+      "expected_threats": ["debit card number"],
+      "category": "personal_info",
+      "is_phishing": true
+    },
+    {
+      "id": 16,
+      "text": "Jaldi karo! Time expire ho raha hai. Apna OTP de do warna transaction fail ho jayega.",
+      "expected_risk": 88,
+      "expected_threats": ["jaldi karo", "time expire", "otp de do"],
+      "category": "urgency",
+      "is_phishing": true
+    },
+    {
+      "id": 17,
+      "text": "Aapke naam pe legal action hoga. Court case avoid karne ke liye advance payment karo.",
+      "expected_risk": 80,
+      "expected_threats": ["legal action hoga", "advance payment karo"],
+      "category": "fear_tactics",
+      "is_phishing": true
+    },
+    {
+      "id": 18,
+      "text": "Sarkar ki yojana ke tahat 2 lakh ka loan mil raha hai. IFSC code aur account number bhejo.",
+      "expected_risk": 80,
+      "expected_threats": ["sarkar ki yojana", "ifsc code bhejo", "bank account number bhejo"],
+      "category": "impersonation",
+      "is_phishing": true
+    },
+    {
+      "id": 19,
+      "text": "PhonePe pe 1000 rupaye bhejo. Tax pay karo claim ke liye. Crore rupaye ka prize aapka hai.",
+      "expected_risk": 88,
+      "expected_threats": ["phonepe pe bhejo", "tax pay karo claim ke liye", "crore rupaye"],
+      "category": "money_request",
+      "is_phishing": true
+    },
+    {
+      "id": 20,
+      "text": "Credit card number dijiye aur CVV batao. Cashback mil raha hai aapke account mein.",
+      "expected_risk": 92,
+      "expected_threats": ["credit card number", "cvv batao", "cashback mil raha"],
+      "category": "credential_request",
+      "is_phishing": true
+    },
+    {
+      "id": 21,
+      "text": "Aakhri mauka hai. Form fill karo is link pe aur login details share karo.",
+      "expected_risk": 80,
+      "expected_threats": ["aakhri mauka", "form fill karo", "login details share"],
+      "category": "urgency",
+      "is_phishing": true
+    },
+    {
+      "id": 22,
+      "text": "Yahan click karo aur apna Aadhaar card details bhejo. KYC expire ho gaya hai aapka.",
+      "expected_risk": 82,
+      "expected_threats": ["yahan click karo", "aadhaar card details", "kyc expire"],
+      "category": "personal_info",
+      "is_phishing": true
+    },
+    {
+      "id": 23,
+      "text": "Customs department se bol rahe hain. Aapka parcel rok diya gaya hai. Fine pay karo.",
+      "expected_risk": 72,
+      "expected_threats": ["customs department"],
+      "category": "impersonation",
+      "is_phishing": true
+    },
+    {
+      "id": 24,
+      "text": "Jail bhej denge agar cooperation nahi kiya. Account details bhejo turant.",
+      "expected_risk": 85,
+      "expected_threats": ["jail bhej denge", "account details bhejo", "turant"],
+      "category": "fear_tactics",
+      "is_phishing": true
+    },
+    {
+      "id": 25,
+      "text": "Deadline khatam ho rahi hai KYC ki. PIN number batao verify karne ke liye.",
+      "expected_risk": 85,
+      "expected_threats": ["deadline khatam", "pin number batao"],
+      "category": "urgency",
+      "is_phishing": true
+    }
+  ],
+  "safe_examples": [
+    {
+      "id": 1,
+      "text": "Your monthly account statement is ready. Login to view.",
+      "expected_risk": 0,
+      "is_phishing": false
+    },
+    {
+      "id": 2,
+      "text": "Reminder: Your EMI payment of Rs 5000 is due tomorrow.",
+      "expected_risk": 0,
+      "is_phishing": false
+    },
+    {
+      "id": 3,
+      "text": "Thank you for shopping with us. Your order has been dispatched.",
+      "expected_risk": 0,
+      "is_phishing": false
+    },
+    {
+      "id": 4,
+      "text": "Aaj ka weather bahut accha hai. Bahar chalo.",
+      "expected_risk": 0,
+      "is_phishing": false
+    },
+    {
+      "id": 5,
+      "text": "Meeting kal 3 baje hai. Please time pe aana.",
+      "expected_risk": 0,
+      "is_phishing": false
+    },
+    {
+      "id": 6,
+      "text": "Happy birthday! Party kab hai?",
+      "expected_risk": 0,
+      "is_phishing": false
+    },
+    {
+      "id": 7,
+      "text": "Your OTP for login is 483921. Do not share this with anyone.",
+      "expected_risk": 0,
+      "is_phishing": false
+    },
+    {
+      "id": 8,
+      "text": "Kal movie dekhne chalein? Naya movie aaya hai.",
+      "expected_risk": 0,
+      "is_phishing": false
+    },
+    {
+      "id": 9,
+      "text": "Your delivery is scheduled for tomorrow between 10 AM and 2 PM.",
+      "expected_risk": 0,
+      "is_phishing": false
+    },
+    {
+      "id": 10,
+      "text": "Kya haal hai? Bahut din ho gaye baat nahi hui.",
+      "expected_risk": 0,
+      "is_phishing": false
+    }
+  ]
+}

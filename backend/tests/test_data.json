@@ -1,0 +1,16 @@
+{
+  "phishing": [
+    {"text": "Password share karo turant!", "min_risk": 50},
+    {"text": "OTP bhejo abhi warna account block hoga", "min_risk": 50},
+    {"text": "CVV batao verification ke liye", "min_risk": 50},
+    {"text": "Bank details share karo immediately", "min_risk": 50},
+    {"text": "Lottery jeeta hai 50 lakh rupaye", "min_risk": 40}
+  ],
+  "safe": [
+    {"text": "Kal meeting hai office mein", "max_risk": 30},
+    {"text": "Happy birthday bhai!", "max_risk": 30},
+    {"text": "Order shipped. Delivery tomorrow.", "max_risk": 30},
+    {"text": "Cricket match ka score dekha?", "max_risk": 30},
+    {"text": "Dinner pe chalein aaj?", "max_risk": 30}
+  ]
+}

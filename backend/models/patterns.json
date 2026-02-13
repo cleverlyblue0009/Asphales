@@ -1,0 +1,123 @@
+{
+  "categories": {
+    "credential_request": {
+      "weight": 0.95,
+      "description": "Requests for passwords, OTPs, PINs, or login credentials"
+    },
+    "urgency": {
+      "weight": 0.75,
+      "description": "Creates artificial urgency to force quick action"
+    },
+    "impersonation": {
+      "weight": 0.70,
+      "description": "Pretends to be a bank, government, or authority"
+    },
+    "suspicious_links": {
+      "weight": 0.80,
+      "description": "Contains suspicious or shortened URLs"
+    },
+    "money_request": {
+      "weight": 0.85,
+      "description": "Requests money transfers or financial details"
+    },
+    "fear_tactics": {
+      "weight": 0.80,
+      "description": "Uses threats or fear to manipulate"
+    },
+    "too_good_to_be_true": {
+      "weight": 0.75,
+      "description": "Promises unrealistic rewards or prizes"
+    },
+    "personal_info": {
+      "weight": 0.85,
+      "description": "Requests sensitive personal information"
+    }
+  },
+  "patterns": [
+    {"text": "password share karo", "risk": 90, "category": "credential_request"},
+    {"text": "password batao", "risk": 90, "category": "credential_request"},
+    {"text": "password bhejo", "risk": 90, "category": "credential_request"},
+    {"text": "password dijiye", "risk": 90, "category": "credential_request"},
+    {"text": "password de do", "risk": 90, "category": "credential_request"},
+    {"text": "otp batao", "risk": 95, "category": "credential_request"},
+    {"text": "otp share karo", "risk": 95, "category": "credential_request"},
+    {"text": "otp bhejo", "risk": 95, "category": "credential_request"},
+    {"text": "otp de do", "risk": 95, "category": "credential_request"},
+    {"text": "otp dijiye", "risk": 95, "category": "credential_request"},
+    {"text": "pin number batao", "risk": 92, "category": "credential_request"},
+    {"text": "pin share karo", "risk": 92, "category": "credential_request"},
+    {"text": "cvv enter karo", "risk": 95, "category": "credential_request"},
+    {"text": "cvv batao", "risk": 95, "category": "credential_request"},
+    {"text": "cvv bhejo", "risk": 95, "category": "credential_request"},
+    {"text": "login details share", "risk": 88, "category": "credential_request"},
+    {"text": "login credentials bhejo", "risk": 88, "category": "credential_request"},
+    {"text": "bank details share", "risk": 90, "category": "credential_request"},
+    {"text": "account details bhejo", "risk": 88, "category": "credential_request"},
+    {"text": "account block hoga", "risk": 80, "category": "fear_tactics"},
+    {"text": "account band ho jayega", "risk": 80, "category": "fear_tactics"},
+    {"text": "account suspend", "risk": 78, "category": "fear_tactics"},
+    {"text": "account freeze", "risk": 78, "category": "fear_tactics"},
+    {"text": "legal action hoga", "risk": 75, "category": "fear_tactics"},
+    {"text": "police case hoga", "risk": 75, "category": "fear_tactics"},
+    {"text": "arrest ho jaoge", "risk": 80, "category": "fear_tactics"},
+    {"text": "jail bhej denge", "risk": 80, "category": "fear_tactics"},
+    {"text": "fir darj hoga", "risk": 75, "category": "fear_tactics"},
+    {"text": "warrant issue", "risk": 75, "category": "fear_tactics"},
+    {"text": "turant verify karo", "risk": 75, "category": "urgency"},
+    {"text": "abhi verify karo", "risk": 75, "category": "urgency"},
+    {"text": "turant click karo", "risk": 78, "category": "urgency"},
+    {"text": "jaldi karo", "risk": 65, "category": "urgency"},
+    {"text": "sirf aaj ke liye", "risk": 70, "category": "urgency"},
+    {"text": "last chance", "risk": 70, "category": "urgency"},
+    {"text": "aakhri mauka", "risk": 70, "category": "urgency"},
+    {"text": "time expire ho raha", "risk": 72, "category": "urgency"},
+    {"text": "deadline khatam", "risk": 70, "category": "urgency"},
+    {"text": "24 ghante mein", "risk": 68, "category": "urgency"},
+    {"text": "lottery jeet", "risk": 85, "category": "too_good_to_be_true"},
+    {"text": "lottery jeeta", "risk": 85, "category": "too_good_to_be_true"},
+    {"text": "prize jeet", "risk": 82, "category": "too_good_to_be_true"},
+    {"text": "inam jeeta", "risk": 82, "category": "too_good_to_be_true"},
+    {"text": "crore rupaye", "risk": 80, "category": "too_good_to_be_true"},
+    {"text": "lakh rupaye jeet", "risk": 80, "category": "too_good_to_be_true"},
+    {"text": "free gift", "risk": 72, "category": "too_good_to_be_true"},
+    {"text": "muft mein", "risk": 68, "category": "too_good_to_be_true"},
+    {"text": "cashback mil raha", "risk": 65, "category": "too_good_to_be_true"},
+    {"text": "bumper offer", "risk": 70, "category": "too_good_to_be_true"},
+    {"text": "police department se call", "risk": 70, "category": "impersonation"},
+    {"text": "rbi se notice", "risk": 72, "category": "impersonation"},
+    {"text": "income tax department", "risk": 68, "category": "impersonation"},
+    {"text": "bank manager bol raha", "risk": 72, "category": "impersonation"},
+    {"text": "sbi se bol raha", "risk": 70, "category": "impersonation"},
+    {"text": "government scheme", "risk": 65, "category": "impersonation"},
+    {"text": "sarkar ki yojana", "risk": 65, "category": "impersonation"},
+    {"text": "customs department", "risk": 68, "category": "impersonation"},
+    {"text": "cbi officer", "risk": 72, "category": "impersonation"},
+    {"text": "cyber cell se", "risk": 70, "category": "impersonation"},
+    {"text": "kyc update karo", "risk": 75, "category": "personal_info"},
+    {"text": "kyc expire ho gaya", "risk": 75, "category": "personal_info"},
+    {"text": "aadhar number bhejo", "risk": 80, "category": "personal_info"},
+    {"text": "aadhaar card details", "risk": 80, "category": "personal_info"},
+    {"text": "pan card number", "risk": 78, "category": "personal_info"},
+    {"text": "pan card bhejo", "risk": 78, "category": "personal_info"},
+    {"text": "bank account number bhejo", "risk": 85, "category": "personal_info"},
+    {"text": "ifsc code bhejo", "risk": 75, "category": "personal_info"},
+    {"text": "debit card number", "risk": 88, "category": "personal_info"},
+    {"text": "credit card number", "risk": 88, "category": "personal_info"},
+    {"text": "paytm pe bhejo", "risk": 75, "category": "money_request"},
+    {"text": "gpay pe transfer karo", "risk": 75, "category": "money_request"},
+    {"text": "phonepe pe bhejo", "risk": 75, "category": "money_request"},
+    {"text": "paise transfer karo", "risk": 78, "category": "money_request"},
+    {"text": "processing fee bhejo", "risk": 82, "category": "money_request"},
+    {"text": "registration fee", "risk": 78, "category": "money_request"},
+    {"text": "advance payment karo", "risk": 80, "category": "money_request"},
+    {"text": "token amount bhejo", "risk": 78, "category": "money_request"},
+    {"text": "tax pay karo claim ke liye", "risk": 82, "category": "money_request"},
+    {"text": "bit.ly", "risk": 70, "category": "suspicious_links"},
+    {"text": "tinyurl", "risk": 70, "category": "suspicious_links"},
+    {"text": "click here turant", "risk": 72, "category": "suspicious_links"},
+    {"text": "is link pe click karo", "risk": 72, "category": "suspicious_links"},
+    {"text": "yahan click karo", "risk": 68, "category": "suspicious_links"},
+    {"text": "form fill karo", "risk": 65, "category": "suspicious_links"},
+    {"text": "link pe jaake verify", "risk": 72, "category": "suspicious_links"}
+  ]
+}

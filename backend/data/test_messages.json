@@ -1,0 +1,136 @@
+{
+  "test_messages": [
+    {
+      "id": 1,
+      "category": "banking_scam",
+      "text": "ALERT: Aapke SBI account se 49999 ka unauthorized transaction hua hai. Cancel karne ke liye turant OTP share karo.",
+      "expected_phishing": true
+    },
+    {
+      "id": 2,
+      "category": "banking_scam",
+      "text": "Dear HDFC customer, aapka internet banking suspend ho gaya hai. Reactivate karne ke liye password bhejo.",
+      "expected_phishing": true
+    },
+    {
+      "id": 3,
+      "category": "banking_scam",
+      "text": "Bank manager bol raha hoon — aapke account mein suspicious activity hai. CVV enter karo verify karne ke liye.",
+      "expected_phishing": true
+    },
+    {
+      "id": 4,
+      "category": "lottery_scam",
+      "text": "Congratulations! Aapne Jio lucky draw mein 25 lakh rupaye jeet liye. Claim karne ke liye 5000 processing fee bhejo.",
+      "expected_phishing": true
+    },
+    {
+      "id": 5,
+      "category": "lottery_scam",
+      "text": "Amazon prize jeet! Aapne iPhone 15 Pro jeeta hai. Registration fee ke liye GPay pe 999 transfer karo.",
+      "expected_phishing": true
+    },
+    {
+      "id": 6,
+      "category": "government_impersonation",
+      "text": "Income tax department se notice. Aapka PAN card number invalid hai. Turant verify karo warna penalty lagega.",
+      "expected_phishing": true
+    },
+    {
+      "id": 7,
+      "category": "government_impersonation",
+      "text": "RBI se urgent notice — aapke saare accounts freeze ho jayenge 48 ghante mein. Aadhar number bhejo verification ke liye.",
+      "expected_phishing": true
+    },
+    {
+      "id": 8,
+      "category": "police_impersonation",
+      "text": "CBI officer Inspector Sharma bol raha hoon. Aapke naam pe FIR darj hoga. Arrest se bachne ke liye 50000 transfer karo.",
+      "expected_phishing": true
+    },
+    {
+      "id": 9,
+      "category": "police_impersonation",
+      "text": "Police department se call — aapke Aadhar card se fraud hua hai. Cyber cell mein report ke liye bank details share karo.",
+      "expected_phishing": true
+    },
+    {
+      "id": 10,
+      "category": "kyc_scam",
+      "text": "Aapka KYC expire ho gaya hai. 24 ghante mein update nahi kiya toh account band ho jayega. Link: tinyurl.com/kyc-now",
+      "expected_phishing": true
+    },
+    {
+      "id": 11,
+      "category": "kyc_scam",
+      "text": "Paytm KYC update karo abhi. Nahi toh wallet freeze ho jayega. Aadhar aur PAN card details bhejo.",
+      "expected_phishing": true
+    },
+    {
+      "id": 12,
+      "category": "prize_scam",
+      "text": "Muft mein Samsung Galaxy mil raha hai! Sirf aaj ke liye offer. Delivery ke liye 500 advance payment karo.",
+      "expected_phishing": true
+    },
+    {
+      "id": 13,
+      "category": "prize_scam",
+      "text": "Bumper offer! 10 crore rupaye ka inam jeeta aapne. Tax pay karo claim ke liye — PhonePe pe 10000 bhejo.",
+      "expected_phishing": true
+    },
+    {
+      "id": 14,
+      "category": "delivery_scam",
+      "text": "Aapka Flipkart order customs mein ruk gaya hai. Release karne ke liye 2000 ka fine pay karo. Last chance hai.",
+      "expected_phishing": true
+    },
+    {
+      "id": 15,
+      "category": "delivery_scam",
+      "text": "Customs department se message — aapka international parcel mein illegal items hain. Fine bhejo warna legal action hoga.",
+      "expected_phishing": true
+    },
+    {
+      "id": 16,
+      "category": "safe_message",
+      "text": "Your Amazon order #12345 has been shipped. Track it at amazon.in/orders.",
+      "expected_phishing": false
+    },
+    {
+      "id": 17,
+      "category": "safe_message",
+      "text": "Kal lunch pe chalein? Naya restaurant khula hai office ke paas.",
+      "expected_phishing": false
+    },
+    {
+      "id": 18,
+      "category": "safe_message",
+      "text": "Reminder: Your credit card payment of Rs 15000 is due on 15th January.",
+      "expected_phishing": false
+    },
+    {
+      "id": 19,
+      "category": "safe_message",
+      "text": "Team meeting postponed to 4 PM. Please update your calendar.",
+      "expected_phishing": false
+    },
+    {
+      "id": 20,
+      "category": "safe_message",
+      "text": "Bhai, cricket match ka score dekha? India jeet gayi!",
+      "expected_phishing": false
+    },
+    {
+      "id": 21,
+      "category": "covid_scam",
+      "text": "COVID vaccine ka free registration karo. Aadhar number aur bank details bhejo slot book karne ke liye.",
+      "expected_phishing": true
+    },
+    {
+      "id": 22,
+      "category": "covid_scam",
+      "text": "Government se COVID relief fund mil raha hai. 10000 paane ke liye account number aur IFSC code bhejo.",
+      "expected_phishing": true
+    }
+  ]
+}
