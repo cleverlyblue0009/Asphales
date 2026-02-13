@@ -1,6 +1,7 @@
 const API_URL = 'http://localhost:8000/analyze';
 const highlights = [];
 let isProtectionActive = false;
+const SUSPICIOUS_BLOCK_HINTS = /(otp|password|kyc|cvv|pin|debit card|credit card|account\s*(blocked|block|suspend|freeze)|verify|click here|sbi|rbi|aadhar|aadhaar|pan|upi|पासवर्ड|ओटीपी|केवाईसी|অটিপি|পাসওয়ার্ড|ஒடிபி|கடவுச்சொல்)/i;
 
 console.log('🛡️ SurakshaAI Shield loaded on this page');
 
@@ -198,11 +199,13 @@ async function scanPage() {
 
   console.log(`📦 Total blocks found: ${blocks.length}`);
 
-  // 🔒 Limit number of blocks (avoid massive pages like Wikipedia)
-  const MAX_BLOCKS = 30;
-  const limitedBlocks = blocks.slice(0, MAX_BLOCKS);
+  // Prioritize suspicious-looking blocks, then fill remaining slots
+  const MAX_BLOCKS = 60;
+  const suspiciousBlocks = blocks.filter(b => SUSPICIOUS_BLOCK_HINTS.test(b.text));
+  const remainingBlocks = blocks.filter(b => !SUSPICIOUS_BLOCK_HINTS.test(b.text));
+  const limitedBlocks = [...suspiciousBlocks, ...remainingBlocks].slice(0, MAX_BLOCKS);
 
-  console.log(`✂️ Using first ${limitedBlocks.length} blocks`);
+  console.log(`✂️ Using ${limitedBlocks.length} prioritized blocks (${suspiciousBlocks.length} suspicious candidates)`);
 
   // Combine selected blocks
   let fullText = limitedBlocks.map(b => b.text).join('\n\n');
@@ -247,11 +250,15 @@ async function scanPage() {
       });
     } else {
       console.log('✅ No threats detected');
-      chrome.runtime.sendMessage({
-        action: "SCAN_RESULT",
-        data: result
-      });
     }
+
+    chrome.runtime.sendMessage({
+      action: "SCAN_RESULT",
+      data: {
+        ...result,
+        scanned_blocks: limitedBlocks.length
+      }
+    });
 
   } catch (err) {
     console.error("🚨 Scan failed:", err);

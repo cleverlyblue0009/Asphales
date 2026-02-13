@@ -20,13 +20,7 @@
  color: #333;
  font-size: 20px;
  }
-
- .shield-icon {
- font-size: 40px;
- text-align: center;
- margin-bottom: 15px;
- }
-
+ .shield-icon { font-size: 40px; text-align: center; margin-bottom: 15px; }
  .status {
  padding: 12px;
  border-radius: 8px;
@@ -35,43 +29,21 @@
  text-align: center;
  transition: all 0.3s;
  }
- 
- .status.active {
- background: #4CAF50;
- color: white;
- }
-
- .status.inactive {
-    background: #f0f0f0;
- color: #666;
- }
-
+ .status.active { background: #4CAF50; color: white; }
+ .status.inactive { background: #f0f0f0; color: #666; }
  button {
- width: 100%;
- padding: 14px;
- font-size: 16px;
- font-weight: bold;
- cursor: pointer;
- border: none;
- border-radius: 8px;
- background: #2196F3;
- color: white;
- transition: all 0.3s;
+ width: 100%; padding: 14px; font-size: 16px; font-weight: bold; cursor: pointer;
+ border: none; border-radius: 8px; background: #2196F3; color: white; transition: all 0.3s;
  }
-  button:hover {
- background: #1976D2;
- transform: translateY(-2px);
- box-shadow: 0 4px 8px rgba(0,0,0,0.2);
- }
-
- .info {
- margin-top: 15px;
- padding: 10px;
- background: #e3f2fd;
- border-radius: 6px;
- font-size: 13px;
- color: #1976D2;
- }
+ button:hover { background: #1976D2; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+ .info { margin-top: 15px; padding: 10px; background: #e3f2fd; border-radius: 6px; font-size: 13px; color: #1976D2; }
+ .scan-summary { margin-top: 12px; font-size: 13px; color: #222; background: #f6f7ff; border-radius: 6px; padding: 10px; display: none; }
+ .threat-list { margin-top: 10px; max-height: 220px; overflow-y: auto; }
+ .threat-item { background: #fff4f4; border: 1px solid #ffc7c7; border-radius: 6px; padding: 8px; margin-bottom: 8px; }
+ .threat-item.safe { background: #f1fff4; border-color: #b6efc2; }
+ .threat-head { font-size: 12px; font-weight: 700; color: #c62828; }
+ .threat-phrase { font-size: 12px; margin-top: 4px; color: #333; word-break: break-word; }
+ .threat-explain { font-size: 11px; margin-top: 5px; color: #555; }
  </style>
 </head>
 <body>
@@ -80,11 +52,10 @@
  <h2>SurakshaAI Shield</h2>
  <div class="status inactive" id="status">Protection: OFF</div>
  <button id="toggleBtn">Activate Protection</button>
- <div class="info" id="info" style="display: none;">
- Scanning webpage for phishing threats...
+ <div class="info" id="info" style="display: none;">Scanning webpage for phishing threats...</div>
+ <div class="scan-summary" id="scanSummary"></div>
+ <div class="threat-list" id="threatList"></div>
  </div>
- </div>
-
  <script src="popup.js"></script>
- </body>
+</body>
 </html>

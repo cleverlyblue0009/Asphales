@@ -79,7 +79,8 @@ async def test_patterns(client):
     r = await client.get("/patterns")
     assert r.status_code == 200
     data = r.json()
-    assert data["total_patterns"] >= 50
+    assert data["total_patterns"] == 0
+    assert data["deprecated"] is True
 
 
 @pytest.mark.asyncio

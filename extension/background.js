@@ -1,14 +1,21 @@
-// This file runs in the background and helps coordinate between popup and content script
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
- if (message.action === 'SAVE_STATE') {
- chrome.storage.local.set({ isActive: message.isActive });
- }
+// Background coordinator for popup/content communication and persisted scan results.
+chrome.runtime.onMessage.addListener((message, sender) => {
+  if (message.action === 'SAVE_STATE') {
+    chrome.storage.local.set({ isActive: message.isActive });
+  }
 
- if (message.action === 'LOG') {
- console.log('SurakshaAI:', message.data);
- }
+  if (message.action === 'SCAN_RESULT') {
+    chrome.storage.local.set({ lastScanResult: message.data || {} });
+    chrome.runtime.sendMessage(message).catch(() => {
+      // Popup may not be open; storage keeps latest result.
+    });
+  }
+
+  if (message.action === 'LOG') {
+    console.log('SurakshaAI:', message.data);
+  }
 });
-// When extension is installed
+
 chrome.runtime.onInstalled.addListener(() => {
- console.log('SurakshaAI Shield installed successfully!');
+  console.log('SurakshaAI Shield installed successfully!');
 });
