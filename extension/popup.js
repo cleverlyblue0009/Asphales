@@ -1,41 +1,71 @@
-// Track if protection is active
 let isActive = false;
-// Get the toggle button
-const toggleBtn = document.getElementById('toggleBtn');
+
+const activateBtn = document.getElementById('activateBtn');
+const deactivateBtn = document.getElementById('deactivateBtn');
 const statusDiv = document.getElementById('status');
 const infoDiv = document.getElementById('info');
-// When button is clicked
-toggleBtn.addEventListener('click', async () => {
- // Toggle the state
- isActive = !isActive;
+const threatsDiv = document.getElementById('threatCount');
 
- // Get the current active tab
- const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+function setUiState() {
+  activateBtn.style.display = isActive ? 'none' : 'block';
+  deactivateBtn.style.display = isActive ? 'block' : 'none';
 
- // Send message to content script
- chrome.tabs.sendMessage(tab.id, {
- action: isActive ? 'START_SCAN' : 'STOP_SCAN'
- });
+  statusDiv.textContent = isActive ? 'Protection: ON ✓' : 'Protection: OFF';
+  statusDiv.className = `status ${isActive ? 'active' : 'inactive'}`;
+}
 
- // Update UI
- if (isActive) {
- statusDiv.textContent = 'Protection: ON ✓';
- statusDiv.className = 'status active';
- toggleBtn.textContent = 'Deactivate Protection';
- infoDiv.style.display = 'block';
- } else {
- statusDiv.textContent = 'Protection: OFF';
- statusDiv.className = 'status inactive';
- toggleBtn.textContent = 'Activate Protection';
- infoDiv.style.display = 'none';
- }
+async function getActiveTab() {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  return tab;
+}
+
+activateBtn.addEventListener('click', async () => {
+  const tab = await getActiveTab();
+  if (!tab?.id) return;
+
+  statusDiv.textContent = 'Scanning...';
+  statusDiv.className = 'status inactive';
+  infoDiv.textContent = 'Analyzing page for phishing signals...';
+  threatsDiv.textContent = '';
+
+  try {
+    const result = await chrome.tabs.sendMessage(tab.id, { action: 'START_SCAN' });
+    isActive = true;
+    chrome.storage.local.set({ isActive: true });
+
+    setUiState();
+    infoDiv.textContent = result?.message || 'Scan complete.';
+    threatsDiv.textContent = `Threats detected: ${result?.threats ?? 0}`;
+  } catch (error) {
+    console.error('Failed to start scan:', error);
+    infoDiv.textContent = 'Could not connect to page script.';
+    statusDiv.textContent = 'Protection: OFF';
+    statusDiv.className = 'status inactive';
+  }
 });
-// Load saved state when popup opens
+
+deactivateBtn.addEventListener('click', async () => {
+  const tab = await getActiveTab();
+  if (!tab?.id) return;
+
+  try {
+    await chrome.tabs.sendMessage(tab.id, { action: 'STOP_SCAN' });
+  } catch (error) {
+    console.error('Failed to stop scan:', error);
+  }
+
+  isActive = false;
+  chrome.storage.local.set({ isActive: false });
+  setUiState();
+  infoDiv.textContent = 'Highlights cleared.';
+  threatsDiv.textContent = 'Threats detected: 0';
+});
+
 chrome.storage.local.get(['isActive'], (result) => {
- if (result.isActive) {
- isActive = true;
- statusDiv.textContent = 'Protection: ON ✓';
- statusDiv.className = 'status active';
- toggleBtn.textContent = 'Deactivate Protection';
- }
+  isActive = Boolean(result.isActive);
+  setUiState();
+  threatsDiv.textContent = 'Threats detected: 0';
+  infoDiv.textContent = isActive
+    ? 'Protection active. Click Deactivate to clear highlights.'
+    : 'Activate protection to scan this page.';
 });
