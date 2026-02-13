@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
@@ -11,6 +12,7 @@ from context_engine import calculate_contextual_risk, extract_links
 from train_model import AdvancedPhishingModel
 
 MODEL_PATH = Path("models/advanced/phishing_model.json")
+SENTENCE_RE = re.compile(r"[^.!?\n]{12,}[.!?]?", re.UNICODE)
 
 
 class AnalyzeRequest(BaseModel):
@@ -32,7 +34,46 @@ class InferenceEngine:
         }
 
 
-app = FastAPI(title="SurakshaAI Advanced Detector", version="2.1.0")
+def _segments(text: str) -> list[str]:
+    found = [s.strip() for s in SENTENCE_RE.findall(text or "") if s.strip()]
+    return found or [text.strip()]
+
+
+def _score_segments(text: str, base_score: float, model: AdvancedPhishingModel) -> list[dict]:
+    sentences = _segments(text)
+    if not sentences:
+        return []
+
+    scored: list[dict] = []
+    for idx, sentence in enumerate(sentences):
+        prev_txt = sentences[idx - 1] if idx > 0 else ""
+        next_txt = sentences[idx + 1] if idx + 1 < len(sentences) else ""
+        context_window = " ".join([prev_txt, sentence, next_txt]).strip()
+        local_score = float(model.predict_proba(context_window))
+
+        risk_score = min(1.0, (local_score * 0.75) + (base_score * 0.25))
+        if risk_score >= 0.55:
+            reason = "Likely phishing pattern in context window"
+            lw = context_window.lower()
+            if "otp" in lw or "password" in lw or "pin" in lw or "cvv" in lw:
+                reason = "Credential harvesting intent"
+            elif "http://" in lw or "https://" in lw:
+                reason = "Suspicious action request with URL"
+            elif "urgent" in lw or "immediately" in lw or "तुरंत" in lw:
+                reason = "Urgency pressure tactic"
+
+            scored.append(
+                {
+                    "phrase": sentence[:220],
+                    "risk_score": round(risk_score, 4),
+                    "reason": reason,
+                }
+            )
+
+    return sorted(scored, key=lambda x: x["risk_score"], reverse=True)[:6]
+
+
+app = FastAPI(title="SurakshaAI Advanced Detector", version="2.2.0")
 engine: InferenceEngine | None = None
 
 
@@ -56,20 +97,30 @@ def analyze_text(request: AnalyzeRequest) -> dict:
     links = extract_links(text)
     ml = engine.predict(text)
     ctx = calculate_contextual_risk(text=text, detected_features=[], links=links, base_score=ml["risk_score"])
+    suspicious_segments = _score_segments(text=text, base_score=ctx["risk_score"], model=engine.model)
+
+    level = ctx["risk_level"]
+    confidence = "High" if ctx["risk_score"] >= 0.82 else "Medium" if ctx["risk_score"] >= 0.45 else "Low"
+    explanation = "Context looks normal; no coordinated phishing cues detected."
+    if suspicious_segments:
+        explanation = "; ".join(seg["reason"] for seg in suspicious_segments[:2])
 
     return {
         "risk_score": ctx["risk_score"],
-        "risk_level": ctx["risk_level"],
+        "risk_level": level,
         "detected_signals": ctx["detected_signals"],
         "context_boost": ctx["context_boost"],
+        "risk_band": level,
         "ml": ml,
         "links": links,
+        "harmful_links": ctx.get("suspicious_links", []),
+        "suspicious_segments": suspicious_segments,
         "genai_validation": {"enabled": False},
         "structured_explanation": {
-            "risk_level": ctx["risk_level"],
-            "primary_reason": ", ".join(ctx["detected_signals"][:2]) or "No strong phishing signal detected.",
-            "psychological_tactics": ["Urgency"] if any("Urgency" in s for s in ctx["detected_signals"]) else [],
-            "technical_indicators": [s for s in ctx["detected_signals"] if "URL" in s],
-            "confidence": "High" if ctx["risk_score"] >= 0.8 else "Medium",
+            "risk_level": level,
+            "primary_reason": explanation,
+            "psychological_tactics": [s for s in ctx["detected_signals"] if "Urgency" in s or "pressure" in s.lower()],
+            "technical_indicators": [s for s in ctx["detected_signals"] if "URL" in s or "credential" in s.lower()],
+            "confidence": confidence,
         },
     }

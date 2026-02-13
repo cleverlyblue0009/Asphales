@@ -43,10 +43,8 @@ class AdvancedPhishingModel:
     def _build_vocab(self, texts: list[str], max_features: int = 120000) -> None:
         tf = Counter()
         df = Counter()
-        docs_feats = []
         for text in texts:
             feats = self._features(text)
-            docs_feats.append(feats)
             tf.update(feats)
             df.update(set(feats))
 
@@ -140,19 +138,85 @@ def read_csv(path: Path) -> tuple[list[str], list[int]]:
     return texts, labels
 
 
+def _add_sample(texts: list[str], labels: list[int], text: str, label: int) -> None:
+    clean = re.sub(r"\s+", " ", (text or "")).strip()
+    if len(clean) >= 8:
+        texts.append(clean)
+        labels.append(label)
+
+
+def _walk_json_samples(node, texts: list[str], labels: list[int], default_label: int | None = None) -> None:
+    if isinstance(node, dict):
+        lower_keys = {k.lower() for k in node.keys()}
+
+        if "text" in node and isinstance(node.get("text"), str):
+            label = default_label
+            if label is None:
+                category = str(node.get("category", "")).lower()
+                label = 1 if any(k in category for k in ("phish", "fraud", "scam", "threat")) else 0
+            _add_sample(texts, labels, node["text"], int(label))
+
+        for key, value in node.items():
+            lk = key.lower()
+            inferred = default_label
+            if any(t in lk for t in ("phish", "threat", "malicious", "fraud", "scam")):
+                inferred = 1
+            elif any(t in lk for t in ("safe", "legit", "ham", "benign", "normal")):
+                inferred = 0
+            _walk_json_samples(value, texts, labels, inferred)
+
+        # Handle language dictionaries with safe/threat arrays
+        if "safe" in lower_keys or "threat" in lower_keys:
+            for k, v in node.items():
+                lk = k.lower()
+                if lk == "safe":
+                    _walk_json_samples(v, texts, labels, 0)
+                if lk in {"threat", "phishing", "fraud", "scam"}:
+                    _walk_json_samples(v, texts, labels, 1)
+
+    elif isinstance(node, list):
+        for item in node:
+            if isinstance(item, str):
+                if default_label is not None:
+                    _add_sample(texts, labels, item, int(default_label))
+            else:
+                _walk_json_samples(item, texts, labels, default_label)
+
+
+def load_json_training_samples(data_dir: Path) -> tuple[list[str], list[int]]:
+    texts: list[str] = []
+    labels: list[int] = []
+    for json_file in sorted(data_dir.glob("*.json")):
+        try:
+            payload = json.loads(json_file.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        _walk_json_samples(payload, texts, labels)
+
+    # Deduplicate while keeping strongest label if conflict
+    merged: dict[str, int] = {}
+    for text, label in zip(texts, labels):
+        merged[text] = max(label, merged.get(text, 0))
+    out_texts = list(merged.keys())
+    out_labels = [merged[t] for t in out_texts]
+    return out_texts, out_labels
+
+
 def tune_threshold(y_true: list[int], probs: list[float]) -> dict:
-    best = {"threshold": 0.5, "f1": 0.0, "precision": 0.0, "recall": 0.0}
+    best = {"threshold": 0.5, "f1": 0.0, "precision": 0.0, "recall": 0.0, "accuracy": 0.0}
     for i in range(20, 91):
         t = i / 100
         preds = [1 if p >= t else 0 for p in probs]
         tp = sum(1 for y, p in zip(y_true, preds) if y == 1 and p == 1)
         fp = sum(1 for y, p in zip(y_true, preds) if y == 0 and p == 1)
         fn = sum(1 for y, p in zip(y_true, preds) if y == 1 and p == 0)
+        tn = sum(1 for y, p in zip(y_true, preds) if y == 0 and p == 0)
         precision = tp / (tp + fp) if (tp + fp) else 0.0
         recall = tp / (tp + fn) if (tp + fn) else 0.0
+        acc = (tp + tn) / len(y_true) if y_true else 0.0
         f1 = (2 * precision * recall / (precision + recall)) if (precision + recall) else 0.0
         if f1 > best["f1"]:
-            best = {"threshold": t, "f1": f1, "precision": precision, "recall": recall}
+            best = {"threshold": t, "f1": f1, "precision": precision, "recall": recall, "accuracy": acc}
     return best
 
 
@@ -164,9 +228,34 @@ def confusion_matrix(y_true: list[int], y_pred: list[int]) -> dict[str, int]:
     return {"tn": tn, "fp": fp, "fn": fn, "tp": tp}
 
 
-def train(train_csv: Path, test_csv: Path, output_dir: Path) -> None:
-    X_train, y_train = read_csv(train_csv)
-    X_test, y_test = read_csv(test_csv)
+def _split_holdout(texts: list[str], labels: list[int], test_ratio: float = 0.2) -> tuple[list[str], list[int], list[str], list[int]]:
+    idxs = list(range(len(texts)))
+    random.seed(42)
+    random.shuffle(idxs)
+    cut = max(1, int(len(idxs) * (1 - test_ratio)))
+    train_idx = idxs[:cut]
+    test_idx = idxs[cut:]
+    X_train = [texts[i] for i in train_idx]
+    y_train = [labels[i] for i in train_idx]
+    X_test = [texts[i] for i in test_idx]
+    y_test = [labels[i] for i in test_idx]
+    return X_train, y_train, X_test, y_test
+
+
+def train(train_csv: Path, test_csv: Path, output_dir: Path, data_dir: Path) -> None:
+    if train_csv.exists() and test_csv.exists():
+        X_train, y_train = read_csv(train_csv)
+        X_test, y_test = read_csv(test_csv)
+    else:
+        fallback = data_dir / "phishing_multilingual_7500.csv"
+        if not fallback.exists():
+            raise FileNotFoundError("Training CSVs not found and fallback dataset missing")
+        texts, labels = read_csv(fallback)
+        X_train, y_train, X_test, y_test = _split_holdout(texts, labels)
+
+    json_texts, json_labels = load_json_training_samples(data_dir)
+    X_train.extend(json_texts)
+    y_train.extend(json_labels)
 
     model = AdvancedPhishingModel()
     model.train(X_train, y_train)
@@ -182,10 +271,16 @@ def train(train_csv: Path, test_csv: Path, output_dir: Path) -> None:
     model_path = output_dir / "phishing_model.json"
     metrics_path = output_dir / "model_metrics.json"
     model.save(model_path)
-    metrics_path.write_text(json.dumps({"best_threshold": best, "confusion_matrix": cm}, indent=2), encoding="utf-8")
+    metrics = {
+        "best_threshold": best,
+        "confusion_matrix": cm,
+        "json_samples_used": len(json_texts),
+        "target_accuracy_95": best["accuracy"] >= 0.95,
+    }
+    metrics_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
 
     print(f"Model saved: {model_path}")
-    print(json.dumps({"best_threshold": best, "confusion_matrix": cm}, indent=2))
+    print(json.dumps(metrics, indent=2))
 
 
 if __name__ == "__main__":
@@ -193,5 +288,6 @@ if __name__ == "__main__":
     parser.add_argument("--train-csv", type=Path, default=Path("data/engineered/train.csv"))
     parser.add_argument("--test-csv", type=Path, default=Path("data/engineered/test.csv"))
     parser.add_argument("--output-dir", type=Path, default=Path("models/advanced"))
+    parser.add_argument("--data-dir", type=Path, default=Path("data"))
     args = parser.parse_args()
-    train(args.train_csv, args.test_csv, args.output_dir)
+    train(args.train_csv, args.test_csv, args.output_dir, args.data_dir)
