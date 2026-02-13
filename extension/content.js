@@ -1,4 +1,3 @@
-const API_URL = 'http://localhost:8000/analyze';
 const MIN_TEXT_LENGTH = 20;
 const API_TIMEOUT_MS = 5000;
 const PAGE_LOAD_DEBOUNCE_MS = 2000;
@@ -26,24 +25,6 @@ function isElementVisible(element) {
 
 function extractVisibleTextBlocks() {
   if (!document.body) return [];
-
-
-
-console.log('🛡️ SurakshaAI Shield content script loaded');
-
-function isElementVisible(element) {
-  if (!element || !(element instanceof Element)) return false;
-  const style = window.getComputedStyle(element);
-  if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') {
-    return false;
-  }
-  if (element.hasAttribute('hidden') || element.getAttribute('aria-hidden') === 'true') {
-    return false;
-  }
-  return true;
-}
-
-function extractVisibleTextBlocks() {
 
   const blocks = [];
   const walker = document.createTreeWalker(
@@ -133,39 +114,30 @@ function showToast(message) {
 }
 
 async function analyzeText(text) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
-
   try {
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text }),
-      signal: controller.signal
+    const response = await chrome.runtime.sendMessage({
+      action: 'ANALYZE_TEXT',
+      text,
+      timeoutMs: API_TIMEOUT_MS
     });
 
-    if (!response.ok) {
-      if (response.status === 422) {
-        throw new Error('Page content too large for one request');
-      }
-      throw new Error(`API returned ${response.status}`);
+    if (!response?.ok) {
+      throw new Error(response?.error || 'Backend not available');
     }
 
-    return await response.json();
+    return response.data;
   } catch (error) {
     console.error('❌ Analyze API error:', error);
 
-    if (error.name === 'AbortError') {
+    if (error?.message?.includes('timeout')) {
       throw new Error('Request timeout after 5 seconds');
     }
 
-    if (error instanceof TypeError) {
-      throw new Error('Backend not available');
+    if (error?.message?.includes('too large')) {
+      throw new Error('Page content too large for one request');
     }
 
-    throw error;
-  } finally {
-    clearTimeout(timeoutId);
+    throw new Error('Backend not available');
   }
 }
 
