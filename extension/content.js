@@ -27,6 +27,24 @@ function isElementVisible(element) {
 function extractVisibleTextBlocks() {
   if (!document.body) return [];
 
+
+
+console.log('🛡️ SurakshaAI Shield content script loaded');
+
+function isElementVisible(element) {
+  if (!element || !(element instanceof Element)) return false;
+  const style = window.getComputedStyle(element);
+  if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') {
+    return false;
+  }
+  if (element.hasAttribute('hidden') || element.getAttribute('aria-hidden') === 'true') {
+    return false;
+  }
+  return true;
+}
+
+function extractVisibleTextBlocks() {
+
   const blocks = [];
   const walker = document.createTreeWalker(
     document.body,
