@@ -19,6 +19,8 @@ function renderResult(result) {
   const contextBoost = Number(result?.context_boost || 0);
   const signals = result?.detected_signals || [];
   const explanation = result?.structured_explanation || {};
+  const segments = result?.suspicious_segments || [];
+  const scannedBlocks = result?.scanned_blocks ?? 'N/A';
 
   scanSummaryDiv.style.display = 'block';
   scanSummaryDiv.innerHTML = `
@@ -28,10 +30,17 @@ function renderResult(result) {
     </div>
     <div style="margin-top:8px;">Risk Score: <strong>${(riskScore * 100).toFixed(1)}%</strong></div>
     <div>Context Boost: <strong>+${(contextBoost * 100).toFixed(1)}%</strong></div>
+    <div>Scanned Blocks: <strong>${scannedBlocks}</strong></div>
   `;
 
   const tactics = explanation.psychological_tactics || [];
   const indicators = explanation.technical_indicators || [];
+
+  const segmentHtml = segments.length
+    ? `<div class="threat-item"><div class="threat-head">Top Suspicious Snippets</div>
+      ${segments.slice(0, 4).map((s) => `<div class="threat-phrase">• ${(s.phrase || '').slice(0, 140)}</div><div class="threat-explain">Risk ${(Number(s.risk_score || 0) * 100).toFixed(0)}%</div>`).join('')}
+    </div>`
+    : `<div class="threat-item safe"><div class="threat-head">Top Suspicious Snippets</div><div class="threat-phrase">No suspicious snippets were detected.</div></div>`;
 
   threatListDiv.innerHTML = `
     <div class="threat-item">
@@ -44,10 +53,11 @@ function renderResult(result) {
       <div class="threat-phrase">${indicators.length ? indicators.join(', ') : 'No technical indicator detected.'}</div>
       <div class="threat-explain"><strong>Signals:</strong> ${signals.length ? signals.join(', ') : 'None'}</div>
     </div>
+    ${segmentHtml}
     <div class="threat-item safe">
       <div class="threat-head">Confidence</div>
       <div class="threat-phrase">${explanation.confidence || 'Medium'}</div>
-      <div class="threat-explain">LLM validation does not override ML classification.</div>
+      <div class="threat-explain">ML + deterministic context analysis (GenAI disabled).</div>
     </div>
   `;
 }
@@ -57,7 +67,7 @@ toggleBtn.addEventListener('click', async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
   chrome.tabs.sendMessage(tab.id, {
-    action: isActive ? 'START_SCAN' : 'STOP_SCAN'
+    action: isActive ? 'START_SCAN' : 'STOP_SCAN',
   });
 
   chrome.runtime.sendMessage({ action: 'SAVE_STATE', isActive });

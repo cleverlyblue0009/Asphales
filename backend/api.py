@@ -1,4 +1,4 @@
-"""FastAPI service for ML + contextual + GenAI phishing analysis."""
+"""Standalone FastAPI service for deterministic ML + context phishing analysis."""
 
 from __future__ import annotations
 
@@ -8,7 +8,6 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
 from context_engine import calculate_contextual_risk, extract_links
-from explanation_engine import ExplanationEngine
 from train_model import AdvancedPhishingModel
 
 MODEL_PATH = Path("models/advanced/phishing_model.json")
@@ -21,9 +20,7 @@ class AnalyzeRequest(BaseModel):
 class InferenceEngine:
     def __init__(self, model_path: Path):
         if not model_path.exists():
-            raise FileNotFoundError(
-                f"Model not found at {model_path}. Run dataset_builder.py and train_model.py first."
-            )
+            raise FileNotFoundError(f"Model not found at {model_path}")
         self.model = AdvancedPhishingModel.load(model_path)
 
     def predict(self, text: str) -> dict:
@@ -35,9 +32,8 @@ class InferenceEngine:
         }
 
 
-app = FastAPI(title="SurakshaAI Advanced Detector", version="2.0.0")
+app = FastAPI(title="SurakshaAI Advanced Detector", version="2.1.0")
 engine: InferenceEngine | None = None
-explainer = ExplanationEngine()
 
 
 @app.on_event("startup")
@@ -58,31 +54,22 @@ def analyze_text(request: AnalyzeRequest) -> dict:
 
     text = request.text
     links = extract_links(text)
-
-    detected_features: list[str] = []
-    ml_result = engine.predict(text)
-    ctx = calculate_contextual_risk(
-        text=text,
-        detected_features=detected_features,
-        links=links,
-        base_score=ml_result["risk_score"],
-    )
-
-    explanation = explainer.validate(
-        text=text,
-        ml_result=ml_result,
-        detected_features=ctx["detected_signals"],
-        links=links,
-        context_result=ctx,
-    )
+    ml = engine.predict(text)
+    ctx = calculate_contextual_risk(text=text, detected_features=[], links=links, base_score=ml["risk_score"])
 
     return {
         "risk_score": ctx["risk_score"],
         "risk_level": ctx["risk_level"],
         "detected_signals": ctx["detected_signals"],
         "context_boost": ctx["context_boost"],
-        "ml": ml_result,
+        "ml": ml,
         "links": links,
-        "genai_validation": explanation.get("validation", {}),
-        "structured_explanation": explanation.get("explanation", {}),
+        "genai_validation": {"enabled": False},
+        "structured_explanation": {
+            "risk_level": ctx["risk_level"],
+            "primary_reason": ", ".join(ctx["detected_signals"][:2]) or "No strong phishing signal detected.",
+            "psychological_tactics": ["Urgency"] if any("Urgency" in s for s in ctx["detected_signals"]) else [],
+            "technical_indicators": [s for s in ctx["detected_signals"] if "URL" in s],
+            "confidence": "High" if ctx["risk_score"] >= 0.8 else "Medium",
+        },
     }
