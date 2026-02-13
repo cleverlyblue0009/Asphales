@@ -62,11 +62,61 @@ async function analyzeText(text) {
   return response.json();
 }
 
+function clearHighlights() {
+  const highlights = document.querySelectorAll('.surakshaai-highlight');
+  highlights.forEach((el) => {
+    el.classList.remove('surakshaai-highlight');
+  });
+}
+
+function highlightSuspiciousText(segments) {
+  clearHighlights();
+
+  if (!segments || segments.length === 0) return;
+
+  const walker = document.createTreeWalker(
+    document.body,
+    NodeFilter.SHOW_TEXT,
+    {
+      acceptNode: (node) => {
+        const parent = node.parentElement;
+        if (!parent) return NodeFilter.FILTER_REJECT;
+        const tag = parent.tagName;
+        if (['SCRIPT', 'STYLE', 'NOSCRIPT'].includes(tag)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      },
+    }
+  );
+
+  let node;
+  while ((node = walker.nextNode())) {
+    const nodeText = node.textContent || '';
+
+    for (const segment of segments) {
+      const phrase = segment.phrase || '';
+      if (!phrase || phrase.length < 20) continue;
+
+      // Check if this text node contains the suspicious phrase
+      const cleanNodeText = nodeText.replace(/\s+/g, ' ').trim();
+      const cleanPhrase = phrase.replace(/\s+/g, ' ').trim().slice(0, 200);
+
+      if (cleanNodeText.includes(cleanPhrase) || cleanPhrase.includes(cleanNodeText)) {
+        const parent = node.parentElement;
+        if (parent && !parent.classList.contains('surakshaai-highlight')) {
+          parent.classList.add('surakshaai-highlight');
+          parent.title = `⚠️ Risk: ${(segment.risk_score * 100).toFixed(0)}% - ${segment.reason || 'Suspicious pattern detected'}`;
+        }
+      }
+    }
+  }
+}
+
 async function scanPage() {
   if (!isProtectionActive) return;
 
   const blocks = extractRelevantBlocks();
   if (!blocks.length) {
+    clearHighlights();
     chrome.runtime.sendMessage({
       action: 'SCAN_RESULT',
       data: {
@@ -92,6 +142,14 @@ async function scanPage() {
 
   try {
     const result = await analyzeText(text);
+
+    // Highlight suspicious segments on the page
+    if (result.suspicious_segments && result.suspicious_segments.length > 0) {
+      highlightSuspiciousText(result.suspicious_segments);
+    } else {
+      clearHighlights();
+    }
+
     chrome.runtime.sendMessage({
       action: 'SCAN_RESULT',
       data: {
@@ -100,6 +158,7 @@ async function scanPage() {
       },
     });
   } catch (error) {
+    clearHighlights();
     chrome.runtime.sendMessage({
       action: 'SCAN_RESULT',
       data: {
@@ -127,5 +186,6 @@ chrome.runtime.onMessage.addListener((message) => {
   }
   if (message.action === 'STOP_SCAN') {
     isProtectionActive = false;
+    clearHighlights();
   }
 });
