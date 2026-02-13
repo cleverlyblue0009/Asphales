@@ -9,6 +9,8 @@ from pydantic import BaseModel, Field
 
 from context_engine import calculate_contextual_risk, extract_links
 from services.classifier import HybridClassifier
+from context_engine import calculate_contextual_risk, extract_links
+from explanation_engine import ExplanationEngine
 from utils.logger import setup_logger
 
 logger = setup_logger("api")
@@ -16,6 +18,7 @@ logger = setup_logger("api")
 router = APIRouter()
 classifier: Optional[HybridClassifier] = None
 _start_time: float = time.time()
+explainer = ExplanationEngine()
 
 SCAM_HINT_RE = re.compile(
     r"(otp|password|pin|cvv|kyc|verify|verification|account\s*(blocked|suspend|freeze)|"
