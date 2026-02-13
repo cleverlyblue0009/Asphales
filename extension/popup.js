@@ -21,6 +21,7 @@ function renderResult(result) {
   const segments = result?.suspicious_segments || [];
   const harmfulLinks = result?.harmful_links || [];
   const scannedBlocks = result?.scanned_blocks ?? 'N/A';
+  const languageInfo = result?.language_info || {};
 
   scanSummaryDiv.style.display = 'block';
   scanSummaryDiv.innerHTML = `
@@ -31,10 +32,37 @@ function renderResult(result) {
     <div style="margin-top:8px;">Threat Score: <strong>${(riskScore * 100).toFixed(1)}%</strong></div>
     <div>Context Impact: <strong>${contextBoost >= 0 ? '+' : ''}${(contextBoost * 100).toFixed(1)}%</strong></div>
     <div>Scanned Blocks: <strong>${scannedBlocks}</strong></div>
+    ${languageInfo.primary_language ? `<div>Detected Language: <strong>${languageInfo.primary_language}</strong></div>` : ''}
   `;
 
   const tactics = explanation.psychological_tactics || [];
+  const tacticsVernacular = explanation.psychological_tactics_vernacular || [];
   const indicators = explanation.technical_indicators || [];
+  const indicatorsVernacular = explanation.technical_indicators_vernacular || [];
+  const detectedLang = explanation.detected_language || 'English';
+
+  // Format bilingual display
+  const formatBilingual = (en, vernacular) => {
+    if (!vernacular || en === vernacular || detectedLang === 'English') {
+      return en;
+    }
+    return `${en} <span style="color:#666;font-size:0.9em;">(${vernacular})</span>`;
+  };
+
+  // Format tactics display
+  const tacticsDisplay = tactics.length
+    ? tactics.map((t, i) => formatBilingual(t, tacticsVernacular[i])).join(', ')
+    : 'No clear manipulation tactic detected.';
+
+  // Format indicators display
+  const indicatorsDisplay = indicators.length
+    ? indicators.map((ind, i) => formatBilingual(ind, indicatorsVernacular[i])).join(', ')
+    : 'No technical indicator detected.';
+
+  // Primary reason (bilingual)
+  const primaryReason = explanation.primary_reason || 'No strong phishing indicator detected.';
+  const primaryReasonVernacular = explanation.primary_reason_vernacular || '';
+  const primaryReasonDisplay = formatBilingual(primaryReason, primaryReasonVernacular);
 
   const segmentHtml = segments.length
     ? `<div class="threat-item"><div class="threat-head">Context-Aware Suspicious Snippets</div>
@@ -43,26 +71,26 @@ function renderResult(result) {
     : `<div class="threat-item safe"><div class="threat-head">Context-Aware Suspicious Snippets</div><div class="threat-phrase">No suspicious snippets were detected.</div></div>`;
 
   const harmfulLinksHtml = harmfulLinks.length
-    ? `<div class="threat-item"><div class="threat-head">Harmful Links</div>${harmfulLinks.map((link) => `<div class="threat-phrase">• ${link}</div>`).join('')}</div>`
+    ? `<div class="threat-item"><div class="threat-head">Harmful Links</div>${harmfulLinks.map((link) => `<div class="threat-phrase" style="word-break:break-all;">• ${link}</div>`).join('')}</div>`
     : `<div class="threat-item safe"><div class="threat-head">Harmful Links</div><div class="threat-phrase">No harmful links detected.</div></div>`;
 
   threatListDiv.innerHTML = `
     <div class="threat-item">
       <div class="threat-head">Manipulation Radar</div>
-      <div class="threat-phrase">${tactics.length ? tactics.join(', ') : 'No clear manipulation tactic detected.'}</div>
-      <div class="threat-explain"><strong>Primary Reason:</strong> ${explanation.primary_reason || 'N/A'}</div>
+      <div class="threat-phrase">${tacticsDisplay}</div>
+      <div class="threat-explain"><strong>Primary Reason:</strong> ${primaryReasonDisplay}</div>
     </div>
     <div class="threat-item">
       <div class="threat-head">Technical Indicators</div>
-      <div class="threat-phrase">${indicators.length ? indicators.join(', ') : 'No technical indicator detected.'}</div>
-      <div class="threat-explain"><strong>Signals:</strong> ${signals.length ? signals.join(', ') : 'None'}</div>
+      <div class="threat-phrase">${indicatorsDisplay}</div>
+      <div class="threat-explain"><strong>Detected Signals:</strong> ${signals.length ? signals.join(', ') : 'None'}</div>
     </div>
     ${harmfulLinksHtml}
     ${segmentHtml}
     <div class="threat-item safe">
       <div class="threat-head">Confidence</div>
       <div class="threat-phrase">${explanation.confidence || 'Medium'}</div>
-      <div class="threat-explain">Scored using full-context ML windows and deterministic signal analysis.</div>
+      <div class="threat-explain">Scored using context-aware ML analysis and multilingual pattern detection.</div>
     </div>
   `;
 }
