@@ -241,7 +241,7 @@ async def analyze_text(request: AnalyzeRequest):
         len(harmful_links) > 0
     )
 
-    return {
+    response_data = {
         "risk_score": ctx["risk_score"],
         "risk_level": ctx["risk_level"],
         "detected_signals": ctx["detected_signals"],
@@ -254,3 +254,11 @@ async def analyze_text(request: AnalyzeRequest):
         "genai_validation": {"enabled": False, "note": "GenAI validation disabled for precision/stability."},
         "structured_explanation": explanation,
     }
+
+    # Debug logging
+    logger.info(f"API Response: risk_score={ctx['risk_score']}, risk_level={ctx['risk_level']}")
+    logger.info(f"Suspicious segments: {len(top_hits)}")
+    if top_hits:
+        logger.info(f"Top threats: {[f'{h['risk_score']*100:.0f}%: {h['phrase'][:50]}' for h in top_hits[:3]]}")
+
+    return response_data

@@ -92,12 +92,20 @@ async function scanPage() {
 
   try {
     const result = await analyzeText(text);
+    console.log('SurakshaAI: API response received:', result);
+    console.log('SurakshaAI: Risk score:', result.risk_score, 'Level:', result.risk_level);
+    console.log('SurakshaAI: Suspicious segments:', result.suspicious_segments?.length || 0);
+
+    const messageData = {
+      ...result,
+      scanned_blocks: blocks.length,
+    };
+
+    console.log('SurakshaAI: Sending SCAN_RESULT message:', messageData);
+
     chrome.runtime.sendMessage({
       action: 'SCAN_RESULT',
-      data: {
-        ...result,
-        scanned_blocks: blocks.length,
-      },
+      data: messageData,
     });
   } catch (error) {
     chrome.runtime.sendMessage({

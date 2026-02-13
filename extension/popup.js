@@ -121,12 +121,17 @@ toggleBtn.addEventListener('click', async () => {
 });
 
 chrome.runtime.onMessage.addListener((message) => {
+  console.log('Popup received message:', message);
   if (message.action === 'SCAN_RESULT') {
+    console.log('Popup: SCAN_RESULT received, data:', message.data);
+    console.log('Popup: Risk score:', message.data?.risk_score, 'Level:', message.data?.risk_level);
     renderResult(message.data || {});
   }
 });
 
 chrome.storage.local.get(['isActive', 'lastScanResult'], (result) => {
+  console.log('Popup: Loading from storage:', result);
+
   if (result.isActive) {
     isActive = true;
     statusDiv.textContent = 'Protection: ON ✓';
@@ -136,6 +141,8 @@ chrome.storage.local.get(['isActive', 'lastScanResult'], (result) => {
   }
 
   if (result.lastScanResult) {
+    console.log('Popup: Rendering lastScanResult:', result.lastScanResult);
+    console.log('Popup: Risk score from storage:', result.lastScanResult?.risk_score);
     renderResult(result.lastScanResult);
   }
 });
