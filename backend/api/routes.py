@@ -9,9 +9,10 @@ from pydantic import BaseModel, Field
 
 from context_engine import calculate_contextual_risk, extract_links
 from services.classifier import HybridClassifier
-from context_engine import calculate_contextual_risk, extract_links
 from explanation_engine import ExplanationEngine
 from utils.logger import setup_logger
+from utils.language_detector import get_language_info, get_primary_language
+from utils.bilingual_explainer import get_bilingual_explanation, determine_reason_type
 
 logger = setup_logger("api")
 
@@ -86,34 +87,57 @@ async def patterns():
     }
 
 
-def _deterministic_explanation(risk_level: str, signals: list[str], ml_score: float) -> dict:
-    primary_reason = (
-        "Bank impersonation with urgency and suspicious credential request."
-        if any("Impersonation" in s for s in signals)
-        else (signals[0] if signals else "No strong phishing indicator detected.")
-    )
+def _enhanced_explanation(
+    risk_level: str,
+    signals: list[str],
+    ml_score: float,
+    language_info: dict,
+    has_suspicious_links: bool
+) -> dict:
+    """
+    Generate enhanced bilingual explanation with better signal detection.
+    """
+    primary_language = language_info.get("primary_language", "English")
 
+    # Determine tactics based on signals
     tactics = []
-    if any("Urgency" in s for s in signals):
+    if any("urgency" in s.lower() or "तुरंत" in s.lower() for s in signals):
         tactics.append("Urgency")
-    if any("Impersonation" in s for s in signals):
+    if any("impersonation" in s.lower() or "brand" in s.lower() for s in signals):
         tactics.append("Authority")
     if any("credential" in s.lower() for s in signals):
         tactics.append("Fear")
+    if any("reward" in s.lower() or "prize" in s.lower() or "इनाम" in s.lower() for s in signals):
+        tactics.append("Greed")
 
+    # Determine technical indicators
     technical = []
-    if any("URL" in s for s in signals):
+    if has_suspicious_links or any("url" in s.lower() or "link" in s.lower() for s in signals):
         technical.append("Suspicious URL")
-    if any("credential" in s.lower() for s in signals):
+    if any("credential" in s.lower() or "harvesting" in s.lower() for s in signals):
         technical.append("Credential Harvesting Pattern")
+    if any("misspell" in s.lower() or "domain" in s.lower() for s in signals):
+        technical.append("Misspelled Domain")
 
-    confidence = "High" if ml_score >= 0.8 else "Medium" if ml_score >= 0.45 else "Low"
+    # Determine reason type
+    reason_type = determine_reason_type(signals, has_suspicious_links)
 
+    # Get bilingual explanation
+    bilingual = get_bilingual_explanation(primary_language, reason_type, tactics, technical)
+
+    # Determine confidence
+    confidence = "High" if ml_score >= 0.75 else "Medium" if ml_score >= 0.45 else "Low"
+
+    # Format for frontend
     return {
         "risk_level": risk_level,
-        "primary_reason": primary_reason,
-        "psychological_tactics": tactics,
-        "technical_indicators": technical,
+        "primary_reason": bilingual["primary_reason"]["en"],
+        "primary_reason_vernacular": bilingual["primary_reason"]["vernacular"],
+        "detected_language": primary_language,
+        "psychological_tactics": [t["en"] for t in bilingual["psychological_tactics"]],
+        "psychological_tactics_vernacular": [t["vernacular"] for t in bilingual["psychological_tactics"]],
+        "technical_indicators": [t["en"] for t in bilingual["technical_indicators"]],
+        "technical_indicators_vernacular": [t["vernacular"] for t in bilingual["technical_indicators"]],
         "confidence": confidence,
     }
 
@@ -124,21 +148,49 @@ async def analyze_text(request: AnalyzeRequest):
         raise HTTPException(status_code=503, detail="Classifier not initialized")
 
     text = request.text
+
+    # Detect language and check for benign content
+    language_info = get_language_info(text)
+
+    # Early exit for clearly benign content (educational/informational)
+    if language_info.get("likely_benign", False):
+        # Still check for links, but apply strong dampening
+        pass
+
     links = extract_links(text)
 
     doc_ml = classifier.ml.predict(text)
     doc_prob = float(doc_ml.get("confidence", 0.0))
 
-    # Line-level evidence extraction to avoid noisy whole-page false positives.
+    # Line-level evidence extraction with improved filtering
     lines = [ln.strip() for ln in re.split(r"\n+", text) if len(ln.strip()) >= 20]
     line_hits: list[dict] = []
 
     for line in lines[:120]:
+        # Skip if line doesn't have scam hints or URLs
         if not (SCAM_HINT_RE.search(line) or "http://" in line.lower() or "https://" in line.lower()):
             continue
 
+        # Check if line has benign indicators
+        line_lower = line.lower()
+        benign_count = sum(1 for term in ["class", "exam", "homework", "assignment", "meeting",
+                                          "project", "tournament", "match", "schedule", "format",
+                                          "style", "vit", "college", "university", "student"]
+                          if term in line_lower)
+
+        # Skip lines with strong benign indicators unless they also have high threat signals
+        if benign_count >= 2:
+            # Check for strong threat keywords
+            threat_count = sum(1 for term in ["otp", "password", "pin", "cvv", "bank", "verify",
+                                              "urgent", "immediately", "block", "suspend"]
+                              if term in line_lower)
+            if threat_count < 2:
+                continue
+
         prob = float(classifier.ml.predict(line).get("confidence", 0.0))
-        if prob < 0.50 and not SCAM_HINT_RE.search(line):
+
+        # Increased threshold to reduce false positives
+        if prob < 0.60 and not SCAM_HINT_RE.search(line):
             continue
 
         line_hits.append(
@@ -152,16 +204,23 @@ async def analyze_text(request: AnalyzeRequest):
     line_hits = sorted(line_hits, key=lambda x: x["risk_score"], reverse=True)
     top_hits = line_hits[:6]
 
+    # Enhanced feature detection
     detected_features = []
     if any(re.search(r"(otp|password|pin|cvv|kyc)", hit["phrase"], re.IGNORECASE) for hit in top_hits):
         detected_features.append("Credential request")
-    if any(re.search(r"(bank|sbi|hdfc|icici|rbi)", hit["phrase"], re.IGNORECASE) for hit in top_hits):
+    if any(re.search(r"(bank|sbi|hdfc|icici|rbi|paytm|phonepe|gpay)", hit["phrase"], re.IGNORECASE) for hit in top_hits):
         detected_features.append("Impersonation context")
-    if any(re.search(r"(urgent|immediately|24 hours|final warning|तुरंत|எச்சரிக்கை|এখনই)", hit["phrase"], re.IGNORECASE) for hit in top_hits):
+    if any(re.search(r"(urgent|immediately|24 hours|final warning|तुरंत|உடனே|এখনই)", hit["phrase"], re.IGNORECASE) for hit in top_hits):
         detected_features.append("Urgency phrase")
+    if any(re.search(r"(prize|reward|won|winner|लॉटरी|इनाम|பரிசு)", hit["phrase"], re.IGNORECASE) for hit in top_hits):
+        detected_features.append("Reward scam")
 
     evidence_prob = max((h["risk_score"] for h in top_hits), default=0.0)
     base_prob = max(doc_prob, evidence_prob)
+
+    # Apply language-based dampening for benign content
+    if language_info.get("likely_benign", False):
+        base_prob = max(0.0, base_prob - 0.25)
 
     ctx = calculate_contextual_risk(
         text=text,
@@ -170,7 +229,17 @@ async def analyze_text(request: AnalyzeRequest):
         base_score=base_prob,
     )
 
-    explanation = _deterministic_explanation(ctx["risk_level"], ctx["detected_signals"], ctx["risk_score"])
+    # Filter harmful links (only include suspicious ones)
+    harmful_links = ctx.get("suspicious_links", [])
+
+    # Generate enhanced bilingual explanation
+    explanation = _enhanced_explanation(
+        ctx["risk_level"],
+        ctx["detected_signals"],
+        ctx["risk_score"],
+        language_info,
+        len(harmful_links) > 0
+    )
 
     return {
         "risk_score": ctx["risk_score"],
@@ -180,6 +249,8 @@ async def analyze_text(request: AnalyzeRequest):
         "suspicious_segments": top_hits,
         "ml": {"risk_score": base_prob, "is_phishing": base_prob >= 0.5},
         "links": links,
+        "harmful_links": harmful_links,  # NEW: Added harmful_links field
+        "language_info": language_info,  # NEW: Added language information
         "genai_validation": {"enabled": False, "note": "GenAI validation disabled for precision/stability."},
         "structured_explanation": explanation,
     }

@@ -15,15 +15,45 @@ IMPERSONATION_TERMS = {"bank", "rbi", "sbi", "hdfc", "icici", "support team", "s
 CREDENTIAL_TERMS = {"otp", "password", "pin", "cvv", "credential", "verify account", "kyc", "login"}
 ACTION_TERMS = {"click", "tap", "open", "verify", "share", "submit", "update", "enter"}
 BENIGN_CONTEXT_TERMS = {
+    # Educational
     "fixture", "score", "style", "match", "players", "schedule", "tournament", "semester", "admission",
     "class", "project", "notice", "agenda", "minutes", "invoice", "receipt", "weather", "festival",
+    "homework", "assignment", "exam", "test", "quiz", "lecture", "tutorial", "lab", "practical",
+    "university", "college", "school", "student", "teacher", "professor", "fresher", "freshers",
+    "semester", "grade", "marks", "result", "transcript", "certificate", "degree", "course",
+    # Sports & Events
+    "cricket", "football", "basketball", "badminton", "tennis", "sport", "game", "team", "coach",
+    "tournament", "championship", "league", "cup", "final", "semifinal", "qualifier", "match",
+    "fixture", "venue", "stadium", "ground", "player", "captain", "wicket", "goal", "run", "over",
+    # Social
+    "friend", "family", "birthday", "party", "celebration", "meeting", "reunion", "gathering",
+    "wedding", "engagement", "anniversary", "festival", "holiday", "vacation", "trip", "travel",
+    # Work/Professional
+    "meeting", "agenda", "presentation", "conference", "workshop", "training", "seminar", "webinar",
+    "deadline", "report", "document", "file", "folder", "email", "memo", "notice", "circular",
+    # Food & Lifestyle
+    "restaurant", "cafe", "food", "lunch", "dinner", "breakfast", "recipe", "cooking", "menu",
+    "movie", "film", "show", "series", "episode", "season", "theater", "cinema", "netflix",
+    # Informational
+    "format", "style", "design", "layout", "template", "guide", "tutorial", "instructions", "steps",
+    "example", "sample", "demo", "showcase", "preview", "overview", "summary", "description",
+    # Location names (common false positives)
+    "vellore", "chennai", "bangalore", "mumbai", "delhi", "hyderabad", "pune", "kolkata",
+    "vit", "iit", "nit", "bits", "manipal", "srm", "amrita", "anna university"
 }
 
 
 def classify_risk_level(score: float) -> str:
-    if score < 0.35:
+    """
+    Classify risk level based on score.
+    Updated thresholds for better accuracy:
+    - LOW RISK: < 0.45 (most benign content)
+    - MEDIUM RISK: 0.45 - 0.75 (suspicious but uncertain)
+    - HIGH RISK: >= 0.75 (clear phishing patterns)
+    """
+    if score < 0.45:
         return "LOW RISK"
-    if score < 0.70:
+    if score < 0.75:
         return "MEDIUM RISK"
     return "HIGH RISK"
 
@@ -84,13 +114,20 @@ def calculate_contextual_risk(text: str, detected_features: list[str] | None, li
             signals.append("Context chain: pressure → action")
             break
 
-    if benign_context and not suspicious_links and not (urgency and credential_req):
-        dampener += 0.15
-        signals.append("Benign-topic dampener")
+    # Strong dampener for clearly benign content
+    if benign_context:
+        if not suspicious_links and not (urgency and credential_req):
+            dampener += 0.25  # Increased from 0.15
+            signals.append("Benign-topic dampener")
+        elif not suspicious_links:
+            # Even if some risk signals, but no suspicious links, dampen moderately
+            dampener += 0.15
+            signals.append("Likely benign context")
 
     # Keep isolated risky words from over-triggering.
     if not suspicious_links and sum([urgency, impersonation, credential_req, action_prompt]) <= 1:
-        dampener += 0.12
+        dampener += 0.18  # Increased from 0.12
+        signals.append("Isolated keyword (low confidence)")
 
     final = max(0.0, min(1.0, base_score + boosts - dampener))
     return {

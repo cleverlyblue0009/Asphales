@@ -15,7 +15,8 @@ from utils.logger import setup_logger
 logger = setup_logger("ml_classifier")
 
 BASE_DIR = Path(__file__).resolve().parents[1]
-DATASET_PATH = BASE_DIR / "data" / "phishing_multilingual_7500.csv"
+# Updated to use the real training data from markdown file
+DATASET_PATH = BASE_DIR / "data" / "phishing_multilingual_from_md.csv"
 MODEL_PATH = BASE_DIR / "models" / "phishing_tfidf_logreg_model.json"
 TOKEN_RE = re.compile(r"\w+", re.UNICODE)
 
