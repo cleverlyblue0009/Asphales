@@ -2,6 +2,7 @@ const API_URL = 'http://localhost:8000/analyze';
 const MIN_TEXT_LENGTH = 20;
 const API_TIMEOUT_MS = 5000;
 const PAGE_LOAD_DEBOUNCE_MS = 2000;
+const MAX_API_TEXT_LENGTH = 5000;
 
 let isProtectionActive = false;
 let debounceTimer = null;
@@ -24,6 +25,26 @@ function isElementVisible(element) {
 }
 
 function extractVisibleTextBlocks() {
+  if (!document.body) return [];
+
+
+
+console.log('🛡️ SurakshaAI Shield content script loaded');
+
+function isElementVisible(element) {
+  if (!element || !(element instanceof Element)) return false;
+  const style = window.getComputedStyle(element);
+  if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') {
+    return false;
+  }
+  if (element.hasAttribute('hidden') || element.getAttribute('aria-hidden') === 'true') {
+    return false;
+  }
+  return true;
+}
+
+function extractVisibleTextBlocks() {
+
   const blocks = [];
   const walker = document.createTreeWalker(
     document.body,
@@ -51,11 +72,41 @@ function extractVisibleTextBlocks() {
 
   let node;
   while ((node = walker.nextNode())) {
-    const cleaned = node.textContent.replace(/\s+/g, ' ').trim();
-    blocks.push({ node, text: cleaned });
+    const cleaned = node.textContent?.replace(/\s+/g, ' ').trim() || '';
+    if (cleaned) {
+      blocks.push({ node, text: cleaned });
+    }
   }
 
   return blocks;
+}
+
+function buildTextBatches(blocks, maxChars = MAX_API_TEXT_LENGTH) {
+  const batches = [];
+  let current = [];
+  let currentLen = 0;
+
+  blocks.forEach((block) => {
+    const text = block.text;
+    if (!text) return;
+
+    const safeText = text.length > maxChars ? text.slice(0, maxChars) : text;
+
+    if (currentLen > 0 && currentLen + safeText.length + 1 > maxChars) {
+      batches.push({ blocks: current, text: current.map((item) => item.text).join('\n') });
+      current = [];
+      currentLen = 0;
+    }
+
+    current.push({ node: block.node, text: safeText });
+    currentLen += safeText.length + 1;
+  });
+
+  if (current.length > 0) {
+    batches.push({ blocks: current, text: current.map((item) => item.text).join('\n') });
+  }
+
+  return batches;
 }
 
 function showLoadingIndicator(message = 'Scanning page...') {
@@ -94,6 +145,9 @@ async function analyzeText(text) {
     });
 
     if (!response.ok) {
+      if (response.status === 422) {
+        throw new Error('Page content too large for one request');
+      }
       throw new Error(`API returned ${response.status}`);
     }
 
@@ -217,6 +271,16 @@ function clearHighlights() {
   hideLoadingIndicator();
 }
 
+function mergeThreats(allThreats, incomingThreats) {
+  incomingThreats.forEach((threat) => {
+    const key = `${(threat.phrase || '').toLowerCase()}|${threat.category || ''}`;
+    if (!key.trim() || key === '|') return;
+    if (!allThreats.some((saved) => `${(saved.phrase || '').toLowerCase()}|${saved.category || ''}` === key)) {
+      allThreats.push(threat);
+    }
+  });
+}
+
 async function scanPage() {
   if (!isProtectionActive) {
     return { ok: false, threats: 0, message: 'Protection is inactive' };
@@ -234,12 +298,19 @@ async function scanPage() {
       return { ok: true, threats: 0, message: 'Text too short. Skipping scan.' };
     }
 
-    const result = await analyzeText(fullText);
-    const threats = Array.isArray(result?.threats) ? result.threats : [];
+    const batches = buildTextBatches(blocks, MAX_API_TEXT_LENGTH);
+    const allThreats = [];
+
+    for (let i = 0; i < batches.length; i += 1) {
+      showLoadingIndicator(`Analyzing page content... (${i + 1}/${batches.length})`);
+      const result = await analyzeText(batches[i].text);
+      const threats = Array.isArray(result?.threats) ? result.threats : [];
+      mergeThreats(allThreats, threats);
+    }
 
     const threatsByNode = new Map();
     blocks.forEach((block) => {
-      const relatedThreats = threats.filter((threat) => {
+      const relatedThreats = allThreats.filter((threat) => {
         const phrase = threat.phrase?.toLowerCase();
         return phrase && block.text.toLowerCase().includes(phrase);
       });
@@ -254,7 +325,11 @@ async function scanPage() {
     });
 
     hideLoadingIndicator();
-    return { ok: true, threats: threats.length, message: `Detected ${threats.length} threat(s).` };
+    return {
+      ok: true,
+      threats: allThreats.length,
+      message: `Detected ${allThreats.length} threat(s) across ${batches.length} page chunk(s).`
+    };
   } catch (error) {
     hideLoadingIndicator();
 
@@ -263,7 +338,9 @@ async function scanPage() {
         ? 'Backend not available'
         : error.message.includes('timeout')
           ? 'Request timed out. Try again.'
-          : 'Scan failed. Please try again.';
+          : error.message.includes('too large')
+            ? 'Page is very large. Scan partially completed.'
+            : 'Scan failed. Please try again.';
 
     showToast(friendlyMessage);
     console.error('❌ Scan failed:', error);
