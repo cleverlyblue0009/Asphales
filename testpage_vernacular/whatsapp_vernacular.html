@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp - वर्नेक्युलर फिशिंग टेस्ट</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #e5ddd5;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QjVCN0E1RjI4MTIwMTFFNkI5MTBBOEI2NTdFNTgzNUIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QjVCN0E1RjM4MTIwMTFFNkI5MTBBOEI2NTdFNTgzNUIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpCNUI3QTVGMDgxMjAxMUU2QjkxMEE4QjY1N0U1ODM1QiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpCNUI3QTVGMTgxMjAxMUU2QjkxMEE4QjY1N0U1ODM1QiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRAA0wgfAaEJ4DwfxDeBKIHgDATAwQAAgwAFHQC+0q8UhAAAAAASUVORK5CYII=');
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .warning-banner {
+            background: #ff6b6b;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .whatsapp-container {
+            max-width: 500px;
+            margin: 0 auto;
+            height: 100vh;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            margin-top: 45px;
+        }
+
+        .header {
+            background: #075e54;
+            color: white;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #25d366;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .contact-status {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .chat-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #e5ddd5;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QjVCN0E1RjI4MTIwMTFFNkI5MTBBOEI2NTdFNTgzNUIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QjVCN0E1RjM4MTIwMTFFNkI5MTBBOEI2NTdFNTgzNUIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpCNUI3QTVGMDgxMjAxMUU2QjkxMEE4QjY1N0U1ODM1QiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpCNUI3QTVGMTgxMjAxMUU2QjkxMEE4QjY1N0U1ODM1QiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRAA0wgfAaEJ4DwfxDeBKIHgDATAwQAAgwAFHQC+0q8UhAAAAAASUVORK5CYII=');
+        }
+
+        .message {
+            margin-bottom: 10px;
+            display: flex;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.incoming {
+            justify-content: flex-start;
+        }
+
+        .message.outgoing {
+            justify-content: flex-end;
+        }
+
+        .message-bubble {
+            max-width: 75%;
+            padding: 8px 12px;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .message.incoming .message-bubble {
+            background: white;
+            border-top-left-radius: 0;
+        }
+
+        .message.outgoing .message-bubble {
+            background: #dcf8c6;
+            border-top-right-radius: 0;
+        }
+
+        .message-text {
+            font-size: 14px;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .message-text a {
+            color: #039be5;
+            text-decoration: none;
+        }
+
+        .timestamp {
+            font-size: 11px;
+            color: #667781;
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        .input-area {
+            padding: 10px;
+            background: #f0f0f0;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 20px;
+            border: none;
+            background: white;
+            font-size: 14px;
+        }
+
+        .send-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #25d366;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="warning-banner">
+        ⚠ यह नियंत्रित वर्नेक्युलर फिशिंग सिमुलेशन वातावरण है। | ⚠ यह एक सुरक्षा परीक्षण वातावरण है।
+    </div>
+
+    <div class="whatsapp-container">
+        <div class="header">
+            <div class="avatar">SB</div>
+            <div class="contact-info">
+                <div class="contact-name">एसटीएट बैंक समर्थन</div>
+                <div class="contact-status">ऑनलाइन</div>
+            </div>
+        </div>
+
+        <div class="chat-area">
+            <!-- HINDI PHISHING 1: Pure Hindi dangerous message -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        तुरंत ध्यान दें! आपके खाते को असामान्य गतिविधि के कारण अस्थायी रूप से निलंबित कर दिया गया है। कृपया तुरंत अपनी पहचान सत्यापित करें अन्यथा आपका खाता स्थायी रूप से बंद हो जाएगा।
+                        <br><br>
+                        यहाँ सत्यापित करें: <a href="#">https://sbi-verify.tk/login</a>
+                    </div>
+                    <div class="timestamp">9:15 AM</div>
+                </div>
+            </div>
+
+            <div class="message outgoing">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        क्या हुआ? मैंने कोई असामान्य गतिविधि नहीं की।
+                    </div>
+                    <div class="timestamp">9:16 AM</div>
+                </div>
+            </div>
+
+            <!-- HINGLISH PHISHING 1 -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        तुरंत verify karein! Aapka account suspicious activity ke wajah se locked ho gaya hai. 24 hours mein login nahi kiya toh account permanently delete ho jayega.
+                        <br><br>
+                        Click here: <a href="#">https://account-verify.ml/sbi</a>
+                    </div>
+                    <div class="timestamp">9:25 AM</div>
+                </div>
+            </div>
+
+            <!-- TAMIL PHISHING 1: Pure Tamil -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        மைनर் ஆபத்து! உங்கள் கணக்கு கூட்ட விளக்கங்கள் நீக்கப்பட்டுள்ளது. உடனே தங்கள் விவரங்கள் புதுப்பிக்கவும் அல்லாவிட்டால் நிரந்தரமாக சாத்து போகும்!
+                        <br><br>
+                        இங்கே சரிபார்க்கவும்: <a href="#">https://tamil-bank-verify.tk/auth</a>
+                    </div>
+                    <div class="timestamp">9:35 AM</div>
+                </div>
+            </div>
+
+            <!-- TAMILISH PHISHING 1: Tamil + English -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        Neenga verify panni irukkanum immediately! Your account na block pannichirukanu kaarana suspicious transaction. Onnum delay pannikavendum.
+                        <br><br>
+                        Verify now: <a href="#">https://bank-security-check.ga/tamil</a>
+                    </div>
+                    <div class="timestamp">9:45 AM</div>
+                </div>
+            </div>
+
+            <!-- TELUGU PHISHING 1: Pure Telugu -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        వెంటనే సమాధానం ఇవ్వండి! మీ ఖాతా అసాధారణ కార్యకలాపాల కారణంగా నిలిపివేయబడింది. వెంటనే మీ వివరాలను నవీకరించుకోండి లేదా మీ ఖాతా శాశ్వతంగా మూసివేయబడుతుంది.
+                        <br><br>
+                        ఇక్కడ ధృవీకరించండి: <a href="#">https://account-update.ml/telugu</a>
+                    </div>
+                    <div class="timestamp">10:00 AM</div>
+                </div>
+            </div>
+
+            <!-- SAFE MESSAGE 1: Hindi - Legitimate notification -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        आपके खाते में मासिक विवरण अपलोड कर दिया गया है। कृपया अपने इंटरनेट बैंकिंग खाते में लॉगिन करके देखें। किसी सवाल के लिए हमसे संपर्क करें।
+                    </div>
+                    <div class="timestamp">10:15 AM</div>
+                </div>
+            </div>
+
+            <!-- BENGALI PHISHING 1: Pure Bengali -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        আপনার অ্যাকাউন্টে নিরাপত্তা সমস্যা দেখা গেছে। অবিলম্বে যাচাই করুন অথবা আপনার অ্যাকাউন্ট স্থায়ীভাবে লক হয়ে যাবে।
+                        <br><br>
+                        এখানে যাচাই করুন: <a href="#">https://bengali-bank-secure.tk/verify</a>
+                    </div>
+                    <div class="timestamp">10:30 AM</div>
+                </div>
+            </div>
+
+            <!-- SAFE MESSAGE 2: Hinglish - Legitimate info -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        Aapka fixed deposit mature ho gaya hai. Rs. 50,000 withdrawal ke liye apne branch mein aaye ya customer care se contact karein. Shukriya apne hamse banking ki.
+                    </div>
+                    <div class="timestamp">10:45 AM</div>
+                </div>
+            </div>
+
+            <!-- TELUGU-ENGLISH MIX: Dangerous -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        మీ account verification pending aundi. Agar abhi verify nechukuni pothe oka mahina lo block ayipotadi. Urgent ga verify cheyyandi:
+                        <br><br>
+                        <a href="#">https://verify-account-urgent.ml/login</a>
+                    </div>
+                    <div class="timestamp">11:00 AM</div>
+                </div>
+            </div>
+
+            <!-- SAFE MESSAGE 3: Tamil - Regular update -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        உங்கள் சேமிப்பு கணக்கு வட்டி தொகை ₹5,000 உங்கள் கணக்கில் பதிவு செய்யப்பட்டுள்ளது. நன்றி!
+                    </div>
+                    <div class="timestamp">11:15 AM</div>
+                </div>
+            </div>
+
+            <!-- HINGLISH URGENT PHISHING 2 -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        ALERT! तुरंत action लें! OTP verify karne ka time complete ho gaya. Agar 1 hour mein verify nahi kiya toh account ban ho jayega permanently!
+                        <br><br>
+                        <a href="#">https://sbi-otp-verify.ga/urgent</a>
+                    </div>
+                    <div class="timestamp">11:30 AM</div>
+                </div>
+            </div>
+
+            <!-- BENGALI-ENGLISH MIX: Phishing -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        আপনার account এ KYC pending আছে। অবিলম্বে complete কর না হলে account suspend হয়ে যাবে। Update करें immediately:
+                        <br><br>
+                        <a href="#">https://kyc-bank-update.ml/bengali</a>
+                    </div>
+                    <div class="timestamp">11:45 AM</div>
+                </div>
+            </div>
+
+            <!-- SAFE MESSAGE 4: Bengali - Service notification -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        আপনার ঋণের আবেদন গৃহীত হয়েছে এবং পর্যালোচনাধীন রয়েছে। আমরা ৫ দিনের মধ্যে আপনার সাথে যোগাযোগ করব। ধন্যবাদ।
+                    </div>
+                    <div class="timestamp">12:00 PM</div>
+                </div>
+            </div>
+
+            <!-- MARATHI PHISHING: Dangerous -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        तुरंत सावधान! तुमचे खाते मध्ये unauthorized access होऊन गेला आहे. तुरंत verify करा किंवा तुमचे खाते बंद होऊन जाईल:
+                        <br><br>
+                        <a href="#">https://marathi-account-verify.tk/bank</a>
+                    </div>
+                    <div class="timestamp">12:15 PM</div>
+                </div>
+            </div>
+
+            <!-- SAFE MESSAGE 5: Tamil + English mix -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        Dear customer, உங்கள் loan application approved aagaya. Oru 5 working days la aapka account mein funds transfer hogi. Thank you for banking with us!
+                    </div>
+                    <div class="timestamp">12:30 PM</div>
+                </div>
+            </div>
+
+            <!-- GUJARATI PHISHING: Pure Gujarati danger -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        તમારો ખાતો માટે તાત્કાલીક ધ્યાન આવશ્યક છે! અસામાન્ય પ્રવૃત્તિ શોધાઈ હતી. તરત જ સત્યાપન કરો અથવા ખાતો બંધ થશે:
+                        <br><br>
+                        <a href="#">https://verify-account.ml/gujarati</a>
+                    </div>
+                    <div class="timestamp">12:45 PM</div>
+                </div>
+            </div>
+
+            <!-- KANNADA PHISHING: Dangerous -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        ನಿಮ್ಮ ಖಾತೆ ತಡೆಯಾಗಿದೆ! ತಕ್ಷಣ ಸತ್ಯಾಪನ ಮಾಡಬೇಕು ಅಥವಾ ಖಾತೆ ಶಾಶ್ವತವಾಗಿ ಮುಚ್ಚುತ್ತಾರೆ:
+                        <br><br>
+                        <a href="#">https://account-verify-urgent.ga/kannada</a>
+                    </div>
+                    <div class="timestamp">1:00 PM</div>
+                </div>
+            </div>
+
+            <!-- SAFE MESSAGE 6: Hindi legitimate -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        आपकी क्रेडिट कार्ड की किस्त का भुगतान सफलतापूर्वक हो गया है। आपकी बकाया राशि अब शून्य है। कृपया अपने सभी दायित्वों को समय पर पूरा करें।
+                    </div>
+                    <div class="timestamp">1:15 PM</div>
+                </div>
+            </div>
+
+            <!-- MALAYALAM PHISHING: Pure Malayalam -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        നിങ്ങളുടെ അക്കൗണ്ട് വിശ്വാസികയ്ക്കുണ്ട്. അടിയന്തിരമായി സ്ഥിരീകരിക്കുകയോ അല്ലാത്തപക്ഷം അടിസ്ഥാനപരമായി പൂട്ടി കൊടുക്കും:
+                        <br><br>
+                        <a href="#">https://verify-urgent-ml.tk/bank</a>
+                    </div>
+                    <div class="timestamp">1:30 PM</div>
+                </div>
+            </div>
+
+            <!-- HINGLISH REWARD PHISHING: Too good to be true -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        Congratulations! आप lucky hain! आपको ₹5,00,000 का prize जीता है। तुरंत claim करें:
+                        <br><br>
+                        <a href="#">https://claim-prize-sbi.ml/winner</a>
+                    </div>
+                    <div class="timestamp">1:45 PM</div>
+                </div>
+            </div>
+
+            <!-- SAFE MESSAGE 7: Marathi legitimate -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        तुमचा बचत खाता सफलतापूर्वक उघडण्यात आला आहे. तुमच्या खात्यावर ₹100 प्रारंभिक जमा केले गेले आहे. आमच्या बँकेमध्ये विश्वास ठेवल्याबद्दल धन्यवाद.
+                    </div>
+                    <div class="timestamp">2:00 PM</div>
+                </div>
+            </div>
+
+            <!-- PUNJABI PHISHING: Dangerous -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        ਤੁਰੰਤ ਧਿਆਨ ਦਿਓ! ਤੁਹਾਡਾ ਖਾਤਾ ਬਲਾਕ ਹੋ ਗਿਆ ਹੈ। ਫੌਰਨ ਪੁਸ਼ਟੀ ਕਰੋ ਜਾ ਬਿਨਾ ਬੰਦ ਹੋ ਜਾਵੇਗਾ:
+                        <br><br>
+                        <a href="#">https://verify-account-punjabi.ga/login</a>
+                    </div>
+                    <div class="timestamp">2:15 PM</div>
+                </div>
+            </div>
+
+            <!-- SAFE MESSAGE 8: Telugu legitimate -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        నీ ఖాతా క్షमలో డబ్బు జమ చేయబడింది. ₹10,000 మీ సేవింగ్స్ ఖాతకు చేర్చారు. ధన్యవాదాలు మాపై నమ్మకం కోసం.
+                    </div>
+                    <div class="timestamp">2:30 PM</div>
+                </div>
+            </div>
+
+            <!-- ASSAMESE PHISHING: Dangerous -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        তাৎক্ষণিক সতর্কতা! আপোনাৰ একাউন্ট বন্ধ হৈছে। এক্ষনে ভেরিফাই নকৰিলে একাউন্ট ডিলিট হয়:
+                        <br><br>
+                        <a href="#">https://account-verify.ml/assamese</a>
+                    </div>
+                    <div class="timestamp">2:45 PM</div>
+                </div>
+            </div>
+
+            <!-- URDU PHISHING: Dangerous -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        فوری اطلاع! آپ کے اکاؤنٹ کو روک دیا گیا ہے۔ فوری طور پر تصدیق کریں ورنہ اکاؤنٹ حذف ہو جائے گا:
+                        <br><br>
+                        <a href="#">https://verify-account.ml/urdu</a>
+                    </div>
+                    <div class="timestamp">3:00 PM</div>
+                </div>
+            </div>
+
+            <!-- SAFE MESSAGE 9: Gujarati legitimate -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        તમારી લોન અરજી મંજૂર થઈ ગઈ છે. ₹2,00,000 તમારા ખાતાને સ્થાનાંતરિત કરવામાં આવશે. બેંકિંગ કરવા બદલ આભાર!
+                    </div>
+                    <div class="timestamp">3:15 PM</div>
+                </div>
+            </div>
+
+            <!-- MIXED SCRIPT PHISHING: Credential request -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        सुरक्षा के लिए हमें आपका Aadhar aur PAN number चाहिए। तुरंत भेजें। नहीं तो account suspend हो जाएगा:
+                        <br><br>
+                        <a href="#">https://aadhar-pan-update.tk/bank</a>
+                    </div>
+                    <div class="timestamp">3:30 PM</div>
+                </div>
+            </div>
+
+            <!-- SAFE MESSAGE 10: Kannada legitimate -->
+            <div class="message incoming">
+                <div class="message-bubble">
+                    <div class="message-text">
+                        ನಿಮ್ಮ ಮಾಸಿಕ ಖಾತೆ ಹೇಳಿಕೆ ಲಭ್ಯವಾಗಿದೆ. ನೀವು ಯಾವುದೇ ಸಮಯದಲ್ಲಿ ಅದನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಬಹುದು. ವಿವರಣೆಗಳಿಗಾಗಿ ಸಂಪರ್ಕ ಕೇಂದ್ರಕ್ಕೆ ಕರೆ ಮಾಡಿ.
+                    </div>
+                    <div class="timestamp">3:45 PM</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <input type="text" class="input-field" placeholder="एक संदेश लिखें...">
+            <button class="send-button">➤</button>
+        </div>
+    </div>
+</body>
+</html>

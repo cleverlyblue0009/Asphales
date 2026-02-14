@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gmail - वर्नेक्युलर फिशिंग टेस्ट</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .gmail-container { max-width: 900px; margin: 0 auto; }
+        .warning { background: #ff6b6b; color: white; padding: 10px; border-radius: 4px; margin-bottom: 20px; text-align: center; }
+        .email-item {
+            background: white; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; padding: 15px;
+            display: flex; align-items: flex-start; gap: 15px; cursor: pointer; transition: 0.2s;
+        }
+        .email-item:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .email-avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: bold; flex-shrink: 0;
+        }
+        .email-content { flex: 1; }
+        .email-from { font-weight: 600; color: #202124; font-size: 14px; }
+        .email-subject { color: #202124; margin: 5px 0; font-size: 14px; font-weight: 500; }
+        .email-preview { color: #5f6368; font-size: 13px; margin: 5px 0; }
+        .email-time { color: #5f6368; font-size: 13px; }
+        .email-detailed {
+            background: white; border: 1px solid #ddd; border-radius: 4px; padding: 20px; margin-bottom: 20px;
+            display: none;
+        }
+        .email-detailed.show { display: block; }
+        .email-header { border-bottom: 1px solid #ddd; padding-bottom: 15px; margin-bottom: 15px; }
+        .email-from-big { font-weight: 600; font-size: 16px; color: #202124; margin-bottom: 5px; }
+        .email-to { color: #5f6368; font-size: 14px; margin-bottom: 10px; }
+        .email-body { color: #202124; line-height: 1.6; font-size: 14px; }
+        .email-body a { color: #1a73e8; text-decoration: none; }
+        .email-body a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="gmail-container">
+        <div class="warning">⚠ यह नियंत्रित वर्नेक्युलर फिशिंग सिमुलेशन वातावरण है।</div>
+
+        <h1 style="font-size: 28px; margin-bottom: 20px;">Gmail - Inbox</h1>
+
+        <!-- HINDI PHISHING 1 -->
+        <div class="email-item" onclick="toggleEmail(this)">
+            <div class="email-avatar">SB</div>
+            <div class="email-content">
+                <div class="email-from">एसटीएट बैंक अलर्ट</div>
+                <div class="email-subject">⚠ तुरंत कार्रवाई आवश्यक - आपके खाते को निलंबित किया गया</div>
+                <div class="email-preview">आपके खाते में असामान्य गतिविधि पाई गई है। तुरंत सत्यापित करें या खाता बंद हो जाएगा...</div>
+                <div class="email-time">9:15 AM</div>
+            </div>
+        </div>
+        <div class="email-detailed">
+            <div class="email-header">
+                <div class="email-from-big">एसटीएट बैंक अलर्ट (alert@statebank-security.tk)</div>
+                <div class="email-to">To: आप</div>
+                <div style="color: #5f6368; font-size: 13px;">आज 9:15 AM</div>
+            </div>
+            <div class="email-body">
+                <p>प्रिय ग्राहक,</p>
+                <p style="margin-top: 10px;">आपके खाते में असामान्य गतिविधि पाई गई है। सुरक्षा कारणों से आपके खाते को अस्थायी रूप से निलंबित कर दिया गया है।</p>
+                <p style="margin-top: 10px;">कृपया तुरंत अपनी पहचान सत्यापित करें:</p>
+                <p style="margin-top: 10px;"><a href="#">https://sbi-account-verify.tk/login</a></p>
+                <p style="margin-top: 10px;">यदि आप 48 घंटे में सत्यापित नहीं करते हैं, तो आपका खाता स्थायी रूप से बंद हो जाएगा।</p>
+                <p style="margin-top: 20px;">एसटीएट बैंक टीम</p>
+            </div>
+        </div>
+
+        <!-- HINGLISH PHISHING -->
+        <div class="email-item" onclick="toggleEmail(this)">
+            <div class="email-avatar">KY</div>
+            <div class="email-content">
+                <div class="email-from">KYC वेरिफिकेशन टीम</div>
+                <div class="email-subject">तुरंत एक्शन लें - आपका KYC अधूरा है</div>
+                <div class="email-preview">Your KYC verification pending hai. 24 hours mein complete na kiya toh account block...</div>
+                <div class="email-time">10:30 AM</div>
+            </div>
+        </div>
+        <div class="email-detailed">
+            <div class="email-header">
+                <div class="email-from-big">KYC वेरिफिकेशन टीम (kyc@bank-verify.ga)</div>
+                <div class="email-to">To: आप</div>
+                <div style="color: #5f6368; font-size: 13px;">आज 10:30 AM</div>
+            </div>
+            <div class="email-body">
+                <p>तुरंत सूचना!</p>
+                <p style="margin-top: 10px;">आपका KYC अभी pending है। अगर 24 घंटे में complete नहीं किया तो आपका account block हो जाएगा।</p>
+                <p style="margin-top: 10px;">Verify करें यहाँ: <a href="#">https://kyc-update-urgent.ml/bank</a></p>
+                <p style="margin-top: 10px;">Do it now, na kiya toh consequences bad honge!</p>
+            </div>
+        </div>
+
+        <!-- TAMIL PHISHING -->
+        <div class="email-item" onclick="toggleEmail(this)">
+            <div class="email-avatar">CB</div>
+            <div class="email-content">
+                <div class="email-from">சென்ட்रல் பேங்க் செக்யூரிटி</div>
+                <div class="email-subject">உடனே சரிபார்க்க வேண்டும் - உங்கள் கணக்கு பாதுகாப்பு</div>
+                <div class="email-preview">உங்கள் கணக்கு ஆபத்தில் உள்ளது! உடனே சரிபார்க்கவும்...</div>
+                <div class="email-time">11:00 AM</div>
+            </div>
+        </div>
+        <div class="email-detailed">
+            <div class="email-header">
+                <div class="email-from-big">சென்ட்رל் பேங்க் (security@central-bank.tk)</div>
+                <div class="email-to">To: நீங்கள்</div>
+                <div style="color: #5f6368; font-size: 13px;">இன்று 11:00 AM</div>
+            </div>
+            <div class="email-body">
+                <p>அலர்ட் அறிவிப்பு!</p>
+                <p style="margin-top: 10px;">உங்கள் கணக்கு suspicious transaction கண்டு பிடிக்கப்பட்டுள்ளது. உடனே சரிபார்க்க வேண்டும்:</p>
+                <p style="margin-top: 10px;"><a href="#">https://tamil-account-security.ml/verify</a></p>
+                <p style="margin-top: 10px;">இல்லாவிட்டால் கணக்கு நிரந்தரமாக தடவ போகும்!</p>
+            </div>
+        </div>
+
+        <!-- SAFE EMAIL 1 -->
+        <div class="email-item" onclick="toggleEmail(this)">
+            <div class="email-avatar">SB</div>
+            <div class="email-content">
+                <div class="email-from">एसटीएट बैंक ऑफिशियल</div>
+                <div class="email-subject">आपके खाते की मासिक विवरण तैयार है</div>
+                <div class="email-preview">आपकी मासिक विवरण तैयार है। अब आप इसे डाउनलोड कर सकते हैं...</div>
+                <div class="email-time">2:00 PM</div>
+            </div>
+        </div>
+        <div class="email-detailed">
+            <div class="email-header">
+                <div class="email-from-big">एसटीएट बैंक (official@statebank.co.in)</div>
+                <div class="email-to">To: आप</div>
+                <div style="color: #5f6368; font-size: 13px;">आज 2:00 PM</div>
+            </div>
+            <div class="email-body">
+                <p>प्रिय ग्राहक,</p>
+                <p style="margin-top: 10px;">आपकी जनवरी 2026 की मासिक विवरण तैयार है। आप इसे अपने इंटरनेट बैंकिंग खाते से डाउनलोड कर सकते हैं।</p>
+                <p style="margin-top: 10px;">किसी प्रश्न के लिए कृपया हमारे ग्राहक सेवा विभाग से संपर्क करें।</p>
+                <p style="margin-top: 20px;">सादर,<br/>एसटीएट बैंक टीम</p>
+            </div>
+        </div>
+
+        <!-- TELUGU PHISHING -->
+        <div class="email-item" onclick="toggleEmail(this)">
+            <div class="email-avatar">AC</div>
+            <div class="email-content">
+                <div class="email-from">ఖాతా నిర్వహణ టీమ్</div>
+                <div class="email-subject">సమస్య! మీ ఖాతా తక్షణ చర్య అవసరం</div>
+                <div class="email-preview">మీ ఖాతా సुरक्ষા ఆపద ఉంది. తక్షణ చర్య కోసం క్లిక్ చేయండి...</div>
+                <div class="email-time">12:15 PM</div>
+            </div>
+        </div>
+        <div class="email-detailed">
+            <div class="email-header">
+                <div class="email-from-big">ఖాతా నిర్వహణ (account@bank-security.ga)</div>
+                <div class="email-to">To: మీరు</div>
+                <div style="color: #5f6368; font-size: 13px;">ఈ రోజు 12:15 PM</div>
+            </div>
+            <div class="email-body">
+                <p>చెప్తా అలర్ట్!</p>
+                <p style="margin-top: 10px;">మీ ఖాతాకు అనుకూల లేని చర్య కనుగొనబడింది. తక్షణ ధృవీకరణ చేయండి:</p>
+                <p style="margin-top: 10px;"><a href="#">https://account-verify-telugu.tk/security</a></p>
+                <p style="margin-top: 10px;">దీన్ని చేయకపోతే ఖాతా బ్లాక్ అవుతుంది!</p>
+            </div>
+        </div>
+
+        <!-- BENGALI PHISHING -->
+        <div class="email-item" onclick="toggleEmail(this)">
+            <div class="email-avatar">BD</div>
+            <div class="email-content">
+                <div class="email-from">বাংলা ব্যাংক সিকিউরিটি</div>
+                <div class="email-subject">জরুরি - আপনার অ্যাকাউন্ট যাচাই করুন</div>
+                <div class="email-preview">আপনার অ্যাকাউন্টে সমস্যা হয়েছে। তাৎক্ষণিক যাচাই করুন...</div>
+                <div class="email-time">1:30 PM</div>
+            </div>
+        </div>
+        <div class="email-detailed">
+            <div class="email-header">
+                <div class="email-from-big">বাংলা ব্যাংক (security@bangla-bank.ml)</div>
+                <div class="email-to">To: আপনি</div>
+                <div style="color: #5f6368; font-size: 13px;">আজ 1:30 PM</div>
+            </div>
+            <div class="email-body">
+                <p>জরুরি সতর্কতা!</p>
+                <p style="margin-top: 10px;">আপনার অ্যাকাউন্টে অনুপযুক্ত লেনদেন দেখা গেছে। তাৎক্ষণিকভাবে যাচাই করুন:</p>
+                <p style="margin-top: 10px;"><a href="#">https://account-verify-bengali.tk/urgent</a></p>
+                <p style="margin-top: 10px;">না করলে অ্যাকাউন্ট স্থায়ীভাবে বন্ধ হয়ে যাবে!</p>
+            </div>
+        </div>
+
+        <!-- SAFE EMAIL 2 -->
+        <div class="email-item" onclick="toggleEmail(this)">
+            <div class="email-avatar">LN</div>
+            <div class="email-content">
+                <div class="email-from">लोन ऑफिस</div>
+                <div class="email-subject">आपके लोन आवेदन को मंजूरी मिल गई है</div>
+                <div class="email-preview">बहुत खुशी की बात है! आपके लोन के लिए मंजूरी मिल गई है...</div>
+                <div class="email-time">3:45 PM</div>
+            </div>
+        </div>
+        <div class="email-detailed">
+            <div class="email-header">
+                <div class="email-from-big">लोन ऑफिस (loans@statebank.co.in)</div>
+                <div class="email-to">To: आप</div>
+                <div style="color: #5f6368; font-size: 13px;">आज 3:45 PM</div>
+            </div>
+            <div class="email-body">
+                <p>प्रिय ग्राहक,</p>
+                <p style="margin-top: 10px;">हमें खुशी है कि आपके होम लोन आवेदन को मंजूरी मिल गई है। ₹25,00,000 की राशि 5 कार्य दिवस में आपके खाते में स्थानांतरित कर दी जाएगी।</p>
+                <p style="margin-top: 10px;">विस्तृत जानकारी के लिए कृपया अपनी नजदीकी शाखा से संपर्क करें।</p>
+                <p style="margin-top: 20px;">सादर,<br/>एसटीएट बैंक लोन टीम</p>
+            </div>
+        </div>
+
+        <!-- MARATHI PHISHING -->
+        <div class="email-item" onclick="toggleEmail(this)">
+            <div class="email-avatar">MR</div>
+            <div class="email-content">
+                <div class="email-from">मराठी बँक सुरक्षा</div>
+                <div class="email-subject">तुरंत सावधान - आपल्या खात्यात समस्या</div>
+                <div class="email-preview">आपल्या खात्यात unauthorized activity आढळून आली आहे...</div>
+                <div class="email-time">4:00 PM</div>
+            </div>
+        </div>
+        <div class="email-detailed">
+            <div class="email-header">
+                <div class="email-from-big">मराठी बँक (security@marathi-bank.ga)</div>
+                <div class="email-to">To: तुम्ही</div>
+                <div style="color: #5f6368; font-size: 13px;">आज 4:00 PM</div>
+            </div>
+            <div class="email-body">
+                <p>तुरंत सावधान!</p>
+                <p style="margin-top: 10px;">आपल्या खात्यात unauthorized transaction आढळून आली आहे. तुरंत verify करा:</p>
+                <p style="margin-top: 10px;"><a href="#">https://marathi-verify-urgent.tk/bank</a></p>
+                <p style="margin-top: 10px;">नाही तर खाता स्थायीपणे बंद होऊन जाईल!</p>
+            </div>
+        </div>
+
+        <!-- GUJARATI PHISHING -->
+        <div class="email-item" onclick="toggleEmail(this)">
+            <div class="email-avatar">GJ</div>
+            <div class="email-content">
+                <div class="email-from">ગુજરાતી બેંક સુરક્ષા</div>
+                <div class="email-subject">ાત્કાલીક - તમારા ખાતાની સમસ્યા</div>
+                <div class="email-preview">તમારા ખાતામાં સુરક્ષા સમસ્યા આવી છે...</div>
+                <div class="email-time">4:30 PM</div>
+            </div>
+        </div>
+        <div class="email-detailed">
+            <div class="email-header">
+                <div class="email-from-big">ગુજરાતી બેંક (security@gujarati-bank.ml)</div>
+                <div class="email-to">To: તમે</div>
+                <div style="color: #5f6368; font-size: 13px;">આજે 4:30 PM</div>
+            </div>
+            <div class="email-body">
+                <p>ાત્કાલીક ચેતવણી!</p>
+                <p style="margin-top: 10px;">તમારા ખાતામાં અયોગ્ય ક્રિયાકલાપ જોવામાં આવ્યું છે. તરત જ ચકાસો:</p>
+                <p style="margin-top: 10px;"><a href="#">https://gujarati-account-verify.tk/urgent</a></p>
+                <p style="margin-top: 10px;">અન્યથા તમારું ખાતું કાયમી રીતે બંધ થઈ જશે!</p>
+            </div>
+        </div>
+
+        <!-- SAFE EMAIL 3 -->
+        <div class="email-item" onclick="toggleEmail(this)">
+            <div class="email-avatar">CC</div>
+            <div class="email-content">
+                <div class="email-from">क्रेडिट कार्ड विभाग</div>
+                <div class="email-subject">आपकी क्रेडिट कार्ड किस्त सफलतापूर्वक संसाधित हुई</div>
+                <div class="email-preview">आपकी ₹15,000 की किस्त सफलतापूर्वक पेमेंट हो गई है...</div>
+                <div class="email-time">5:00 PM</div>
+            </div>
+        </div>
+        <div class="email-detailed">
+            <div class="email-header">
+                <div class="email-from-big">क्रेडिट कार्ड विभाग (creditcard@statebank.co.in)</div>
+                <div class="email-to">To: आप</div>
+                <div style="color: #5f6368; font-size: 13px;">आज 5:00 PM</div>
+            </div>
+            <div class="email-body">
+                <p>प्रिय ग्राहक,</p>
+                <p style="margin-top: 10px;">आपकी क्रेडिट कार्ड की किस्त ₹15,000 सफलतापूर्वक संसाधित हो गई है।</p>
+                <p style="margin-top: 10px;">आपकी बकाया राशि: ₹0</p>
+                <p style="margin-top: 10px;">आपके समय पर भुगतान के लिए धन्यवाद।</p>
+                <p style="margin-top: 20px;">सादर,<br/>एसटीएट बैंक क्रेडिट कार्ड टीम</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleEmail(element) {
+            const detailedDiv = element.nextElementSibling;
+            document.querySelectorAll('.email-detailed.show').forEach(el => {
+                if (el !== detailedDiv) el.classList.remove('show');
+            });
+            detailedDiv.classList.toggle('show');
+        }
+    </script>
+</body>
+</html>

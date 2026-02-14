@@ -24,16 +24,16 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            min-height: 100vh;
             padding: 0;
-            width: 600px;
+            width: 700px;
+            margin: 0;
         }
 
         .container {
             background: white;
-            min-height: 100vh;
             display: flex;
             flex-direction: column;
+            max-height: 90vh;
         }
 
         /* Header */
@@ -135,7 +135,7 @@
             flex: 1;
             padding: 16px;
             overflow-y: auto;
-            max-height: calc(100vh - 60px);
+            max-height: calc(90vh - 60px);
         }
 
         /* Status Section */
