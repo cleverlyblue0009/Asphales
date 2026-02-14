@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banking Portal - वर्नेक्युलर</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+        .warning {
+            background: #ff6b6b; color: white; padding: 10px; text-align: center;
+            font-weight: bold;
+        }
+        .header {
+            background: linear-gradient(to right, #1a47b8, #2e5ae9);
+            color: white; padding: 20px; text-align: center;
+        }
+        .container { max-width: 1000px; margin: 20px auto; }
+        .alert-box {
+            background: #fff3cd; border-left: 4px solid #ff9800;
+            padding: 15px; margin: 20px 0; border-radius: 4px;
+        }
+        .alert-title { font-weight: 600; color: #ff6b00; margin-bottom: 8px; }
+        .alert-content { color: #333; line-height: 1.6; }
+        .alert-content a { color: #0066cc; text-decoration: none; font-weight: 600; }
+        .account-section {
+            background: white; border: 1px solid #ddd; border-radius: 4px;
+            padding: 20px; margin: 20px 0;
+        }
+        .section-title { font-size: 18px; font-weight: 600; margin-bottom: 15px; color: #1a47b8; }
+        .transaction-list { background: #f9f9f9; padding: 15px; border-radius: 4px; }
+        .transaction {
+            padding: 10px; border-bottom: 1px solid #ddd;
+            display: flex; justify-content: space-between;
+        }
+        .transaction:last-child { border-bottom: none; }
+        .button {
+            background: #1a47b8; color: white; border: none;
+            padding: 10px 20px; border-radius: 4px; cursor: pointer;
+            margin: 10px 0;
+        }
+        .button:hover { background: #133c8b; }
+        .danger { background: #ffebee; border-left-color: #d32f2f; }
+        .safe { background: #e8f5e9; border-left-color: #388e3c; }
+        .security-warning {
+            background: #ffe0b2; border: 2px solid #e65100;
+            padding: 15px; border-radius: 4px; margin: 20px 0;
+            font-weight: 600; color: #e65100;
+        }
+    </style>
+</head>
+<body>
+    <div class="warning">⚠ वर्नेक्युलर बैंकिंग पोर्टल फिशिंग सिमुलेशन</div>
+
+    <div class="header">
+        <h1>एसटीएट बैंक इंटरनेट बैंकिंग पोर्टल</h1>
+        <p>नियंत्रित परीक्षण वातावरण</p>
+    </div>
+
+    <div class="container">
+        <!-- ALERT 1: HINDI PHISHING -->
+        <div class="alert-box danger">
+            <div class="alert-title">🚨 तुरंत कार्रवाई आवश्यक!</div>
+            <div class="alert-content">
+                आपके खाते में असामान्य गतिविधि पाई गई है। आपका खाता कुछ समय के लिए निलंबित कर दिया गया है।
+                कृपया तुरंत <a href="https://sbi-bank-verify.tk/login">अपनी पहचान सत्यापित करें</a> और अपने खाते को पुनः सक्रिय करें।
+                यदि आप 24 घंटे में सत्यापित नहीं करते हैं, तो आपका खाता स्थायी रूप से बंद हो जाएगा।
+            </div>
+        </div>
+
+        <!-- ALERT 2: HINGLISH PHISHING -->
+        <div class="alert-box danger">
+            <div class="alert-title">⚠ KYC Verification Urgent!</div>
+            <div class="alert-content">
+                Aapka KYC update pending hai. Urgent action required!
+                <a href="https://kyc-bank-update.ml/verify">Apne KYC ko update karein abhi</a>
+                Nahi toh aapka account block ho jayega sirf 1 hour mein!
+            </div>
+        </div>
+
+        <!-- SAFE ALERT: Account Update -->
+        <div class="alert-box safe">
+            <div class="alert-title">✓ मासिक विवरण अपलोड हुई</div>
+            <div class="alert-content">
+                आपकी जनवरी 2026 की मासिक विवरण तैयार है। आप इसे "Download Statements" सेक्शन से डाउनलोड कर सकते हैं। धन्यवाद!
+            </div>
+        </div>
+
+        <!-- ACCOUNT SECTION -->
+        <div class="account-section">
+            <div class="section-title">📊 खाता विवरण</div>
+
+            <!-- TAMIL PHISHING ALERT -->
+            <div style="background: #fff3e0; padding: 12px; border-radius: 4px; margin-bottom: 15px;">
+                <strong style="color: #ff6b00;">வெட்டையோ! உங்கள் கணக்கு சரிபார்ப்பு தேவை!</strong><br/>
+                உடனே <a href="https://tamil-bank-verify.tk" style="color: #0066cc;">உங்கள் கணக்கை சரிபார்க்கவும்</a>
+                அல்லாவிட்டால் கணக்கு நிரந்தரமாக பூட்டப்பட்ட போகும்!
+            </div>
+
+            <div class="transaction-list">
+                <div class="transaction">
+                    <span>ই-ট্রান্সফার (नई ट्रान्सफर)</span>
+                    <span>₹5,000 (तटस्थ)</span>
+                </div>
+                <div class="transaction">
+                    <span>वेतन जमा (Safe)</span>
+                    <span>₹45,000 (जमा)</span>
+                </div>
+                <div class="transaction">
+                    <span>अन्य खातों को भुगतान</span>
+                    <span>₹10,000 (तटस्थ)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- TELUGU PHISHING -->
+        <div class="security-warning">
+            🔒 మీ ఖాతాకు చర్యా చేయవలసిన కార్యక్రమం ఉంది!
+            <br/>
+            <a href="https://telugu-account-verify.tk" style="color: #e65100; text-decoration: underline;">ఇక్కడ క్లిక్ చేయండి</a>
+            సరిచేయడానికి. తక్షణం!
+        </div>
+
+        <!-- ACCOUNT SECTION 2 -->
+        <div class="account-section">
+            <div class="section-title">💳 क्रेडिट कार्ड</div>
+
+            <!-- BENGALI PHISHING -->
+            <div style="background: #ffe0b2; padding: 12px; border-radius: 4px; margin-bottom: 15px;">
+                <strong style="color: #e65100;">জরুরি! আপনার কার্ড যাচাই করুন!</strong><br/>
+                <a href="https://bangla-card-verify.ml" style="color: #0066cc;">এখানে ক্লিক করুন</a>
+                অথবা কার্ড লক হয়ে যাবে!
+            </div>
+
+            <div class="transaction-list">
+                <div class="transaction">
+                    <span>Available Balance (उपलब्ध शेष)</span>
+                    <span>₹50,000</span>
+                </div>
+                <div class="transaction">
+                    <span>Outstanding Amount (बकाया राशि)</span>
+                    <span>₹0</span>
+                </div>
+                <div class="transaction">
+                    <span>Credit Limit (क्रेडिट सीमा)</span>
+                    <span>₹5,00,000</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- MARATHI PHISHING -->
+        <div class="alert-box danger">
+            <div class="alert-title">⚡ तुरंत कारवाई करा!</div>
+            <div class="alert-content">
+                तुमचे खाते मध्ये unauthorized access होऊन गेला.
+                <a href="https://marathi-account-verify.ga">तुरंत verify कर</a>
+                नाही तर खाता लॉक होऊन जाईल!
+            </div>
+        </div>
+
+        <!-- SAFE SECTION -->
+        <div class="account-section" style="border-left: 4px solid #388e3c;">
+            <div class="section-title" style="color: #388e3c;">✓ लोन सेवाएं</div>
+            <p style="color: #333; line-height: 1.6;">
+                आपका होम लोन आवेदन सफलतापूर्वक स्वीकार किया गया है।
+                ₹25,00,000 की राशि 5 कार्य दिवस में आपके खाते में स्थानांतरित कर दी जाएगी।
+                विस्तृत जानकारी के लिए कृपया नजदीकी शाखा से संपर्क करें।
+            </p>
+            <button class="button">आवेदन विवरण देखें</button>
+        </div>
+
+        <!-- KANNADA PHISHING -->
+        <div class="alert-box danger">
+            <div class="alert-title">🔴 ತುರಂತ ಕ್ರಮ!</div>
+            <div class="alert-content">
+                ನಿಮ್ಮ ಖಾತೆ ನಿರ್ಬಂಧ ಮಾಡಲಾಗಿದೆ!
+                <a href="https://kannada-verify-urgent.tk">ತಕ್ಷಣ ಸತ್ಯಾಪಿಸಿ</a>
+                ಇಲ್ಲದಿದ್ದರೆ ಖಾತೆ ಸ್ಥಾಯಿಯಾಗಿ ಮುಚ್ಚುತ್ತಾರೆ!
+            </div>
+        </div>
+
+        <!-- MALAYALAM PHISHING -->
+        <div class="alert-box danger">
+            <div class="alert-title">🔐 അടിയന്തര സിക്യുരിറ്റി അപ്ഡേറ്റ്!</div>
+            <div class="alert-content">
+                നിങ്ങളുടെ അക്കൗണ്ട് സുരക്ഷ പരിരക്ഷണാർത്ഥം വെരിഫൈ ചെയ്യണ്ടതുണ്ട്!
+                <a href="https://malayalam-bank-verify.ml">ഇങ്ങോട്ട് ക്ലിക്ക് ചെയ്യുക</a>
+                അല്ലാത്തപക്ഷം അക്കൗണ്ട് ബ്ലോക്ക് ചെയ്യപ്പെടും!
+            </div>
+        </div>
+
+        <!-- ACCOUNT SECTION 3: SAFE -->
+        <div class="account-section" style="border-left: 4px solid #388e3c;">
+            <div class="section-title" style="color: #388e3c;">📈 बचत योजनाएं</div>
+            <div class="transaction-list">
+                <div class="transaction">
+                    <span>Fixed Deposit (एफडी) - 3 महीने</span>
+                    <span>₹1,00,000 (परिपक्व हुई)</span>
+                </div>
+                <div class="transaction">
+                    <span>Savings Account Interest (ब्याज)</span>
+                    <span>₹500 (जमा किया गया)</span>
+                </div>
+            </div>
+            <button class="button" style="background: #388e3c; margin-top: 15px;">FD को नवीनीकृत करें</button>
+        </div>
+
+        <!-- URDU PHISHING -->
+        <div class="alert-box danger">
+            <div class="alert-title">🚨 فوری سیکیورٹی الرٹ!</div>
+            <div class="alert-content">
+                آپ کے اکاؤنٹ میں غیر معمولی سرگرمی دیکھی گئی ہے۔
+                <a href="https://account-verify-urdu.ml">فوری طور پر تصدیق کریں</a>
+                ورنہ اکاؤنٹ محدود ہو جائے گا!
+            </div>
+        </div>
+    </div>
+</body>
+</html>

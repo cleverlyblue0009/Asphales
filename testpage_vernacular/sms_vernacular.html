@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS - वर्नेक्युलर फिशिंग टेस्ट</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5; padding: 20px;
+        }
+        .warning {
+            background: #ff6b6b; color: white; padding: 10px; border-radius: 4px;
+            margin-bottom: 20px; text-align: center; font-weight: bold;
+        }
+        .sms-container { max-width: 600px; margin: 0 auto; }
+        h1 { margin-bottom: 20px; font-size: 24px; }
+        .sms-thread { background: white; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 20px; }
+        .sms-header { background: #f9f9f9; padding: 12px 15px; border-bottom: 1px solid #ddd; font-weight: 600; }
+        .sms-message {
+            padding: 12px 15px; border-bottom: 1px solid #f0f0f0;
+            display: flex; gap: 12px;
+        }
+        .sms-message:last-child { border-bottom: none; }
+        .sms-time { color: #999; font-size: 12px; min-width: 60px; }
+        .sms-content { flex: 1; }
+        .sms-sender { font-weight: 600; margin-bottom: 4px; }
+        .sms-text { color: #333; font-size: 14px; line-height: 1.4; }
+        .sms-text a { color: #0066cc; }
+        .danger { background: #fff3e0; }
+        .safe { background: #f1f8e9; }
+    </style>
+</head>
+<body>
+    <div class="warning">⚠ वर्नेक्युलर एसएमएस फिशिंग सिमुलेशन</div>
+
+    <div class="sms-container">
+        <h1>एसएमएस इनबॉक्स - वर्नेक्युलर</h1>
+
+        <!-- SMS THREAD 1: HINDI PHISHING -->
+        <div class="sms-thread danger">
+            <div class="sms-header">एसटीएट बैंक सतर्कता - हिंदी</div>
+            <div class="sms-message">
+                <div class="sms-time">9:15 AM</div>
+                <div class="sms-content">
+                    <div class="sms-sender">SB Alert</div>
+                    <div class="sms-text">
+                        तुरंत! आपके खाते को निलंबित कर दिया गया है। यहाँ सत्यापित करें: https://sbi-verify-urgent.tk/login - तुरंत करें या खाता बंद हो जाएगा!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SMS THREAD 2: HINGLISH PHISHING -->
+        <div class="sms-thread danger">
+            <div class="sms-header">बैंक सिक्योरिटी - Hinglish</div>
+            <div class="sms-message">
+                <div class="sms-time">10:30 AM</div>
+                <div class="sms-content">
+                    <div class="sms-sender">BANK ALERT</div>
+                    <div class="sms-text">
+                        Aapka account suspicious activity ke kaaran lock ho gaya hai. Turant verify karein nahi toh ₹50,000 debit ho jayega. Click: https://account-verify.ml/sbi
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SMS THREAD 3: TAMIL PHISHING -->
+        <div class="sms-thread danger">
+            <div class="sms-header">பேங்க் அலர்ட் - தமிழ்</div>
+            <div class="sms-message">
+                <div class="sms-time">11:00 AM</div>
+                <div class="sms-content">
+                    <div class="sms-sender">CB ALERT</div>
+                    <div class="sms-text">
+                        உடனே! உங்கள் கணக்கு பாதுகாப்பு ஆபத்தில் உள்ளது. உடனே சரிபார்க்கவும்: https://tamil-bank-verify.tk
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SMS THREAD 4: TAMILISH PHISHING -->
+        <div class="sms-thread danger">
+            <div class="sms-header">பேங்க் செக்யூரிटி - Tamilish</div>
+            <div class="sms-message">
+                <div class="sms-time">11:45 AM</div>
+                <div class="sms-content">
+                    <div class="sms-sender">SECURITY</div>
+                    <div class="sms-text">
+                        Neenga verify pannanum! Your account locked aagaya! Urgent verify link: https://tamilbank-verify.ga Delay pannikavendum!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SMS THREAD 5: TELUGU PHISHING -->
+        <div class="sms-thread danger">
+            <div class="sms-header">బ్యాంక్ అలర్ట్ - తెలుగు</div>
+            <div class="sms-message">
+                <div class="sms-time">12:00 PM</div>
+                <div class="sms-content">
+                    <div class="sms-sender">BANK SECURITY</div>
+                    <div class="sms-text">
+                        తక్షణం చర్య చేయండి! మీ ఖాతా అসాధారణ కార్యకలాపాల కారణంగా నిరోధించబడింది. సరిచేయండి: https://telugu-bank-urgent.tk
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SMS THREAD 6: BENGALI PHISHING -->
+        <div class="sms-thread danger">
+            <div class="sms-header">ব্যাংক সতর্কতা - বাংলা</div>
+            <div class="sms-message">
+                <div class="sms-time">1:15 PM</div>
+                <div class="sms-content">
+                    <div class="sms-sender">BANK ALERT</div>
+                    <div class="sms-text">
+                        জরুরি! আপনার অ্যাকাউন্ট সুরক্ষা ঝুঁকিতে রয়েছে। অবিলম্বে যাচাই করুন: https://bangla-bank-verify.ml
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SMS THREAD 7: SAFE MESSAGE - HINDI -->
+        <div class="sms-thread safe">
+            <div class="sms-header">एसटीएट बैंक - समाचार</div>
+            <div class="sms-message">
+                <div class="sms-time">2:00 PM</div>
+                <div class="sms-content">
+                    <div class="sms-sender">SB NEWS</div>
+                    <div class="sms-text">
+                        आपकी जनवरी 2026 की मासिक विवरण तैयार है। अपने खाते से डाउनलोड करें। धन्यवाद!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SMS THREAD 8: MARATHI PHISHING -->
+        <div class="sms-thread danger">
+            <div class="sms-header">बँक सतर्कता - मराठी</div>
+            <div class="sms-message">
+                <div class="sms-time">2:30 PM</div>
+                <div class="sms-content">
+                    <div class="sms-sender">BANK</div>
+                    <div class="sms-text">
+                        तुरंत सावधान! तुमचा खाता suspended झाला आहे. फौरन verify कर: https://marathi-bank-urgent.tk
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SMS THREAD 9: KANNADA PHISHING -->
+        <div class="sms-thread danger">
+            <div class="sms-header">ಬ್ಯಾಂಕ್ ಅಲರ್ಟ್ - ಕನ್ನಡ</div>
+            <div class="sms-message">
+                <div class="sms-time">3:00 PM</div>
+                <div class="sms-content">
+                    <div class="sms-sender">BANK SEC</div>
+                    <div class="sms-text">
+                        ತುರಂತ! ನಿಮ್ಮ ಖಾತೆ ನಿರ್ಬಂಧ ಮಾಡಲಾಗಿದೆ. ಸತ್ಯಾಪಿಸಿ: https://kannada-verify.ga
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SMS THREAD 10: MALAYALAM PHISHING -->
+        <div class="sms-thread danger">
+            <div class="sms-header">ബാങ്ക് അലര്ട്ട് - മലയാളം</div>
+            <div class="sms-message">
+                <div class="sms-time">3:30 PM</div>
+                <div class="sms-content">
+                    <div class="sms-sender">BANK</div>
+                    <div class="sms-text">
+                        അടിയന്തരം! നിങ്ങളുടെ അക്കൗണ്ട് സുരക്ഷ സമയമായി വെരിഫൈ ചെയ്യേണ്ടതുണ്ട്: https://malayalam-bank.ml
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SMS THREAD 11: SAFE MESSAGE - TAMIL -->
+        <div class="sms-thread safe">
+            <div class="sms-header">பேங்க் செய்திகள் - தமிழ்</div>
+            <div class="sms-message">
+                <div class="sms-time">4:00 PM</div>
+                <div class="sms-content">
+                    <div class="sms-sender">CB NEWS</div>
+                    <div class="sms-text">
+                        உங்கள் FD திரும்பவும் பொருட்படுத்தப்பட்டுள்ளது. நன்றி!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SMS THREAD 12: GUJARATI PHISHING -->
+        <div class="sms-thread danger">
+            <div class="sms-header">બેંક ચેતવણી - ગુજરાતી</div>
+            <div class="sms-message">
+                <div class="sms-time">4:30 PM</div>
+                <div class="sms-content">
+                    <div class="sms-sender">BANK</div>
+                    <div class="sms-text">
+                        તરત! તમારો ખાતો બંધ થશે! તરત જ ચકાસો: https://gujarati-urgent.tk
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SMS THREAD 13: PUNJABI PHISHING -->
+        <div class="sms-thread danger">
+            <div class="sms-header">ਬੈਂਕ ਅਲਰਟ - ਪੰਜਾਬੀ</div>
+            <div class="sms-message">
+                <div class="sms-time">5:00 PM</div>
+                <div class="sms-content">
+                    <div class="sms-sender">BANK</div>
+                    <div class="sms-text">
+                        ਤੁਰੰਤ! ਤੁਹਾਡਾ ਖਾਤਾ ਬ੍ਲਾਕ ਹੋ ਗਿਆ! ਫੌਰਨ ਚੈਕ ਕਰ: https://punjabi-bank.ml
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SMS THREAD 14: SAFE MESSAGE - TELUGU -->
+        <div class="sms-thread safe">
+            <div class="sms-header">బ్యాంక్ సమाचार - తెలుగు</div>
+            <div class="sms-message">
+                <div class="sms-time">5:30 PM</div>
+                <div class="sms-content">
+                    <div class="sms-sender">BANK NEWS</div>
+                    <div class="sms-text">
+                        మీ ऋణ అనుమతి మిळ్ళా. ప్రశంసలు!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SMS THREAD 15: ASSAMESE PHISHING -->
+        <div class="sms-thread danger">
+            <div class="sms-header">ব্যাংক সতর্কতা - অসমীয়া</div>
+            <div class="sms-message">
+                <div class="sms-time">6:00 PM</div>
+                <div class="sms-content">
+                    <div class="sms-sender">BANK</div>
+                    <div class="sms-text">
+                        তাৎক্ষণিক! একাউন্ট বন্ধ হৈছে! ভেরিফাই কৰ: https://assamese-bank.ga
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

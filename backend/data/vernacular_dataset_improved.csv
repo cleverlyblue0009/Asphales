@@ -1,0 +1,84 @@
+text,language,script,is_phishing,category,danger_level,tactics
+तुरंत सावधान! आपके खाते को असामान्य गतिविधि के कारण निलंबित कर दिया गया है। यहाँ क्लिक करके तुरंत सत्यापित करें।,Hindi,Devanagari,1,credential_request,high,urgency;impersonation;credential_request
+मैंने आपके लिए एक नई फाइल बनाई है। कल का प्रेजेंटेशन अच्छा हुआ।,Hindi,Devanagari,0,normal,low,none
+Aapka account suspicious activity ke wajah se lock ho gaya. Turant verify karo nahi toh permanent delete hoga.,Hindi,Roman,1,credential_request,high,urgency;fear_tactics
+Mujhe aaj office late jaana pad jayega. Kya aap assignment kar doge?,Hindi,Roman,0,normal,low,none
+आपकी बैंक खाते में ₹50,000 की unauthorized transfer दिखाई दी है। तुरंत अपने बैंक से संपर्क करें या यहाँ सत्यापित करें।,Hindi,Devanagari,1,credential_request,high,fear_tactics;urgency
+आज शाम को मीटिंग है। क्या तुम समय पर आ सकते हो?,Hindi,Devanagari,0,normal,low,none
+आपका PAN card गलत पाया गया। तुरंत आधिकारिक पोर्टल पर अपडेट करें।,Hindi,Devanagari,1,credential_request,high,impersonation;urgency
+कल सिनेमा चलें? नई फिल्म आ गई है।,Hindi,Devanagari,0,normal,low,none
+உங்கள் கணக்கு ஆபத்தில் உள்ளது! உடனே சரிபார்க்க வேண்டும்! இங்கே என்ற ஐடி உள்ளது,Tamil,Tamil,1,credential_request,high,urgency;fear_tactics
+நேற்று நீங்கள் பிறந்த நாளுக்கு வாழ்த்துகள்! மிகுந்த சந்தோஷம்!,Tamil,Tamil,0,normal,low,none
+Neenga urgent verify pannanum! Suspicious transaction kandupidichirukku. Click here: site link,Tamil,Roman,1,credential_request,high,urgency;fear_tactics
+Naalai office a vandhiya? Lunch seikirka?,Tamil,Roman,0,normal,low,none
+உங்கள் கணக்கு பாதுகாப்பு அறிவிப்பு: கடந்த 24 மணி நேரத்தில் 5 அசாதாரண நுழைவுகள் கண்டறியப்பட்டுள்ளன।,Tamil,Tamil,1,credential_request,high,fear_tactics;urgency
+நன்றி உங்கள் பணம் பெற்றதற்கு। உங்கள் கொள்குறிப்பு ஈமেலில் அனுப்பப்பட்டுள்ளது।,Tamil,Tamil,0,normal,low,none
+మీ ఖాతా తక్షణమే బ్లాక్ అవుతుంది! ఇప్పుడే సరిచేయండి! మీ పోర్టల్ లింక్ చేసుకోండి!,Telugu,Telugu,1,credential_request,high,urgency;fear_tactics
+కల నేను చదువుకున్న పుస్తకం చాలా బాగుందని అనుకుంటున్నాను!,Telugu,Telugu,0,normal,low,none
+Aapka account verify pending aundi. Agar abhi cheykuvundi, block ayipotadi. Urgent verify link.,Telugu,Roman,1,credential_request,high,urgency;fear_tactics
+Naa office ma late ayya. Nee assignment cheyyaledu?,Telugu,Roman,0,normal,low,none
+আপনার অ্যাকাউন্ট নিরাপত্তা ঝুঁকিতে রয়েছে! অবিলম্বে যাচাই করুন অথবা স্থায়ীভাবে লক হয়ে যাবে।,Bengali,Bengali,1,credential_request,high,urgency;fear_tactics
+আপনার পাঠানো ফাইল সফলভাবে গ্রহণ করা হয়েছে।,Bengali,Bengali,0,normal,low,none
+Aapka KYC pending hai! Ek din mein complete karo nahi toh account band ho jayega.,Bengali,Roman,1,credential_request,high,urgency;fear_tactics
+Aaj ki meeting 5 minute late hogi.,Bengali,Roman,0,normal,low,none
+तुरंत कार्रवाई करा! तुमचा खाता suspended झाला आहे. तुरंत verify कर नाही तर स्थाई रूप से बंद होऊन जाईल!,Marathi,Devanagari,1,credential_request,high,urgency;fear_tactics
+कल जिम चलायला हवे का?,Marathi,Devanagari,0,normal,low,none
+तમારો ખાતો તરત જ બંધ થશે! તરત જ ચકાસો! સુરક્ષા પોર્ટલ લિંક દીધી છે!,Gujarati,Gujarati,1,credential_request,high,urgency;fear_tactics
+કાલે કોર્ટ છે? શું તમે આવી શકો છો?,Gujarati,Gujarati,0,normal,low,none
+ನಿಮ್ಮ ಖಾತೆ ತಡೆಯಾಗಿದೆ! ತಕ್ಷಣ ಸತ್ಯಾಪಿಸಿ ಅಥವಾ ಖಾತೆ ನಿಶ್ಚಿತವಾಗಿ ಮುಚ್ಚುತ್ತಾರೆ!,Kannada,Kannada,1,credential_request,high,urgency;fear_tactics
+ನಿನ್ನೆ ಗುಂಡಾದ ಚಿತ್ರವು ತುಂಬಾ ತಿಕಕು!,Kannada,Kannada,0,normal,low,none
+നിങ്ങളുടെ അക്കൗണ്ട് സുരക്ഷ തിരുമാനാര്ത്ഥം വെരിഫൈ ചെയ്യണ്ടതുണ്ട്! ഉടനെ ക്ലിക്ക് ചെയ്യുക!,Malayalam,Malayalam,1,credential_request,high,urgency;fear_tactics
+ഇന്നത്തെ മീറ്റിംഗ് 5 മിനിറ്റ് വൈകും.,Malayalam,Malayalam,0,normal,low,none
+ਤੁਰੰਤ! ਤੁਹਾਡਾ ਖਾਤਾ ਬੰਦ ਹੋ ਜਾਵੇਗਾ! ਫੌਰਨ ਚੈਕ ਕਰ! ਖਾਤਾ ਸੁਰਕਸ਼ਾ ਪਾੜੋਲ ਲਿੰਕ!,Punjabi,Punjabi,1,credential_request,high,urgency;fear_tactics
+ਕੀ ਕਲ ਕਸਰਤ ਕਰ ਸਕਦੇ ਹੋ?,Punjabi,Punjabi,0,normal,low,none
+আপনার এক্সাউন্ট অবিলম্বে সতর্কতা! গত 48 ঘন্টায় 3টি পাসওয়ার্ড পরিবর্তনের প্রচেষ্টা পাওয়া গেছে।,Assamese,Assamese,1,credential_request,high,fear_tactics;urgency
+আমরা কাল পিকনিক এ যাব।,Assamese,Assamese,0,normal,low,none
+فوری طور پر تصدیق کریں! آپ کے اکاؤنٹ میں غیر معمولی سرگرمی ہے۔ اب ہی تصدیق کریں یا اکاؤنٹ بند ہو جائے گا!,Urdu,Urdu,1,credential_request,high,urgency;fear_tactics
+آج میری طبیعت ٹھیک نہیں ہے۔ میں آفس نہیں آسکوں گا۔,Urdu,Urdu,0,normal,low,none
+Aapka OTP expire ho jayega! 2 minutes baad aap login nahi kar paenge. Turant verify karo:,Hindi,Roman,1,credential_request,high,urgency
+क्या तुमने नई खबर सुनी है?,Hindi,Devanagari,0,normal,low,none
+आपका बैंक आपको सूचित करता है: आपके खाते से ₹100000 की राशि successful निकाली गई। यदि यह आपने नहीं की है तो तुरंत सूचित करें।,Hindi,Devanagari,1,credential_request,high,fear_tactics;false_authority
+नई कॉफी शॉप खुल गई है। आओ चलते हैं।,Hindi,Devanagari,0,normal,low,none
+Congratulations! Aap ₹5,00,000 ka prize jeet gaye! Immediately claim karo link par:,Hindi,Roman,1,credential_request,high,too_good_to_be_true
+Mujhe samosa khareedne hain. Kya tu saath chalega?,Hindi,Roman,0,normal,low,none
+உங்கள் கணக்கு 48 மணி நேரத்தில் நিரந்தரமாக அपBn்டு போகும். உடனே சரிபார்க்கவும்!,Tamil,Tamil,1,credential_request,high,fear_tactics
+நாளை நம் தலாக் நினைவாய் சேர்ந்து சாப்பிடலாம்.,Tamil,Tamil,0,normal,low,none
+Neenga aadhar card verify panninum! Govt of India official announcement. Click immediately:,Tamil,Roman,1,credential_request,high,false_authority
+Naa apartment yeppudu kadchina matter discussion pannukklam?,Tamil,Roman,0,normal,low,none
+మీ ఖాతాకు ₹75,000 చెల్లింపు విఫలమైంది. తక్షణం సరిచేయండి!,Telugu,Telugu,1,credential_request,high,false_authority
+నేను అంతా సరిగా లేను. నాకు విశ్రాంతి కావాలి.,Telugu,Telugu,0,normal,low,none
+Government announcement: Aapka Aadhar card update pending. Ek din mein update karo:,Telugu,Roman,1,credential_request,high,false_authority
+Aaj ravi roshni movie chitram chusava?,Telugu,Roman,0,normal,low,none
+আপনার আধার কার্ড আপডেট জরুরি! সরকারি ঘোষণা: 48 ঘন্টার মধ্যে সম্পূর্ণ করুন।,Bengali,Bengali,1,credential_request,high,false_authority
+আমরা আগামীকাল পার্ক এ ঘুরতে যাব।,Bengali,Bengali,0,normal,low,none
+तुमचे PAN आधार साथ link करणे गरजेचे आहे. तुरंत करा:,Marathi,Devanagari,1,credential_request,high,false_authority
+तुम्हारी साडी खूप सुंदर दिसली.,Marathi,Devanagari,0,normal,low,none
+તમારો Aadhar immediate update કરવો પડશે! નહી તો ID cancel થશે! Official govt link:,Gujarati,Gujarati,1,credential_request,high,false_authority
+કાલે આપણે નવી રેસ્તોરાં માં જાવ?,Gujarati,Gujarati,0,normal,low,none
+ನಿಮ್ಮ ಸಂಪೂರ್ಣ ನಿಲಯಾ Aadhar ಅಪೌತೇ ಸತ್ಯಾಪಿಸಿ! ಸರ್ಕಾರೀ ಘೋಷಣೆ:,Kannada,Kannada,1,credential_request,high,false_authority
+ನಾಳೆ ಮಾವಿ ಸಿನೆಮಾ ಕಂಡೊಂಡಹುದರೆ ಏನು?,Kannada,Kannada,0,normal,low,none
+നിങ്ങളുടെ സിമ് കാർഡ് ഉടനെ ആക്ടിവേറ്റ് ചെയ്യണ്ടതുണ്ട്! അല്ലാത്തപക്ഷം ബ്ലാക്ക് ചെയ്യപ്പെടും:,Malayalam,Malayalam,1,credential_request,high,false_authority
+ഇന്നത്തെ ഭക്ഷണം വളരെ 맛있었ാണ്!,Malayalam,Malayalam,0,normal,low,none
+ਤੁਹਾਡਾ ਬੈਂਕ ਖਾਤਾ ਅਪਡੇਟ ਕਰਨਾ ਜ਼ਰੂਰੀ ਹੈ! 24 ਘੰਟਿਆਂ ਵਿਚ ಸੀ ਚੈਕ ਕਰ:,Punjabi,Punjabi,1,credential_request,high,false_authority
+ਕੀ ਕਲ ਫੁਟਬਾਲ ਖੇਲ ਸਕਦੇ ਹਾਂ?,Punjabi,Punjabi,0,normal,low,none
+আপনার মোবাইল নম্বর KYC ছাড়া বন্ধ হবে! তাৎক্ষণিক নিবন্ধন করুন:,Assamese,Assamese,1,credential_request,high,false_authority
+ই তুমাক চাই? পথাচ ভাল।,Assamese,Assamese,0,normal,low,none
+آپ کے SIM کارڈ فوری طور پر منسوخ کر دیے جائیں گے! فوری طور پر تصدیق کریں:,Urdu,Urdu,1,credential_request,high,false_authority
+آج موسم بہت خوبصورت ہے۔,Urdu,Urdu,0,normal,low,none
+State Bank of India: आपके खाते में ₹50000 की suspicious activity पाई गई। अभी सत्यापित करें।,Hindi,Devanagari,1,credential_request,critical,false_authority;fear_tactics;urgency
+मैंने आपकी किताब के लिए आवेदन पत्र भेज दिया है। कृपया चेक करें।,Hindi,Devanagari,0,normal,low,none
+Aadhar Aur PAN को link karwana zaroori hai! Turant karo, nahi toh account band hoga!,Hindi,Roman,1,credential_request,critical,false_authority;fear_tactics;urgency
+Meri assignment submit ho gai. Tum apna bhi kar de.,Hindi,Roman,0,normal,low,none
+Government of India - Tax department: आपका ITR return galta hai. तुरंत सुधार करें।,Hindi,Devanagari,1,credential_request,critical,false_authority;fear_tactics;urgency
+रविवार को पिकनिक चलें??,Hindi,Devanagari,0,normal,low,none
+RBI WARNING: உங்கள் கணக்கு தப்பு வாய்புகள் கண்டறியப்பட்டுள்ளது. உடனே நட்சங் செய்க:,Tamil,Tamil,1,credential_request,critical,false_authority;fear_tactics;urgency
+நாம் நாளை மூவி பார்க்கலாமா?,Tamil,Tamil,0,normal,low,none
+Neenga NEFT transfer block aagaya! Turant verify pannum link:,Tamil,Roman,1,credential_request,critical,false_authority;fear_tactics;urgency
+Adhukum sapidum sevi??,Tamil,Roman,0,normal,low,none
+Reserve Bank of India Alert: మీ ఖాతా 12 గంటల్లో బ్లాక్ అవుతుంది! తక్షణం సరిచేయండి:,Telugu,Telugu,1,credential_request,critical,false_authority;fear_tactics;urgency
+నేను అంతకీ సిరిసౌందర్యం సీరిస్‌ చూశా. చాలా బాగుంది.,Telugu,Telugu,0,normal,low,none
+ನಿಮ್ಮ ಖಾತೆ 24 ಗಂಟೆಗಳ ನಲ್ಲಿ ಚಿರಸ್ಥಾಯೀವಾಗಿ ಮುಚ್ಚುತ್ತಾರೆ! ತಕ್ಷಣ ಸರಿಪಡಿಸಿ:,Kannada,Kannada,1,credential_request,critical,false_authority;fear_tactics;urgency
+ನನ್ನ ಸ್ನೇಹಿತನು ತುಂಬಾ ಬದುಕನ್ನದಮತ್ತು.,Kannada,Kannada,0,normal,low,none
+National Payment Corporation: আপনার UPI হ্যাক হয়েছে! অবিলম্বে নিরাপত্তা আপডেট করুন:,Bengali,Bengali,1,credential_request,critical,false_authority;fear_tactics;urgency
+আমরা নেক্সট উইকএন্ড দেশে ঘুরতে যাব।,Bengali,Bengali,0,normal,low,none
+আপনার সংস্কৃত প্রতিষ্ঠান: তাত্ক্ষণিক সেবা অপারেশন বন্ধ করুন কারণ অসমর্থিত লেনদেন।,Bengali,Bengali,1,credential_request,critical,false_authority;fear_tactics;urgency
