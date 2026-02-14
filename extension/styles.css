@@ -1,3 +1,14 @@
+html, body {
+  width: 360px;      /* ideal Chrome popup width */
+  min-width: 360px;
+  max-width: 360px;
+  height: 600px;     /* adjust as needed */
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
 .surakshaai-highlight {
   background: rgba(255, 87, 51, 0.25) !important;
   border-bottom: 2px solid #ff5733 !important;
