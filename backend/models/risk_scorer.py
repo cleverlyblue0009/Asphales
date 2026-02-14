@@ -56,6 +56,9 @@ class RiskResult:
         method: str = "pattern",
         ml_score: int = 0,
         genai_score: Optional[int] = None,
+        openai_score: Optional[int] = None,
+        openai_explanation: Optional[str] = None,
+        openai_confidence: Optional[float] = None,
         processing_time_ms: float = 0,
         cached: bool = False,
     ):
@@ -65,6 +68,9 @@ class RiskResult:
         self.method = method
         self.ml_score = ml_score
         self.genai_score = genai_score
+        self.openai_score = openai_score
+        self.openai_explanation = openai_explanation
+        self.openai_confidence = openai_confidence
         self.processing_time_ms = processing_time_ms
         self.cached = cached
 
@@ -80,6 +86,10 @@ class RiskResult:
         }
         if self.genai_score is not None:
             result["genai_score"] = self.genai_score
+        if self.openai_score is not None:
+            result["openai_score"] = self.openai_score
+            result["openai_explanation"] = self.openai_explanation
+            result["openai_confidence"] = self.openai_confidence
         return result
 
 
