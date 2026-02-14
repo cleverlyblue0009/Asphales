@@ -1,0 +1,120 @@
+text,label,language,category,source
+आपका बैंक खाता बंद कर दिया गया है। तुरंत ओटीपी और कार्ड विवरण भेजें।,1,Hindi,otp,vernacular
+कल सुबह 9 बजे मीटिंग है। कृपया समय पर आएं।,0,Hindi,work,vernacular
+आपकी KYC सत्यापन विफल हुई। तुरंत आधार और पैन भेजें।,1,Hindi,kyc,vernacular
+माता-पिता कैसे हैं? लंबे समय में नहीं बोला।,0,Hindi,family,vernacular
+आपके यूपीआई खाते से ₹5000 ट्रांसफर किया गया। तुरंत कार्रवाई करें।,1,Hindi,money,vernacular
+স্কুল বন্ধ। আগামীকাল ক্লাস নেই।,0,Bengali,education,vernacular
+আপনার ব্যাংক অ্যাকাউন্ট অনুমোদিত হয়নি। এখনই যাচাই করুন এবং ক্রেডিট কার্ড নম্বর পাঠান।,1,Bengali,kyc,vernacular
+আজ সন্ধ্যায় বাজারে যাব। তুমি কিছু চাই?।,0,Bengali,personal,vernacular
+আপনার ডিভিআই বাতিল করা হয়েছে। তাৎক্ষণিক পুনরায় সক্রিয় করুন।,1,Bengali,credential,vernacular
+என்னுடைய வீட்டில் நாளை விழா உண்டு। வந்து விடுவீர்களா?,0,Tamil,family,vernacular
+உங்கள் ஆதார்확인 தோல்வியடைந்தது। உடனே உங்கள் கார்ड எண்ணையும் OTP ஐயும் அனுப்பவும்।,1,Tamil,kyc,vernacular
+இந்த விவரம் எப்படி? பொதுவாக சரியாக செயல்படுகிறது।,0,Tamil,social,vernacular
+உங்கள் UPI লேனদேனம் ₹10000 மீறி சுপারி செய்யப்பட்டுள்ளது। உடனே கணக்கு যাচাই செய்யவும்।,1,Tamil,upi,vernacular
+आपकी खातेवर जलद दिवस नष्ट होहैं। तुरंत सत्यापन करो।,1,Marathi,kyc,vernacular
+कल बाजारात जाऊ. काही गरज आहे का?,0,Marathi,family,vernacular
+आपल्या यूपीआई खाता निलंबित केला गेला आहे। तुरंत पुनः सक्रिय करा।,1,Marathi,utp,vernacular
+ગુજરાતી પરીક્ષા આવતા સપ્તાહે છે. અભ્યાસ જરૂર કર.‌,0,Gujarati,education,vernacular
+તમારો બેંક ખાતો ફ્લોક કરવામાં આવ્યો છે. તુરંત ચકાસણી કરો અને ક્રેડિટ કાર્ડ વિગતો મોકલો.,1,Gujarati,kyc,vernacular
+આ અમુક સમસ્યા તે સંબંધમાં? સામાન્યતઃ યોગ્ય રીતે કાર્ય કરે છે.,0,Gujarati,social,vernacular
+আপনার পেমেন্ট ব্যর্থ হয়েছে। তুরন্ত ডেবিট কার্ড দিয়ে পুনরায় চেষ্টা করুন।,1,Punjabi,money,vernacular
+ਪਰਸੋਂ ਸਕੂਲ ਖੁੱਲ ਹੈ। ਸਮਾਂ ਸਿਰ ਪਹੂੰਚਨਾ।,0,Punjabi,education,vernacular
+ਤੁਹਾਡਾ ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਨੂੰ ਰੱਦ ਕਰ ਦਿੱਤਾ ਗਿਆ ਹੈ। ਤਣਾਜ਼ ਮੁਡ ਕਾਰ ਡੇਟਾ ਅਤੇ ਓ ਟੀ ਪੀ ਮੋਕਲੋ।,1,Punjabi,kyc,vernacular
+অসমীয়া পৰীক্ষা কেতিয়া হ'ব?,0,Assamese,education,vernacular
+আপোনার অ্যাকাউন্ট সুৰক্ষা লংঘন হৈছে। তুরন্ত সংশোধন কৰক।,1,Assamese,credential,vernacular
+আমার কল কৰক যেতিয়া বিনামূলীয় হয়।,0,Assamese,personal,vernacular
+നിങ്ങളുടെ ബാങ്ക് അക്കൗണ്ട് നിരോധിച്ചിരിക്കുന്നു. ഉടന്നെ സ്ഥിരീകരണം നടത്തി ക്രെഡിറ്റ് കാർഡ് വിവരങ്ങൾ അയയ്ക്കുക.,1,Malayalam,kyc,vernacular
+നാളെ സ്കൂൾ അടച്ചിരിക്കും.,0,Malayalam,education,vernacular
+നിങ്ങളുടെ അപ്ലിക്കേഷൻ അംഗീകരിച്ചു. ആനന്ദം! നിങ്ങൾക്ക് വായ്പ ലഭിച്ചു.,0,Malayalam,commerce,vernacular
+ನಿಮ್ಮ ಖಾತೆ ನಿಲುಮುಡಿಸಲಾಗಿದೆ. ತಕ್ಷಣ ಪರಿಶೀಲನೆ ಮಾಡಿ ಮತ್ತು ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಸಂಖ್ಯೆ ಅಲಿಕಾಲ್ ಮೋಕಳಿ.,1,Kannada,kyc,vernacular
+ನೆಲೆ ನಾಲ್ಕು ಅರ್ಧಪೀಠ ತಸ್ಕರಿ ಸೂಚನೆ ತೆಗೆ ನೇರ ಪರೀಕ್ಷೆ.,0,Kannada,education,vernacular
+ತೆಲುಗು ಸೀಮೆಯ ಕತೆ ಅದ್ಬುತವಾಗಿದೆ.,0,Kannada,social,vernacular
+తెలుగు ప్రశ్న చేస్తే సమాధానమివ్వండి.,0,Telugu,education,vernacular
+మీ ఖాతా నిలిపివేయబడింది. అత్యవసరంగా సत్యాపనం చేసి ఆధార్ మరియు పాన్ అంటిపెట్టండి.,1,Telugu,kyc,vernacular
+పనిలో విజయం సాధించడానికి చాలా పేదవారిని సహాయం చేయాలి.,0,Telugu,work,vernacular
+ओडिया પરીક્ષા આવતા વર્ષે.,0,Odia,education,vernacular
+ଆପଣଙ୍କ ଆଧାର ଧାରଣ ବିଫଳ ହୋଇଛି। ତାତକ୍ଷଣିକ ପୁନଃ ସୁଦୃଢ० କରନ୍ତୁ।,1,Odia,kyc,vernacular
+ଆଜ ଆବଶ୍ୟତାବୃତ୍ତ। ଯଦି ସହାୟତା ଆବଶ୍ୟକ ତ ଜଣାଆନ୍ତୁ।,0,Odia,social,vernacular
+अनेक काम आहे आतापर्यंत पूर्ण करायचे।,0,Konkani,work,vernacular
+तुमचा बँक खाता बंद केला गेला आहे। तुरंत सत्यापन करा आणि क्रेडिट कार्ड क्रमांक पाठवा।,1,Konkani,kyc,vernacular
+नालायक इंटरनेटच्या कारणे सगळ्या गोष्टी विलंबित आहेत।,0,Konkani,personal,vernacular
+মনিপুরী ভাষায় বলতে পারবেন কি?,0,Manipuri,education,vernacular
+আপনার ডিজিটাল লকার নিরোধিত করা হয়েছে। তাৎক্ষণিকভাবে পুনরায় সক্রিয় করুন এবং পাসওয়ার্ড পরিবর্তন করুন।,1,Manipuri,credential,vernacular
+বাজারে নতুন পণ্য এসেছে। ভালো মানের এবং সাশ্রয়ী দাম।,0,Manipuri,commerce,vernacular
+मैथिली भाषा बहुत पुरानी छै।,0,Maithili,education,vernacular
+अपने बैंक खाते को तुरंत सत्यापित करें। आधार और पैन नंबर भेजें।,1,Maithili,kyc,vernacular
+आजको मौसम बहुत गरम छै।,0,Maithili,social,vernacular
+डोगरी सीखना कठिन छै।,0,Dogri,education,vernacular
+तुम्हारा खाता अक्षम कर दिया गया है। तुरंत पुनः सक्षम करो और ओटीपी भेजो।,1,Dogri,otp,vernacular
+वर्षा का मौसम आ गया है।,0,Dogri,social,vernacular
+बोडो भाषा भारतीय संवิधान की आठवीं अनुसूची में है।,0,Bodo,education,vernacular
+आपके खाते में असामान्य गतिविधि पाई गई है। तुरंत पुष्टिकरण करें।,1,Bodo,credential,vernacular
+कल मित्रों के साथ मिलेंगे।,0,Bodo,social,vernacular
+कश्मीरी भाषा कश्मीर में बोली जाती है।,0,Kashmiri,education,vernacular
+आपका खाता सुरक्षा कारणों से ब्लॉक किया गया है। तुरंत पुष्टि करें।,1,Kashmiri,credential,vernacular
+मौसम बहुत सुहावना है आजकल।,0,Kashmiri,social,vernacular
+संस्कृत प्राचीन भाषा है।,0,Sanskrit,education,vernacular
+आपके बैंक खाते की सुरक्षा जोखिम में है। तुरंत सत्यापन करें।,1,Sanskrit,credential,vernacular
+आज बहुत अच्छा दिन है।,0,Sanskrit,social,vernacular
+ᱥᱟᱱᱛᱟᱞᱤ ᱥᱮᱬᱮᱨ ᱜᱮᱞ ᱟᱱᱟᱜ ᱯᱟᱨᱛᱟᱞᱢᱟ ।,0,Santali,education,vernacular
+ᱟᱯᱟᱱ ᱟᱡᱟᱜ ᱟᱠᱟᱣᱩᱸᱴ ᱵᱚᱱᱫ ᱠᱟᱱ ᱟᱠᱟᱠᱟ ᱫᱚ। ᱡᱤᱦᱚᱱ ᱠᱮ ᱞᱟᱜᱮᱫ ᱤ ᱵᱚᱦᱟᱞ ᱨᱮᱭᱟᱜ ᱱᱚᱢᱵᱚᱨ ᱦᱟᱞᱤᱜ ᱯᱩᱨᱟᱹ।,1,Santali,kyc,vernacular
+ᱰᱩᱦᱠᱟᱜᱞᱟ ᱰᱷᱤᱨᱚᱜ ᱰᱩᱦᱠᱟᱜᱞᱟ ।,0,Santali,social,vernacular
+سندھی ختم ہے۔,0,Sindhi,education,vernacular
+آپ کا بینک اکاؤنٹ بند کر دیا گیا ہے۔ فوری طور پر OTP اور کریڈٹ کارڈ نمبر بھیجیں۔,1,Sindhi,otp,vernacular
+بہت اچھا موسم ہے آج کل۔,0,Sindhi,social,vernacular
+नेपाली भाषा नेपालमा बोलिन्छ।,0,Nepali,education,vernacular
+तपाईको खाता बन्द गरिएको छ। तुरन्तै सत्यापन गरी आधार र पान नम्बर पठाउनुहोस्।,1,Nepali,kyc,vernacular
+आज बहुत अलिकालो रात हुनेछ।,0,Nepali,social,vernacular
+اردو بہت خوبصورت زبان ہے۔,0,Urdu,education,vernacular
+آپ کا بینک اکاؤنٹ مسدود ہو گیا ہے۔ فوری طور پر سत्यापن کریں اور کریڈٹ کارڈ کی تفصیلات بھیجیں۔,1,Urdu,kyc,vernacular
+بہت اچھا دن ہے آج۔,0,Urdu,social,vernacular
+আপনার ব্যাংক অ্যাকাউন্ট হ্যাক হয়ে গেছে। তুরন্ত এসএমএস থেকে লিঙ্কে ক্লিক করুন এবং পাসওয়ার্ড পরিবর্তন করুন।,1,Bengali,credential,vernacular
+আগামীকাল অফিস বন্ধ থাকবে।,0,Bengali,work,vernacular
+আপনার মোবাইল নাম্বার যাচাই করা হয়নি। এখনই OTP প্রবেশ করুন।,1,Bengali,otp,vernacular
+আপনার জন্য একটি বিশেষ অফার পাওয়া যায়। তাড়াতাড়ি অফারটি গ্রহণ করুন।,0,Bengali,commerce,vernacular
+भारत को कुल 22 भाषा है।,0,Hindi,education,vernacular
+आपकी UPI ट्रांजेक्शन विफल हुई। दोबारा कोशिश करें।,0,Hindi,commerce,vernacular
+फोन से संदिग्ध गतिविधि दिख रही है। तुरंत बदलाव करें।,1,Hindi,credential,vernacular
+রাত 9টায় ঘুমাতে যেতে হবে স্কুল খোলার জন্য।,0,Bengali,education,vernacular
+তোমার প্যাকেজ আগামীকাল ডেলিভারি হবে।,0,Bengali,commerce,vernacular
+প্রতিটি সপ্তাহে ছুটির দিন নেওয়ার যোগ্য।,0,Bengali,work,vernacular
+என் வகுப்পில் 40 மாணவர்கள் உண்டு।,0,Tamil,education,vernacular
+அட்டை வசூல் செய்ய சொல்லி வந்தார்கள்।,0,Tamil,work,vernacular
+மழை இல்லை இந்த வாரம்।,0,Tamil,social,vernacular
+ಅರುಂಧತಿ ರಾಯ್ ಪುಸ್ತಕ ಬರೆಯುವ ಬರಹಮಾನ ಲೇಖಕ।,0,Kannada,education,vernacular
+ಕಾರ್ಯದಿನ ಆರಂಭ 9 ಗಂಟೆಗೆ ಆಗುತ್ತೆ।,0,Kannada,work,vernacular
+ನಿಮ್ಮ ಬಿಲ್ ಪ್ರತಿದಿನ ಹೆಚ್ಚುತ್ತಿದೆ।,0,Kannada,commerce,vernacular
+తెలుగు సినిమాలు చాలా బాగుంటాయి।,0,Telugu,social,vernacular
+ఆఫీసు నుండి ఇంటికి చేరుకోవడానికి ఒంటిగంట వేయాలి।,0,Telugu,work,vernacular
+ఆ వస్తువు ఇప్పుడు స్టాక్‌లో లేనిది।,0,Telugu,commerce,vernacular
+ଆପ୍ରେରିଂଜ କାକୁ ଫୋନ କରନ୍ତୁ।,0,Odia,work,vernacular
+ସେ ଏକ ଚୋର। ତାକୁ ବିଶ୍ୱାସ କରନ୍ତୁ ନା।,1,Odia,impersonation,vernacular
+ଟେଲିଫୋନ ମୋଠାଏ ଟାଙ୍ଗି ଦିଅ।,0,Odia,personal,vernacular
+पूरा काम आजतक पूरा नहीं हुआ है।,0,Marathi,work,vernacular
+घरातून नव्हे आता।,0,Marathi,personal,vernacular
+चिकन खाने का शौक है क्या?।,0,Marathi,social,vernacular
+આ પસંદ છે મને ખૂબ રીતે।,0,Gujarati,social,vernacular
+તમારો હોમવર્ક કરી તો દીધો।,0,Gujarati,education,vernacular
+આવતો અઠવાડિયે ટુર છે।,0,Gujarati,personal,vernacular
+ਮੇਰਾ ਅਸੀਨਮੇਂਟ ਪੂਰਾ ਨਹਿ ਹੋਇਆ।,0,Punjabi,education,vernacular
+ਕੰਮ ਕਿ ਲਿਜਾਮ ਤੋਂ ਬਹੁਤ ਥਕ ਗਏ।,0,Punjabi,work,vernacular
+ਪਿਤਾ ਜੀ ਬਾਜ਼ਾਰ ਜਾਣ ਤੋਂ ਪਹਿਲੀਂ ਦਿ ਜਿ ਦੱਲ ਲਿ।,0,Punjabi,personal,vernacular
+ଅସମ ଅଧିଯନ ଧରିବାର ଆବଶ୍ୟକତା।,0,Assamese,education,vernacular
+ଆଜ ଅଟୁଲ ଆଲ ଧରାଇ ଦେବାର ସମୟ ଆସିଲା।,1,Assamese,urgency,vernacular
+ଘରାଘରେ ମୋ ଭାଇଜାଁ ଆସି ଗେଲେ।,0,Assamese,family,vernacular
+എനിക്കിൽ ഒരിക്കലും കളിയായിരുന്നില്ല ഇത്രയും കഷ്ടം।,0,Malayalam,social,vernacular
+കാലെ ഓഫീസ് ശേഷമാണ് വൈകുന്നേരം വരുന്നത്।,0,Malayalam,work,vernacular
+സ്കൂൾ സമാപ്തിക്കുന്നതിനോടുകൂടി വിളളി ആയിരിക്കും।,0,Malayalam,education,vernacular
+ಹೊಸ ಕಾರ್ಯಕ್ರಮ ಇಂದು ರಾತ್ರಿ 8 ಕ್ಲಾಕಿಗೆ ಪ್ರಸಾರಿತ ಆಗುತ್ತೆ।,0,Kannada,social,vernacular
+ನನಗೆ ಬಹಳ ಹಿಂಚರಿಗಾಗಿದೆ ಈ ವಿದ್ಯುತ್ ಬಿಲ್।,0,Kannada,commerce,vernacular
+ಶಾಲೆಯಲ್ಲಿ ಒಂದೆರಡು ಗುಂಪು ಹೆಗ್ಗುವಿಕೆ ನಡೆದಿದೆ।,0,Kannada,education,vernacular
+ఈ సంవత్సరం అనేక రుద్రాలు చేసాం ఏ ఈ ముందు చేయలేదు।,0,Telugu,social,vernacular
+నా సోదరుడు పాఠశాలలో మీరు బాగా చదువుతున్నారు।,0,Telugu,education,vernacular
+ఆ దుకాణం నుండి విసుగు వస్తువులను కొని మొదలు పెట్టండి।,1,Telugu,impersonation,vernacular
+এই সুযোগটি হাতছাড়া করবেন না। এখনই বিনিয়োগ করুন এবং মুনাফা অর্জন করুন।,1,Bengali,money,vernacular
+আমাদের প্রোডাক্ট সারা দেশে সেরা। গ্রাহক সন্তুষ্টি আমাদের লক্ষ্য।,0,Bengali,commerce,vernacular
+সকাল 6টায় জিম যাওয়ার পরিকল্পনা আছে।,0,Bengali,personal,vernacular
+नई नौकरी पाने के लिए बहुत मेहनत करनी पड़ेगी।,0,Hindi,work,vernacular
+मेरा कुत्ता बहुत वफादार है।,0,Hindi,personal,vernacular
+बाजार में नए फूल आ गए हैं।,0,Hindi,commerce,vernacular

@@ -1,4 +1,4 @@
-"""Phishing classifier combining ML scoring + GenAI explanation."""
+"""Phishing classifier combining ML scoring + OpenAI + Advanced Link Analysis."""
 
 import time
 from typing import Optional
@@ -6,6 +6,8 @@ from typing import Optional
 from models.risk_scorer import RiskResult, RiskScorer, ThreatDetail
 from services.cache_manager import CacheManager
 from services.genai_analyzer import GenAIAnalyzer
+from services.openai_analyzer import OpenAIPhishingAnalyzer
+from services.advanced_link_analyzer import AdvancedLinkAnalyzer
 from services.ml_classifier import MLPhishingClassifier
 from utils.logger import setup_logger
 from utils.text_processor import text_hash, validate_length
@@ -14,11 +16,13 @@ logger = setup_logger("classifier")
 
 
 class HybridClassifier:
-    """ML-first classifier with line-level risk aggregation and optional GenAI reasoning."""
+    """Advanced ML classifier with OpenAI analysis, link detection, and multi-layer risk assessment."""
 
     def __init__(self):
         self.risk_scorer = RiskScorer()
-        self.genai = GenAIAnalyzer()
+        self.genai = GenAIAnalyzer()  # Keep for backwards compatibility
+        self.openai = OpenAIPhishingAnalyzer()  # New OpenAI integration
+        self.link_analyzer = AdvancedLinkAnalyzer()  # Advanced link detection
         self.ml = MLPhishingClassifier()
         self.cache = CacheManager(max_size=1000, ttl=60)
 
@@ -26,9 +30,10 @@ class HybridClassifier:
         self.total_time_ms = 0.0
 
         logger.info(
-            "Classifier ready — ML model=%s, GenAI %s",
+            "Classifier ready — ML model=%s, GenAI %s, OpenAI %s, Advanced Link Analysis enabled",
             self.ml.model_name,
             "enabled" if self.genai.is_available() else "disabled",
+            "enabled" if self.openai.enabled else "disabled",
         )
 
     async def classify(self, text: str) -> RiskResult:
@@ -60,27 +65,72 @@ class HybridClassifier:
         line_threats, max_line_score = self._score_suspicious_lines(text)
         ml_score = max(ml_doc_score, max_line_score)
 
+        # Advanced link analysis
+        link_score, tactics, warning_signs = self.link_analyzer.analyze_text_for_scams(text)
+        if link_score > 0:
+            ml_score = max(ml_score, int(link_score * 100))
+            for warning in warning_signs:
+                line_threats.append(
+                    ThreatDetail(
+                        phrase=warning,
+                        risk=int(link_score * 100),
+                        category="link_analysis",
+                        explanation=f"Advanced threat detection identified: {warning}",
+                    )
+                )
+
+        openai_score: Optional[int] = None
+        openai_explanation: Optional[str] = None
+        openai_confidence: Optional[float] = None
+
+        # Try OpenAI first, fallback to GenAI (Anthropic)
+        if self.openai.enabled:
+            try:
+                openai_result = await self.openai.analyze(text)
+                if openai_result is not None:
+                    openai_score = int(openai_result["risk_score"])
+                    openai_explanation = openai_result.get("explanation")
+                    openai_confidence = openai_result.get("confidence", 0.5)
+                    if openai_result.get("is_phishing"):
+                        tactics_list = openai_result.get("tactics", [])
+                        tactic_text = ", ".join(tactics_list[:4]) if tactics_list else "suspicious patterns detected"
+                        line_threats.append(
+                            ThreatDetail(
+                                phrase=tactic_text,
+                                risk=openai_score,
+                                category="openai_detected",
+                                explanation=openai_explanation or "OpenAI detected phishing indicators in this message.",
+                            )
+                        )
+            except Exception as e:
+                logger.warning(f"OpenAI analysis error: {e}")
+
         genai_score: Optional[int] = None
         genai_explanation: Optional[str] = None
 
-        # Final GenAI check (when available) to reduce false negatives.
-        if self.genai.is_available():
-            genai_result = await self.genai.analyze(text)
-            if genai_result is not None:
-                genai_score = int(genai_result["risk_score"])
-                genai_explanation = genai_result.get("explanation_hinglish")
-                if genai_result.get("is_phishing"):
-                    tactic_text = ", ".join(genai_result.get("tactics", [])[:4]) or "contextual phishing indicators"
-                    line_threats.append(
-                        ThreatDetail(
-                            phrase=tactic_text,
-                            risk=genai_score,
-                            category="genai_detected",
-                            explanation=genai_explanation or "GenAI ne suspicious social-engineering pattern detect kiya.",
+        # Fallback to GenAI (Anthropic) if OpenAI unavailable
+        if self.genai.is_available() and openai_score is None:
+            try:
+                genai_result = await self.genai.analyze(text)
+                if genai_result is not None:
+                    genai_score = int(genai_result["risk_score"])
+                    genai_explanation = genai_result.get("explanation_hinglish")
+                    if genai_result.get("is_phishing"):
+                        tactic_text = ", ".join(genai_result.get("tactics", [])[:4]) or "contextual phishing indicators"
+                        line_threats.append(
+                            ThreatDetail(
+                                phrase=tactic_text,
+                                risk=genai_score,
+                                category="genai_detected",
+                                explanation=genai_explanation or "Phishing patterns detected.",
+                            )
                         )
-                    )
+            except Exception as e:
+                logger.warning(f"GenAI analysis error: {e}")
 
-        final_score = ml_score if genai_score is None else max(ml_score, int((ml_score * 0.65) + (genai_score * 0.35)))
+        # Determine final score using priority: OpenAI > GenAI > ML
+        ai_score = openai_score if openai_score is not None else genai_score
+        final_score = ml_score if ai_score is None else max(ml_score, int((ml_score * 0.6) + (ai_score * 0.4)))
         severity = self.risk_scorer.get_severity(final_score)
 
         if not line_threats and final_score >= 45:
@@ -89,17 +139,27 @@ class HybridClassifier:
                     phrase=text[:220],
                     risk=final_score,
                     category="ml_detected",
-                    explanation="ML + contextual analysis ne message ko suspicious classify kiya. Link/OTP/KYC details verify kiye bina action mat lo.",
+                    explanation="Machine learning detected suspicious patterns. Verify before clicking links or sharing information.",
                 )
             )
+
+        # Build method string
+        method_parts = ["ml"]
+        if openai_score is not None:
+            method_parts.append("openai")
+        elif genai_score is not None:
+            method_parts.append("genai")
 
         result = RiskResult(
             overall_risk=final_score,
             severity=severity,
             threats=line_threats[:8],
-            method="ml+genai" if genai_score is not None else "ml",
+            method="+".join(method_parts),
             ml_score=ml_score,
             genai_score=genai_score,
+            openai_score=openai_score,
+            openai_explanation=openai_explanation,
+            openai_confidence=openai_confidence,
             processing_time_ms=(time.time() - start) * 1000,
         )
 

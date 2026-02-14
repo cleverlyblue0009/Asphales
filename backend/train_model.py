@@ -243,25 +243,51 @@ def _split_holdout(texts: list[str], labels: list[int], test_ratio: float = 0.2)
 
 
 def train(train_csv: Path, test_csv: Path, output_dir: Path, data_dir: Path) -> None:
+    X_train, y_train = [], []
+
+    # Load all three multilingual CSV datasets
+    csv_files = [
+        data_dir / "phishing_multilingual_7500.csv",
+        data_dir / "phishing_multilingual_from_md.csv",
+        data_dir / "phishing_multilingual_vernacular_22lang.csv"
+    ]
+
+    loaded_files = []
+    for csv_file in csv_files:
+        if csv_file.exists():
+            texts, labels = read_csv(csv_file)
+            X_train.extend(texts)
+            y_train.extend(labels)
+            loaded_files.append(csv_file.name)
+            print(f"✓ Loaded {csv_file.name}: {len(texts)} samples")
+        else:
+            print(f"⚠ Dataset not found: {csv_file.name}")
+
+    if not X_train:
+        raise FileNotFoundError("No training datasets found. Expected CSV files in data directory.")
+
+    # Try to use provided train/test CSV if available
     if train_csv.exists() and test_csv.exists():
-        X_train, y_train = read_csv(train_csv)
         X_test, y_test = read_csv(test_csv)
     else:
-        # Updated to use the real training data from markdown file
-        fallback = data_dir / "phishing_multilingual_from_md.csv"
-        if not fallback.exists():
-            # Try old dataset as final fallback
-            fallback = data_dir / "phishing_multilingual_7500.csv"
-            if not fallback.exists():
-                raise FileNotFoundError("Training CSVs not found and fallback dataset missing")
-        texts, labels = read_csv(fallback)
-        X_train, y_train, X_test, y_test = _split_holdout(texts, labels)
+        # Split combined data into train/test
+        X_train, y_train, X_test, y_test = _split_holdout(X_train, y_train)
 
+    # Load additional JSON training samples if available
     json_texts, json_labels = load_json_training_samples(data_dir)
-    X_train.extend(json_texts)
-    y_train.extend(json_labels)
+    if json_texts:
+        X_train.extend(json_texts)
+        y_train.extend(json_labels)
+        print(f"✓ Loaded {len(json_texts)} additional JSON training samples")
+
+    print(f"\n📊 Training Dataset Statistics:")
+    print(f"   Total training samples: {len(X_train)}")
+    print(f"   Total test samples: {len(X_test)}")
+    print(f"   Training phishing/safe ratio: {sum(y_train)}/{len(y_train) - sum(y_train)}")
+    print(f"   CSV files used: {', '.join(loaded_files)}\n")
 
     model = AdvancedPhishingModel()
+    print("🔄 Training model with TF-IDF + Logistic Regression...")
     model.train(X_train, y_train)
 
     probs = [model.predict_proba(t) for t in X_test]
@@ -276,14 +302,19 @@ def train(train_csv: Path, test_csv: Path, output_dir: Path, data_dir: Path) -> 
     metrics_path = output_dir / "model_metrics.json"
     model.save(model_path)
     metrics = {
+        "training_datasets": loaded_files,
+        "total_training_samples": len(X_train),
+        "total_test_samples": len(X_test),
+        "json_samples_used": len(json_texts) if json_texts else 0,
         "best_threshold": best,
         "confusion_matrix": cm,
-        "json_samples_used": len(json_texts),
         "target_accuracy_95": best["accuracy"] >= 0.95,
     }
     metrics_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
 
-    print(f"Model saved: {model_path}")
+    print(f"✅ Model saved: {model_path}")
+    print(f"✅ Metrics saved: {metrics_path}")
+    print("\n📈 Model Performance Metrics:")
     print(json.dumps(metrics, indent=2))
 
 

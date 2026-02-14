@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SurakshaAI Shield - Advanced Protection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #667eea;
+            --primary-dark: #764ba2;
+            --success: #2e7d32;
+            --warning: #ef6c00;
+            --danger: #b71c1c;
+            --light: #f5f5f5;
+            --border: #e0e0e0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            min-height: 100vh;
+            padding: 0;
+            width: 600px;
+        }
+
+        .container {
+            background: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .language-toggle {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            border-radius: 6px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .language-toggle:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Language Selector Modal */
+        .language-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .language-modal.show {
+            display: flex;
+        }
+
+        .language-modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            max-height: 80vh;
+            overflow-y: auto;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .language-modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--primary);
+        }
+
+        .language-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .language-option {
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.2s;
+            font-size: 13px;
+        }
+
+        .language-option:hover {
+            border-color: var(--primary);
+            background: #f9f9f9;
+        }
+
+        .language-option.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Main Content */
+        .content {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            max-height: calc(100vh - 60px);
+        }
+
+        /* Status Section */
+        .status-section {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .status-toggle {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .status-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102,126,234,0.4);
+        }
+
+        .status-toggle.active {
+            background: linear-gradient(135deg, var(--success) 0%, #1b5e20 100%);
+        }
+
+        .status-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        /* Risk Display */
+        .risk-display {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+            display: none;
+        }
+
+        .risk-display.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .risk-score-widget {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .risk-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .risk-circle.low {
+            background: linear-gradient(135deg, var(--success) 0%, #66bb6a 100%);
+        }
+
+        .risk-circle.medium {
+            background: linear-gradient(135deg, var(--warning) 0%, #ffb74d 100%);
+        }
+
+        .risk-circle.high {
+            background: linear-gradient(135deg, var(--danger) 0%, #e53935 100%);
+        }
+
+        .risk-info {
+            flex: 1;
+        }
+
+        .risk-level {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .risk-description {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 16px 0 8px 0;
+            padding-top: 8px;
+        }
+
+        /* Indicators */
+        .indicators-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .indicator {
+            background: #f9f9f9;
+            border-left: 3px solid var(--border);
+            padding: 10px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .indicator.critical {
+            border-left-color: var(--danger);
+            background: rgba(183,28,28,0.05);
+        }
+
+        .indicator.warning {
+            border-left-color: var(--warning);
+            background: rgba(239,108,0,0.05);
+        }
+
+        .indicator.info {
+            border-left-color: var(--primary);
+            background: rgba(102,126,234,0.05);
+        }
+
+        .indicator-icon {
+            font-size: 14px;
+            margin-right: 6px;
+        }
+
+        /* GenAI Explanation */
+        .genai-explanation {
+            background: linear-gradient(135deg, rgba(102,126,234,0.05) 0%, rgba(118,75,162,0.05) 100%);
+            border: 1px solid rgba(102,126,234,0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .genai-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .genai-explanation-text {
+            font-size: 13px;
+            color: #333;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .genai-explanation-vernacular {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.5;
+            padding: 8px;
+            background: white;
+            border-radius: 4px;
+            border-left: 2px solid var(--primary);
+            padding-left: 10px;
+            margin-top: 8px;
+        }
+
+        .genai-confidence {
+            font-size: 11px;
+            color: #888;
+            margin-top: 6px;
+        }
+
+        /* Tactics */
+        .tactics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .tactic-badge {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px 10px;
+            font-size: 12px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            color: #333;
+        }
+
+        .tactic-badge.urgent {
+            border-color: var(--danger);
+            background: rgba(183,28,28,0.05);
+            color: var(--danger);
+        }
+
+        .tactic-badge.credential {
+            border-color: var(--danger);
+            background: rgba(183,28,28,0.05);
+            color: var(--danger);
+        }
+
+        .tactic-badge.impersonation {
+            border-color: var(--warning);
+            background: rgba(239,108,0,0.05);
+            color: var(--warning);
+        }
+
+        .tactic-badge.reward {
+            border-color: var(--primary);
+            background: rgba(102,126,234,0.05);
+            color: var(--primary);
+        }
+
+        /* Links Section */
+        .harmful-links {
+            background: #fff3e0;
+            border-left: 3px solid var(--danger);
+            border-radius: 4px;
+            padding: 10px 12px;
+            margin-bottom: 16px;
+        }
+
+        .harmful-links-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--danger);
+            margin-bottom: 6px;
+        }
+
+        .link-item {
+            font-size: 11px;
+            color: #333;
+            word-break: break-all;
+            padding: 4px;
+            background: white;
+            border-radius: 3px;
+            margin-bottom: 4px;
+        }
+
+        /* Confidence Badge */
+        .confidence-badge {
+            display: inline-block;
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .confidence-badge.high {
+            background: rgba(46,125,50,0.1);
+            color: var(--success);
+        }
+
+        .confidence-badge.medium {
+            background: rgba(239,108,0,0.1);
+            color: var(--warning);
+        }
+
+        .confidence-badge.low {
+            background: rgba(102,126,234,0.1);
+            color: var(--primary);
+        }
+
+        /* Utilities */
+        .no-data {
+            text-align: center;
+            color: #999;
+            padding: 24px;
+            font-size: 14px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 16px;
+            color: var(--primary);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(102,126,234,0.2);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Scrollbar */
+        .content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .content::-webkit-scrollbar-thumb {
+            background: #ddd;
+            border-radius: 3px;
+        }
+
+        .content::-webkit-scrollbar-thumb:hover {
+            background: #bbb;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            body {
+                width: 100%;
+            }
+
+            .tactics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-title">🛡️ SurakshaAI Shield</div>
+            <button class="language-toggle" onclick="toggleLanguageModal()">🌐 English</button>
+        </div>
+
+        <!-- Language Modal -->
+        <div class="language-modal" id="languageModal">
+            <div class="language-modal-content">
+                <div class="language-modal-title">Select Language</div>
+                <div class="language-grid" id="languageGrid"></div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Status Section -->
+            <div class="status-section">
+                <button class="status-toggle" id="toggleBtn" onclick="toggleProtection()">
+                    <span id="toggleText">🔴 Turn Protection ON</span>
+                </button>
+                <div class="status-label" id="statusLabel">Protection is OFF - Tap to activate</div>
+            </div>
+
+            <!-- Risk Display -->
+            <div class="risk-display" id="riskDisplay">
+                <!-- Risk Score Widget -->
+                <div class="risk-score-widget">
+                    <div class="risk-circle" id="riskCircle"></div>
+                    <div class="risk-info">
+                        <div class="risk-level" id="riskLevel"></div>
+                        <div class="risk-description" id="riskDescription"></div>
+                    </div>
+                </div>
+
+                <!-- GenAI Explanation -->
+                <div class="genai-explanation" id="genaiSection" style="display: none;">
+                    <div class="genai-header">🤖 AI Analysis</div>
+                    <div class="genai-explanation-text" id="genaiExplanation"></div>
+                    <div class="genai-explanation-vernacular" id="genaiVernacular" style="display: none;"></div>
+                    <div class="genai-confidence" id="genaiConfidence"></div>
+                </div>
+
+                <!-- Tactics -->
+                <div id="tacticsSection" style="display: none;">
+                    <div class="section-title">⚙️ Detected Tactics</div>
+                    <div class="tactics-grid" id="tacticsList"></div>
+                </div>
+
+                <!-- Technical Indicators -->
+                <div id="indicatorsSection" style="display: none;">
+                    <div class="section-title">🔍 Technical Indicators</div>
+                    <div class="indicators-list" id="indicatorsList"></div>
+                </div>
+
+                <!-- Harmful Links -->
+                <div class="harmful-links" id="linksSection" style="display: none;">
+                    <div class="harmful-links-title">⚠️ Detected Suspicious Links</div>
+                    <div id="linksList"></div>
+                </div>
+
+                <!-- Confidence -->
+                <div style="margin-top: 16px; text-align: center;">
+                    <span class="confidence-badge" id="confidenceBadge"></span>
+                </div>
+            </div>
+
+            <!-- No Data -->
+            <div class="no-data" id="noData">
+                <p>🔐 Ready to protect you</p>
+                <p style="font-size: 12px; margin-top: 8px; color: #ccc;">
+                    Turn on protection to analyze messages
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Translations
+        const translations = {
+            en: {
+                turnOn: '🟢 Turn Protection OFF',
+                turnOff: '🔴 Turn Protection ON',
+                protectionOn: 'Protection is ON - Monitoring messages',
+                protectionOff: 'Protection is OFF - Tap to activate',
+                analyzing: 'Analyzing...',
+                lowRisk: 'Low Risk',
+                mediumRisk: 'Medium Risk',
+                highRisk: 'High Risk',
+                safe: 'This message appears safe',
+                suspicious: 'This message contains suspicious elements',
+                dangerous: 'This message is likely phishing or a scam',
+                aiAnalysis: '🤖 AI Analysis',
+                confidence: 'Confidence',
+                noData: '🔐 Ready to protect you',
+                noDataDesc: 'Turn on protection to analyze messages',
+            },
+            hi: {
+                turnOn: '🟢 सुरक्षा बंद करें',
+                turnOff: '🔴 सुरक्षा चालू करें',
+                protectionOn: 'सुरक्षा चालू है - संदेश निगरानी कर रहे हैं',
+                protectionOff: 'सुरक्षा बंद है - सक्रिय करने के लिए टैप करें',
+                analyzing: 'विश्लेषण किया जा रहा है...',
+                lowRisk: 'कम जोखिम',
+                mediumRisk: 'मध्यम जोखिम',
+                highRisk: 'उच्च जोखिम',
+                safe: 'यह संदेश सुरक्षित दिखाई देता है',
+                suspicious: 'इस संदेश में संदिग्ध तत्व हैं',
+                dangerous: 'यह संदेश फिशिंग या घोटाले की संभावना है',
+                aiAnalysis: '🤖 कृत्रिम बुद्धिमत्ता विश्लेषण',
+                confidence: 'विश्वास',
+                noData: '🔐 आपकी सुरक्षा के लिए तैयार',
+                noDataDesc: 'संदेशों का विश्लेषण करने के लिए सुरक्षा चालू करें',
+            },
+            ta: {
+                turnOn: '🟢 பாதுகாப்பை அணைக்கவும்',
+                turnOff: '🔴 பாதுகாப்பை இயக்கவும்',
+                protectionOn: 'பாதுகாப்பு இயக்கப்பட்டுள்ளது - செய்திகளைக் கண்காணிக்கிறது',
+                protectionOff: 'பாதுகாப்பு முடக்கப்பட்டுள்ளது - செயல்படுத்த தொட்டுக் குறிப்பிடவும்',
+                analyzing: 'பகுப்பாய்வு செய்யப்படுகிறது...',
+                lowRisk: 'குறைந்த ঝুகம்',
+                mediumRisk: 'நடுத்தர ஝ுகம்',
+                highRisk: 'உচ்ச ஝ுகம்',
+                safe: 'இந்த செய்தி பாதுகாப்பாகத் தோன்றுகிறது',
+                suspicious: 'இந்த செய்தியில் சந்தேகமான கூறுகள் உள்ளன',
+                dangerous: 'இந்த செய்தி ஃபிஷிங் அல்லது மோசமான தொழில்நுட்பம்',
+                aiAnalysis: '🤖 AI பகுப்பாய்வு',
+                confidence: 'நம்பிக்கை',
+                noData: '🔐 உங்கள் பாதுகாப்பிற்கு தயாரிக்க முடிந்தது',
+                noDataDesc: 'செய்திகளைப் பகுப்பாய்வு செய்ய பாதுகாப்பைத் திறக்கவும்',
+            },
+            bn: {
+                turnOn: '🟢 সুরক্ষা বন্ধ করুন',
+                turnOff: '🔴 সুরক্ষা চালু করুন',
+                protectionOn: 'সুরক্ষা চালু আছে - বার্তা পর্যবেক্ষণ করছে',
+                protectionOff: 'সুরক্ষা বন্ধ - সক্রিয় করতে ট্যাপ করুন',
+                analyzing: 'বিশ্লেষণ করা হচ্ছে...',
+                lowRisk: 'কম ঝুঁকি',
+                mediumRisk: 'মধ্যম ঝুঁকি',
+                highRisk: 'উচ্চ ঝুঁকি',
+                safe: 'এই বার্তাটি নিরাপদ বলে মনে হয়',
+                suspicious: 'এই বার্তায় সন্দেহজনক উপাদান রয়েছে',
+                dangerous: 'এই বার্তাটি ফিশিং বা জালিয়াতি সম্ভব',
+                aiAnalysis: '🤖 AI বিশ্লেষণ',
+                confidence: 'আত্মবিশ্বাস',
+                noData: '🔐 আপনার সুরক্ষার জন্য প্রস্তুত',
+                noDataDesc: 'বার্তা বিশ্লেষণ করতে সুরক্ষা চালু করুন',
+            }
+        };
+
+        const languages = [
+            { code: 'en', name: 'English' },
+            { code: 'hi', name: 'हिन्दी' },
+            { code: 'ta', name: 'தமிழ்' },
+            { code: 'te', name: 'తెలుగు' },
+            { code: 'bn', name: 'বাংলা' },
+            { code: 'mr', name: 'मराठी' },
+            { code: 'gu', name: 'ગુજરાતી' },
+            { code: 'kn', name: 'ಕನ್ನಡ' },
+            { code: 'ml', name: 'മലയാളം' },
+            { code: 'or', name: 'ଓଡ଼ିଆ' },
+            { code: 'pa', name: 'ਪੰਜਾਬੀ' },
+            { code: 'as', name: 'অসমীয়া' },
+            { code: 'ur', name: 'اردو' },
+            { code: 'ne', name: 'नेपाली' },
+        ];
+
+        let currentLanguage = 'en';
+        let isProtectionActive = false;
+        let lastScanResult = null;
+
+        // Initialize language selector
+        function initLanguageSelector() {
+            const grid = document.getElementById('languageGrid');
+            languages.forEach(lang => {
+                const option = document.createElement('div');
+                option.className = `language-option ${lang.code === currentLanguage ? 'selected' : ''}`;
+                option.textContent = lang.name;
+                option.onclick = () => selectLanguage(lang.code);
+                grid.appendChild(option);
+            });
+        }
+
+        function selectLanguage(code) {
+            currentLanguage = code;
+            document.querySelectorAll('.language-option').forEach(opt => opt.classList.remove('selected'));
+            event.target.classList.add('selected');
+            const btn = document.querySelector('.language-toggle');
+            const langName = languages.find(l => l.code === code).name;
+            btn.textContent = `🌐 ${langName}`;
+            updateUILanguage();
+            toggleLanguageModal();
+            if (lastScanResult) {
+                displayResult(lastScanResult);
+            }
+        }
+
+        function updateUILanguage() {
+            const t = translations[currentLanguage] || translations.en;
+            const toggleBtn = document.getElementById('toggleBtn');
+            const statusLabel = document.getElementById('statusLabel');
+
+            toggleBtn.textContent = isProtectionActive ? t.turnOn : t.turnOff;
+            statusLabel.textContent = isProtectionActive ? t.protectionOn : t.protectionOff;
+        }
+
+        function toggleLanguageModal() {
+            document.getElementById('languageModal').classList.toggle('show');
+        }
+
+        function toggleProtection() {
+            isProtectionActive = !isProtectionActive;
+            updateUILanguage();
+            if (isProtectionActive) {
+                chrome.runtime.sendMessage({ action: 'START_SCAN' });
+            } else {
+                chrome.runtime.sendMessage({ action: 'STOP_SCAN' });
+                document.getElementById('riskDisplay').classList.remove('show');
+                document.getElementById('noData').style.display = 'block';
+                lastScanResult = null;
+            }
+        }
+
+        function displayResult(result) {
+            lastScanResult = result;
+            const t = translations[currentLanguage] || translations.en;
+            const display = document.getElementById('riskDisplay');
+            const noData = document.getElementById('noData');
+
+            if (!result || !result.risk_score) {
+                noData.style.display = 'block';
+                display.classList.remove('show');
+                return;
+            }
+
+            display.classList.add('show');
+            noData.style.display = 'none';
+
+            const riskScore = Math.round(result.risk_score * 100);
+            const riskCircle = document.getElementById('riskCircle');
+            const riskLevel = document.getElementById('riskLevel');
+            const riskDesc = document.getElementById('riskDescription');
+
+            riskCircle.textContent = riskScore + '%';
+
+            let riskClass, levelText, descText;
+            if (result.risk_level === 'LOW RISK' || riskScore < 40) {
+                riskClass = 'low';
+                levelText = t.lowRisk;
+                descText = t.safe;
+            } else if (result.risk_level === 'MEDIUM RISK' || (riskScore >= 40 && riskScore < 70)) {
+                riskClass = 'medium';
+                levelText = t.mediumRisk;
+                descText = t.suspicious;
+            } else {
+                riskClass = 'high';
+                levelText = t.highRisk;
+                descText = t.dangerous;
+            }
+
+            riskCircle.className = `risk-circle ${riskClass}`;
+            riskLevel.textContent = levelText;
+            riskDesc.textContent = descText;
+
+            // GenAI Explanation
+            const genaiSection = document.getElementById('genaiSection');
+            if (result.genai_explanation) {
+                genaiSection.style.display = 'block';
+                document.getElementById('genaiExplanation').textContent = result.genai_explanation;
+                if (result.genai_explanation_vernacular) {
+                    const vernDiv = document.getElementById('genaiVernacular');
+                    vernDiv.textContent = result.genai_explanation_vernacular;
+                    vernDiv.style.display = 'block';
+                }
+                if (result.genai_confidence) {
+                    document.getElementById('genaiConfidence').textContent = `${t.confidence}: ${Math.round(result.genai_confidence * 100)}%`;
+                }
+            } else {
+                genaiSection.style.display = 'none';
+            }
+
+            // Tactics
+            const tacticsSection = document.getElementById('tacticsSection');
+            if (result.psychological_tactics && result.psychological_tactics.length > 0) {
+                tacticsSection.style.display = 'block';
+                const tacticsList = document.getElementById('tacticsList');
+                tacticsList.innerHTML = result.psychological_tactics.map(tactic => {
+                    let icon = '⚡';
+                    if (tactic.includes('Urgency')) icon = '⚡';
+                    else if (tactic.includes('Credential')) icon = '🔑';
+                    else if (tactic.includes('Authority')) icon = '👑';
+                    else if (tactic.includes('Fear')) icon = '😨';
+                    else if (tactic.includes('Greed')) icon = '💰';
+                    return `<div class="tactic-badge">${icon} ${tactic}</div>`;
+                }).join('');
+            } else {
+                tacticsSection.style.display = 'none';
+            }
+
+            // Technical Indicators
+            const indicatorsSection = document.getElementById('indicatorsSection');
+            if (result.technical_indicators && result.technical_indicators.length > 0) {
+                indicatorsSection.style.display = 'block';
+                const indicatorsList = document.getElementById('indicatorsList');
+                indicatorsList.innerHTML = result.technical_indicators.map(indicator => {
+                    let className = 'info';
+                    if (indicator.includes('Suspicious')) className = 'critical';
+                    else if (indicator.includes('Misspelled')) className = 'warning';
+                    return `<div class="indicator ${className}"><span class="indicator-icon">🔍</span>${indicator}</div>`;
+                }).join('');
+            } else {
+                indicatorsSection.style.display = 'none';
+            }
+
+            // Harmful Links
+            const linksSection = document.getElementById('linksSection');
+            if (result.harmful_links && result.harmful_links.length > 0) {
+                linksSection.style.display = 'block';
+                const linksList = document.getElementById('linksList');
+                linksList.innerHTML = result.harmful_links.map(link => `<div class="link-item">🔗 ${link}</div>`).join('');
+            } else {
+                linksSection.style.display = 'none';
+            }
+
+            // Confidence Badge
+            let confidenceClass = 'low';
+            if (result.confidence >= 0.8) confidenceClass = 'high';
+            else if (result.confidence >= 0.5) confidenceClass = 'medium';
+            document.getElementById('confidenceBadge').className = `confidence-badge ${confidenceClass}`;
+            document.getElementById('confidenceBadge').textContent = `${t.confidence}: ${Math.round(result.confidence * 100)}%`;
+        }
+
+        // Listen for scan results from background script
+        chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+            if (request.action === 'SCAN_RESULT') {
+                displayResult(request.result);
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initLanguageSelector();
+            updateUILanguage();
+            chrome.storage.local.get(['isActive', 'lastScanResult'], (items) => {
+                if (items.isActive) {
+                    isProtectionActive = true;
+                    updateUILanguage();
+                }
+                if (items.lastScanResult) {
+                    displayResult(items.lastScanResult);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
